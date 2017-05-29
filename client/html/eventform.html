@@ -1,0 +1,29 @@
+<template name="eventform">
+	<div class="top-nav"> top navigation here </div>
+
+	<div class="container">
+    <header>
+      <h1>Event Form</h1>
+
+      <label class="hide-finished">
+          <input type="checkbox" checked="{{hideFinished}}">
+          Hide Finished Events
+      </label>
+
+      <form class="new-event" id="new-event">
+        <input type="text" name="title" placeholder="A new event">
+        <br>
+        <textarea name="description" form="new-event"></textarea> <br>
+        <input type="submit" value="Submit">
+      </form>
+
+    </header>
+
+    <h1> Make shift Events display</h1>
+    <ul>
+      {{#each userEvents}}
+        {{> userevents}}
+      {{/each}}
+    </ul>
+  </div>
+</template>
