@@ -1,15 +1,9 @@
 <template name="landing">
-	<head>
-		<title>NUS Events Board</title>
-	</head>
-
-<div class="top-nav"> top navigation here </div>
-
 	<body>
 		<h1>Hello World, Landing Page </h1>
 
 		{{> login}}
 
-		<a href="/homepage">continue as guest</a>
+		<a href="{{pathFor route='home'}}">continue as guest</a>
 	</body>
 </template>
