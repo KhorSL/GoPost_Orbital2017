@@ -1,0 +1,68 @@
+<template name="eventform">
+	<div class="top-nav"> top navigation here </div>
+
+	<div class="container">
+    <header>
+      <h1>Create event</h1>
+
+      <form class="new-event" id="new-event">
+        <p> Event Title </p>
+        <input type="text" name="title" placeholder="A new event" required>
+        <br>
+        <p> Event Poster </p>
+        <label class="img-input">
+					<input type="file" accept="image/*" name="img">
+
+					{{#each images}} {{> image}} {{/each}}
+        </label>
+
+        <p> Location </p>
+        <input type="text" name="location" placeholder="Enter a location">
+
+				<body>
+				  <div class="map-container">
+				    {{> googleMap name="exampleMap" options=exampleMapOptions}}
+				  </div>
+				</body>
+
+        <p> Event Date and Time </p>
+        <input type="datetime-local" name="dateTime">
+
+        <p> Event Type</p>
+        <select multiple name="type">
+          <option value="Camp">Camp</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Community">Community</option>
+          <option value="Social">Social</option>
+          <option value="Hobbies">Hobbies</option>
+          <option value="Cancerous">Cancerous</option>
+        </select>
+
+        <p> Event Description </p>
+          <textarea name="description" form="new-event"></textarea> <br>
+
+				<p> Contact </p>
+					<input name="contact" type="tel"> <br>
+
+         <p> Privacy options </p>
+          <label class="pub-option">
+            <input type="checkbox" name="privacy"> Private event
+          </label>
+
+          <input type="submit" value="Submit">
+
+      </form>
+
+    </header>
+          <h1> Make shift Events display</h1>
+          <label class="hide-finished">
+            <input type="checkbox" checked="{{hideFinished}}">
+              Hide Finished Events
+          </label>
+          <ul>
+            {{#each userEvents}}
+              {{> userevents}}
+            {{/each}}
+          </ul>
+        </div>
+</template>
