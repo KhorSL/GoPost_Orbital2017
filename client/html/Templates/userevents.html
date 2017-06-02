@@ -1,12 +1,12 @@
 <template name="userevents">
   <li class="{{#if checked}}checked{{/if}}">
     <input type="checkbox" checked="{{checked}}" class="toggle-checked">
-    <span class="text"> {{title}} </span>
+    <span class="text"> Title: {{title}} </span>
+    <p> <span class="text"> Description: {{description}} </span> </p>
+    <p> <span class="text"> Location: {{location}} </span> </p>
+    <p> <span class="text"> DateTime: {{dateTime}} </span> </p>
+    <p> <img src="{{img}}"> </p>
+    <p> <span class="text"> Event Type: {{type}} </span> </p>
     <button class="delete">Remove</button>
-    <p> <span class="text">  {{description}} </span> </p>
-    <p> <span class="text">  {{location}} </span> </p>
-    <p> <span class="text">  {{dateTime}} </span> </p>
-    <p> <span class="text">  {{img}} </span> </p>
-    <p> <span class="text">  {{type}} </span> </p>
   </li>
 </template>

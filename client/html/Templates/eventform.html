@@ -1,59 +1,74 @@
 <template name="eventform">
-	<div class="top-nav"> top navigation here </div>
+	<div class="navbar navbar-default"></div>
 
-	<div class="container">
-    <header>
-      <h1>Create event</h1>
+	<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
+    <div class="panel-heading"> Create event </div>
+      <div class="panel-body">
+        
+        <form class="new-event" id="new-event">
+          
+          <div class="form-group">
+            <label for="title">Event Title:</label>           
+            <input type="text" class="form-control" name="title" placeholder="A new event" required>
+          </div>
 
-      <form class="new-event" id="new-event">
-        <p> Event Title </p>
-        <input type="text" name="title" placeholder="A new event" required>
-        <br>
-        <p> Event Poster </p>
-        <label class="img-input">
-					<input type="file" accept="image/*" name="img">
+          <p> Event Poster </p>
+          <div class="form-group">
+  					<input class="img-input" type="file" accept="image/*" name="img">
+            <img id='output'>
+  					{{#each images}} {{> image}} {{/each}}
+          </div>
 
-					{{#each images}} {{> image}} {{/each}}
-        </label>
+          <div class="form-group">
+            <label> Location: </label>
+            <input class="form-control" type="text" name="location" placeholder="Enter a location">
+          
+            <body>
+    				  <div class="map-container">
+    				     {{> googleMap name="exampleMap" options=exampleMapOptions}}
+    				  </div>
+    				</body>
+          </div>
 
-        <p> Location </p>
-        <input type="text" name="location" placeholder="Enter a location">
+          <div class="form-group">
+            <label> Event Date and Time: </label>
+            <input class="form-control" type="datetime-local" name="dateTime">
+          </div>
 
-				<body>
-				  <div class="map-container">
-				    {{> googleMap name="exampleMap" options=exampleMapOptions}}
-				  </div>
-				</body>
+          <div class="form-group">
+            <label> Event Type: </label>
+            <select class="form-control" multiple name="type">
+              <option value="Camp">Camp</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Community">Community</option>
+              <option value="Social">Social</option>
+              <option value="Hobbies">Hobbies</option>
+              <option value="Cancerous">Cancerous</option>
+            </select>
+          </div>
 
-        <p> Event Date and Time </p>
-        <input type="datetime-local" name="dateTime">
+          <div class="form-group">
+            <label> Event Description: </label>
+              <textarea class="form-control" name="description" form="new-event"></textarea>
+          </div>
 
-        <p> Event Type</p>
-        <select multiple name="type">
-          <option value="Camp">Camp</option>
-          <option value="Adventure">Adventure</option>
-          <option value="Community">Community</option>
-          <option value="Social">Social</option>
-          <option value="Hobbies">Hobbies</option>
-          <option value="Cancerous">Cancerous</option>
-        </select>
+  				<div class="form-group">
+            <label> Contact: </label>
+    					<input class="form-control" name="contact" type="tel"> <br>
+          </div>
 
-        <p> Event Description </p>
-          <textarea name="description" form="new-event"></textarea> <br>
+          <div class="form-group" name="pub-option">
+             <label> Privacy options: </label>
+                <input type="checkbox" name="privacy"> Private event
+                <input type="checkbox" name="privacy"> Private event
+          </div>
 
-				<p> Contact </p>
-					<input name="contact" type="tel"> <br>
+            <input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
 
-         <p> Privacy options </p>
-          <label class="pub-option">
-            <input type="checkbox" name="privacy"> Private event
-          </label>
-
-          <input type="submit" value="Submit">
-
-      </form>
-
-    </header>
+          </form>
+        </div>
+      </div>
+          
           <h1> Make shift Events display</h1>
           <label class="hide-finished">
             <input type="checkbox" checked="{{hideFinished}}">
@@ -64,5 +79,5 @@
               {{> userevents}}
             {{/each}}
           </ul>
-        </div>
+        
 </template>

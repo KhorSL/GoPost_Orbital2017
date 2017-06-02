@@ -47,6 +47,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventform.onCreated(function() {
+	  var output;
 	  // We can use the `ready` callback to interact with the map API once the map is ready.
 	  GoogleMaps.ready('exampleMap', function(map) {
 	    // Add a marker to the map once it's ready
@@ -69,8 +70,9 @@ if(Meteor.isClient) {
 			var dateTime = event.target.dateTime.value;
 			var type = event.target.type.value;
 			var privacy = event.target.privacy.value;
-
-			Meteor.call("addEvent", title, description, location, dateTime, type, privacy);
+			var contact = event.target.contact.value;
+			var img = output.src;
+			Meteor.call("addEvent", title, description, location, dateTime, type, privacy, contact, img);
 
 			return false;
 		},
@@ -80,17 +82,22 @@ if(Meteor.isClient) {
 		},
 
 		'change .img-input': function(event) {
-			console.log(event);
+			var input = event.target;
+			var reader = new FileReader();
+			reader.onload = function() {
+				var dataURL = reader.result;
+				output = document.getElementById('output');
+				output.src = dataURL;
+			};
+			reader.readAsDataURL(input.files[0]);
+			
+			/****************************************
 			FS.Utility.eachFile(event, function(file){
 				var newFile = new FS.File(file);
-				Images.insert(newFile, function(error, result){
-					if(error) {
-						console.log('There is an issue with the upload');
-					} else {
-						console.log('Image Uploaded');
-					}
-				});
+				console.log(newFile);
+				//Meteor.call("addImage", newFile);
 			});
+			*****************************************/
 		}
 	});
 

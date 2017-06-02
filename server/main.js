@@ -25,19 +25,30 @@ if(Meteor.isServer) {
 }
 
 Meteor.methods({
-	addEvent: function(title, description, location, dateTime, type, privacy){
+	addEvent: function(title, description, location, dateTime, type, privacy, contact, img){
 		UserEvents.insert({
-			// lacking img, owner
+			// lacking owner. Img to further test
 			title: title,
 			description: description,
 			location: location,
 			dateTime: dateTime,
 			type: type,
 			privacy: privacy,
+			contact: contact,
+			img: img,
 			createdAt: new Date()
 		});
 	},
 	removeEvent: function(id){
 		UserEvents.remove(id);
+	},
+	addImage: function(newFile) {
+		Images.insert(newFile, function(error, result){
+			if(error) {
+				console.log('There is an issue with the upload');
+			} else {
+				console.log('Image Uploaded');
+			}
+		});
 	}
 });
