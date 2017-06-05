@@ -19,6 +19,7 @@ shell-server@0.2.3            # Server-side component of the `meteor shell` comm
 
 iron:router
 session@1.1.7
+
 meteortoys:allthings
 cfs:standard-packages
 raix:ui-dropped-event
