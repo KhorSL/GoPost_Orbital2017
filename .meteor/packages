@@ -21,7 +21,6 @@ iron:router
 session@1.1.7
 meteortoys:allthings
 cfs:standard-packages
-cfs:gridfs
 raix:ui-dropped-event
 dburles:google-maps
 twbs:bootstrap

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 UserEvents = new Mongo.Collection('userEvents');
 
+/*==========================================
 Images = new FS.Collection('Images', {
 	stores: [new FS.Store.GridFS('Images')],
 		filter: {
@@ -13,6 +14,7 @@ Images = new FS.Collection('Images', {
 			}
 		}
 });
+===========================================*/
 
 Meteor.startup(() => {
   // code to run on server at startup
@@ -41,7 +43,8 @@ Meteor.methods({
 	},
 	removeEvent: function(id){
 		UserEvents.remove(id);
-	},
+	}
+	/*===========================================================
 	addImage: function(newFile) {
 		Images.insert(newFile, function(error, result){
 			if(error) {
@@ -51,4 +54,5 @@ Meteor.methods({
 			}
 		});
 	}
+	============================================================*/
 });

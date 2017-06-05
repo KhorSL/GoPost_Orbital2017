@@ -1,5 +1,6 @@
 UserEvents = new Mongo.Collection('userEvents');
 
+/*========= FSCollection with cfs:grid ======
 Images = new FS.Collection('Images', {
 	stores: [new FS.Store.GridFS('Images')],
 		filter: {
@@ -17,6 +18,7 @@ Images.allow({
 	update: function(){ return true;},
 	download: function(){ return true;},
 })
+===========================================*/
 
 if(Meteor.isClient) {
 	Meteor.subscribe("userEvents");
@@ -37,11 +39,14 @@ if(Meteor.isClient) {
 		exampleMapOptions: function() {
 	    // Make sure the maps API has loaded
 	    if (GoogleMaps.loaded()) {
-	      // Map initialization options
-	      return {
-	        center: new google.maps.LatLng(1.3521, 103.8198),
-	        zoom: 10
-	      };
+	    	// Map initialization options
+	    	var input = document.getElementById('pac-input');
+  			var searchBox = new google.maps.places.SearchBox(input);
+
+	    	return {
+	    		center: new google.maps.LatLng(1.3521, 103.8198),
+	    		zoom: 10
+	    	};
 	    }
 	  }
 	});
@@ -59,7 +64,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventform.onRendered(function() {
-	  GoogleMaps.load();
+	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
 	});
 
 	Template.eventform.events({
