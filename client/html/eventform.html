@@ -12,8 +12,8 @@
             <input type="text" class="form-control" name="title" placeholder="A new event" required>
           </div>
 
-          <p> Event Poster </p>
           <div class="form-group">
+            <label for="img">Event Poster:</label>
   					<input class="img-input" type="file" accept="image/*" name="img">
             <img id='output'>
   					<!-- {{#each images}} {{> image}} {{/each}} -->
@@ -23,10 +23,9 @@
             <label> Location: </label>
             <input id="pac-input" class="form-control" type="text" name="location" placeholder="Enter a location">
             <body>
-              {{exampleMapOptions}}
-    				<!--  <div class="map-container">
+    				<div class="map-container" name="eventMap">
     				     {{> googleMap name="exampleMap" options=exampleMapOptions}}
-    				  </div> -->
+    				  </div>
     				</body>
           </div>
 
@@ -69,15 +68,15 @@
         </div>
       </div>
           
-          <h1> Make shift Events display</h1>
+          <h1> <center> Events display </center> </h1>
           <label class="hide-finished">
             <input type="checkbox" checked="{{hideFinished}}">
               Hide Finished Events
           </label>
-          <ul>
+          <center>
             {{#each userEvents}}
               {{> userevents}}
             {{/each}}
-          </ul>
+          </center>
         
 </template>

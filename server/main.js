@@ -27,12 +27,13 @@ if(Meteor.isServer) {
 }
 
 Meteor.methods({
-	addEvent: function(title, description, location, dateTime, type, privacy, contact, img){
+	addEvent: function(title, description, location, locationAddr, dateTime, type, privacy, contact, img){
 		UserEvents.insert({
 			// lacking owner. Img to further test
 			title: title,
 			description: description,
 			location: location,
+			locationAddr: locationAddr,
 			dateTime: dateTime,
 			type: type,
 			privacy: privacy,
