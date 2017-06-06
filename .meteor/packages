@@ -24,4 +24,10 @@ meteortoys:allthings
 cfs:standard-packages
 raix:ui-dropped-event
 dburles:google-maps
-twbs:bootstrap
+
+accounts-ui
+accounts-password
+accounts-base
+useraccounts:unstyled
+raix:handlebar-helpers
+aldeed:template-extension

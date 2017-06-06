@@ -1,6 +1,4 @@
 <template name="eventform">
-	<div class="navbar navbar-default"></div>
-
 	<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
     <div class="panel-heading"> Create event </div>
       <div class="panel-body">
@@ -59,7 +57,6 @@
           <div class="form-group" name="pub-option">
              <label> Privacy options: </label>
                 <input type="checkbox" name="privacy"> Private event
-                <input type="checkbox" name="privacy"> Private event
           </div>
 
             <input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
@@ -67,16 +64,4 @@
           </form>
         </div>
       </div>
-          
-          <h1> <center> Events display </center> </h1>
-          <label class="hide-finished">
-            <input type="checkbox" checked="{{hideFinished}}">
-              Hide Finished Events
-          </label>
-          <center>
-            {{#each userEvents}}
-              {{> userevents}}
-            {{/each}}
-          </center>
-        
 </template>

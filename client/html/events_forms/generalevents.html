@@ -1,0 +1,34 @@
+<template name="generalevents">  
+	<div class="row">
+		<div class="col-md-5">
+			{{#if isPublic}}
+			<img src="{{img}}">
+			{{/if}}
+		</div>
+					
+		<div class="col-md-7">
+			{{#if isPublic}}
+			<span>
+				<h2> {{title}} </h2> 
+				<small> {{description}} </small>
+			</span>
+
+			<p>
+
+ 			<span class="glyphicon glyphicon-map-marker"></span>
+                    {{location}}, {{locationAddr}}
+			<br>
+                
+			<span class="glyphicon glyphicon-time"></span>
+				{{dateTime}} 
+            <br>
+                
+			<span class="glyphicon glyphicon-info-sign"></span>
+				{{type}} 
+			<br>
+
+			</p>
+			{{/if}}
+		</div>
+	</div>
+</template>

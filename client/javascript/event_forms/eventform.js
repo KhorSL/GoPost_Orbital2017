@@ -51,6 +51,7 @@ if(Meteor.isClient) {
 	Template.eventform.onCreated(function() {
 	  var output; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
+	  geo = ""; //Global var.. for location geometry
 
 	  // We can use the `ready` callback to interact with the map API once the map is ready.
 	  GoogleMaps.ready('exampleMap', function(map) {
@@ -94,6 +95,8 @@ if(Meteor.isClient) {
   					console.log("Returned place contains no geometry");
   					return;
   				}
+  				geo = place.geometry;
+
   				// Create a marker for the new place
 		      	markers.push(new google.maps.Marker( {
 			      	map: map.instance,
@@ -123,15 +126,14 @@ if(Meteor.isClient) {
 			var description = event.target.description.value;
 			var location = event.target.location.value;
 			var locationAddr = addr;
+			var locationGeo = geo;
 			var dateTime = event.target.dateTime.value;
 			var type = event.target.type.value;
-			var privacy = event.target.privacy.value;
+			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
 			
-			Meteor.call("addEvent", title, description, location, locationAddr, dateTime, type, privacy, contact, img);
-
-			return false;
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img);
 		},
 
 		'change .hide-finished': function(event) {
@@ -155,19 +157,6 @@ if(Meteor.isClient) {
 				//Meteor.call("addImage", newFile);
 			});
 			*****************************************/
-		}
-	});
-
-	Template.userevents.events({
-		'click .toggle-checked': function() {
-			UserEvents.update(this._id, {$set: {
-				checked: !this.checked
-				}
-			});
-		},
-
-		'click .delete': function() {
-			Meteor.call("removeEvent", this._id);
 		}
 	});
 }
