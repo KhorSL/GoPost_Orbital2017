@@ -27,6 +27,25 @@
 				{{type}} 
 			<br>
 
+			{{#if currentUser}}
+				{{#if hasLiked}}
+				<span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart"></span>
+					{{likes}} 
+				<br>
+
+				{{else}}
+				<span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty"></span>
+					{{likes}} 
+				<br>
+				{{/if}}
+
+			{{else}}
+			<span class="glyphicon glyphicon-heart-empty"></span>
+				{{likes}} 
+			<br>
+
+			{{/if}}
+
 			</p>
 			{{/if}}
 		</div>

@@ -10,10 +10,4 @@ if (Meteor.isClient) {
 			}
 		}
 	});
-
-	Template.generalevents.helpers({
-		isPublic: function() {
-			return this.privacy !== true;
-		}
-	});
 }

@@ -74,7 +74,27 @@ Meteor.methods({
 
 	removeEvent: function(id){
 		UserEvents.remove(id);
+	},
+
+	toggleLikes: function(id) {
+		// Array of the current users that liked the post
+		var currLikers = UserEvents.find( {_id: id}, { likers: 1}).fetch()[0].likers;
+		// Check if the current user is in the array
+		var q = _.find(currLikers, (x) => x == Meteor.userId());
+		
+		if(q == Meteor.userId()) {
+			UserEvents.update( {_id: id}, { 
+				$inc: { likes: -1 },
+				$pull: { likers: Meteor.userId() } 
+			});
+		} else {
+			UserEvents.update( {_id: id}, { 
+				$inc: { likes: 1 },
+				$push: { likers: Meteor.userId() } 
+			});
+		}
 	}
+
 	/*===========================================================
 	addImage: function(newFile) {
 		Images.insert(newFile, function(error, result){
