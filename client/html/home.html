@@ -8,4 +8,17 @@
 	<p>2. Slider for Highlighted Events</p>
 	<p>3. Upcoming, Newest, Most Popular Events Thumbnails (like movie websites) view more...</p>
 	
+	<h1> <center> Latest Events </center> </h1>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          {{#each userEvents}}
+            {{> generalevents}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
 </template>

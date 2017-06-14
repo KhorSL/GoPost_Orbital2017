@@ -1,0 +1,39 @@
+<template name="userevents">
+    <div class="{{#if checked}}checked{{/if}}">
+        {{#if isOwner}}
+        <input type="checkbox" checked="{{checked}}" class="toggle-checked">
+        {{/if}}
+        <div class="row">
+            <div class="col-md-5">
+            {{#if isOwner}}
+                <img src="{{img}}">
+            {{/if}}
+            </div>
+
+            <div class="col-md-7">
+            {{#if isOwner}}
+                <span>
+                    <h2> {{title}} </h2> 
+                    <small> {{description}} </small>
+                </span>
+
+                <p>
+
+                <span class="glyphicon glyphicon-map-marker"></span>
+                    {{location}}, {{locationAddr}}
+                <br>
+                <span class="glyphicon glyphicon-time"></span>
+                    {{dateTime}} 
+                <br>
+                <span class="glyphicon glyphicon-info-sign"></span>
+                    {{type}} 
+                <br>
+                </p>
+
+                <button class="delete">Remove</button>
+                <button id="{{this._id}}" class="update">Update</button>
+            {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
