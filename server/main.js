@@ -85,20 +85,6 @@ UserEventsSchema = new SimpleSchema({
 
 UserEvents.attachSchema(UserEventsSchema);
 
-/*==========================================
-Images = new FS.Collection('Images', {
-	stores: [new FS.Store.GridFS('Images')],
-		filter: {
-			allow: {
-				contentTypes: ['image/*']
-			},
-			onInvalid: function(message) {
-				console.log(message);
-			}
-		}
-});
-===========================================*/
-
 Meteor.startup(() => {
   // code to run on server at startup
 });
@@ -177,16 +163,4 @@ Meteor.methods({
 			});
 		}
 	}
-
-	/*===========================================================
-	addImage: function(newFile) {
-		Images.insert(newFile, function(error, result){
-			if(error) {
-				console.log('There is an issue with the upload');
-			} else {
-				console.log('Image Uploaded');
-			}
-		});
-	}
-	============================================================*/
 });
