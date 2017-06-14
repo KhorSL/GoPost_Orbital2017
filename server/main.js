@@ -2,6 +2,89 @@ import { Meteor } from 'meteor/meteor';
 
 UserEvents = new Mongo.Collection('userEvents');
 
+UserEventsSchema = new SimpleSchema({
+	title: {
+		type: String,
+		label: "Title"
+	},
+	description: {
+		type: String,
+		label: "Description"
+	},
+	location: {
+		type: String,
+		label: "Location"
+	},
+	locationAddr: {
+		type: String,
+		label: "Location Address",
+		optional: true
+	},
+	locationGeo: {
+		type: Object,
+		label: "Location Geometry",
+		optional: true,
+		blackbox: true //to skip the validation of things in the object
+	},
+	createdAt: {
+		type: Date,
+		label: "Created At",
+		defaultValue: function() {
+			return new Date();
+		},
+		denyUpdate: true
+	},
+	img: {
+		type: String,
+		label: "Image",
+		optional: true
+	},
+	owner: {
+		type: String,
+		label: "Owner",
+		defaultValue: function() {
+			return Meteor.userId();
+		},
+		denyUpdate: true
+	},
+	type: {
+		type: Array,
+		label: "Event Types"
+	},
+	"type.$": {
+		type: String
+	},
+	contact: {
+		type: String,
+		label: "Contact"
+	},
+	likes: {
+		type: Number,
+		label: "Likes",
+		defaultValue: 0
+	},
+	likers: {
+		type: Array,
+		label:"Likers",
+		defaultValue: []
+	},
+	"likers.$": {
+		type: String
+	},
+	privacy: {
+		type: Boolean,
+		label: "Privacy",
+		optional: true
+	},
+	dateTime: {
+		type: String,
+		label: "Date and Time",
+		optional: true
+	}
+});
+
+UserEvents.attachSchema(UserEventsSchema);
+
 /*==========================================
 Images = new FS.Collection('Images', {
 	stores: [new FS.Store.GridFS('Images')],

@@ -128,12 +128,14 @@ if(Meteor.isClient) {
 			var locationAddr = addr;
 			var locationGeo = geo;
 			var dateTime = event.target.dateTime.value;
-			var type = event.target.type.value;
+			var type = $('#event-type').val();
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
-			
+
 			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img);
+		
+			return false;
 		},
 
 		'change .hide-finished': function(event) {

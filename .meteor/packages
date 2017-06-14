@@ -31,3 +31,4 @@ accounts-base
 useraccounts:unstyled
 raix:handlebar-helpers
 aldeed:template-extension
+aldeed:collection2
