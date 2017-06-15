@@ -4,30 +4,8 @@ import { Template } from 'meteor/templating';
 import '../html/components/loginPage.html';
 import '../css/loginReg.css';
 
-$.validator.setDefaults({
-  rules: {
-      emailAdd: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 3
-      }
-    },
-    messages: {
-      emailAdd: {
-        required: "Please enter an email address.",
-        email: "You've entered an invalid email address."
-      },
-      password: {
-        required: "Please enter a password.",
-        minlength: "Your password must be at least {0} characters."
-      }
-    } 
-});
-
 Template.loginPage.onRendered(function() {
+
   var validator = $('.login-form').validate({
     submitHandler: function(event) {   //Activates when form is submitted
       // store username and password in variables

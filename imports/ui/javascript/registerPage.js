@@ -4,46 +4,8 @@ import { Template } from 'meteor/templating';
 import '../html/components/registerPage.html';
 import '../css/loginReg.css';
 
-$.validator.setDefaults({
-  rules: {
-      userName: {
-        required: true,
-      },
-      emailAddr: {
-        required: true,
-        email: true
-      },
-      password1: {
-        required: true,
-        minlength: 3
-      },
-      password2: {
-        required: true,
-        minlength: 3,
-        equalTo: "#password1"
-      }
-    },
-    messages: {
-      userName: {
-        required: "Please enter an username."
-      },
-      emailAddr: {
-        required: "Please enter an email address.",
-        email: "You've entered an invalid email address."
-      },
-      password1: {
-        required: "Please enter a password.",
-        minlength: "Your password must be at least {0} characters."
-      },
-      password2: {
-        required: "Please enter a password.",
-        minlength: "Your password must be at least {0} characters.",
-        equalTo: "Password do not matched! Please enter again."
-      }
-    } 
-});
-
 Template.registerPage.onRendered(function() {
+
   var validator = $('.register-form').validate({
     submitHandler: function(event) {   //Activates when form is submitted
 
@@ -52,12 +14,25 @@ Template.registerPage.onRendered(function() {
       var pw1 = $('[name=password1]').val();
       var pw2 = $('[name=password2]').val();
 
-      var newUserData = {
-        username: un,
-        email: em,
-        password: pw1
-      };
+      if($.trim(un) == '') {
+        validator.showErrors({
+          userName: "Please enter an username."
+        });
+      }
+      var pwStr = pw1.replace(/\s/g, "");
+      if(pw1.length > pwStr.length) {
+        validator.showErrors({
+          password1: "Please remove all spacing in your password.",
+          password2: "Please remove all spacing in your password."
+        });
+      }
 
+      var newUserData = {
+        username: $.trim(un),
+        email: $.trim(em),
+        password: $.trim(pw1)
+      };
+      
       Meteor.call('insertUser', newUserData, function(error, result) {
         if(error) {
           //Three possible Error (Email already exists) (Need to set a username or email) (password may not be empty)

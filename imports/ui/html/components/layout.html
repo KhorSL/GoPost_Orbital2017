@@ -1,4 +1,5 @@
 <template name='layout'>
+	<div class="wrapper">
 	<!-- Navigation Bar Header -->
 	<nav class='navbar navbar-default'>
 		<div class='container-fluid'>
@@ -18,13 +19,14 @@
 			        	<li class="dropdown">
 			          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
 			          		<ul class="dropdown-menu">
-				            	<li><a href="{{pathFor route='bulletinBoard'}}">Bulletin Board (All)</a></li>
-				            	<li><a href="{{pathFor route='myBoard'}}">Personal Board</a></li>
+				            	<li><a href="{{pathFor route='bulletinBoard'}}">Noticeboards</a></li>
+				            	<li><a href="#">Categories</a></li>
+				            	<li><a href="{{pathFor route='myBoard'}}">My Notices</a></li>
+				            	<li role="separator" class="divider"></li>
+				            	<li><a href="{{pathFor route='myEvents'}}">My Events</a></li>
+				            	<li><a href="{{pathFor route='create-event'}}">Create Event</a></li>
+				            	<li role="separator" class="divider"></li>
 				            	<li><a href="{{pathFor route='messageBoard'}}">Message Board (Forum)</a></li>
-				            	<li role="separator" class="divider"></li>
-				            	<li><a href="#">Separated link</a></li>
-				            	<li role="separator" class="divider"></li>
-				            	<li><a href="#">Separated link</a></li>
 			          		</ul>
 			        	</li>
 			      	</ul>
@@ -65,17 +67,14 @@
 
 	<div class='container'>
 
-
 		<!-- contents -->
 		{{> yield}}
 
 	</div>
+	</div>
 
 	<!-- Footer -->
 	<footer class='footer'>
-		<div class='containerFoot'>
-			<p class='text-muted'>Footer information here please..</p>
-		</div>
+		<p class='text-muted'>Footer information here please..</p>
 	</footer>
-		
 </template>

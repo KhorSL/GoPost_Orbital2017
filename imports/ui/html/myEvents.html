@@ -9,4 +9,19 @@
 	<p>3. Download of Excel File</p>
 	<p>4. Management for all events </p>
 	
+	<h1> <center> Events display </center> </h1>
+		<label class="hide-finished">
+			<input type="checkbox" checked="{{hideFinished}}">
+              Hide Finished Events
+		</label>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					{{#each userEvents}}
+						{{> userEvents}}
+					{{/each}}
+				</div>
+			</div>
+		</div>
 </template>

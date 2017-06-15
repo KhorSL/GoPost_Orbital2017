@@ -45,6 +45,22 @@ Router.route('/myEvents', {
   layoutTemplate: 'layout'
 });
 
+Router.route('/create-event', {
+  name: "create-event",
+  template: "eventForm_Create",
+  layoutTemplate: "layout"
+  //this.render('eventform');
+});
+
+Router.route('/update-event/:_id', {
+  name: "update-event",
+  template: "eventForm_Update",
+  layoutTemplate: "layout",
+  data: function () {
+    return UserEvents.findOne({_id: this.params._id});
+  },
+});
+
 Router.route('/settings', {
 	name: 'settings',
   template: 'settings',

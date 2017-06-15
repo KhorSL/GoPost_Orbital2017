@@ -1,0 +1,68 @@
+<template name="eventForm_Update">
+<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
+		<div class="panel-heading"> Update event </div>
+			<div class="panel-body">
+				
+				<form class="update-event" id="update-event">
+					
+					<div class="form-group">
+						<label for="title">Event Title:</label>           
+						<input type="text" class="form-control" name="title" placeholder="Update your title" value="{{this.title}}" required>
+					</div>
+
+					<div class="form-group">
+						<label for="img">Event Poster:</label>
+						<input class="img-input" type="file" accept="image/*" name="img">
+						<img src="{{this.img}}">
+						
+					</div>
+
+					<div class="form-group">
+						<label> Location: </label>
+						<input id="pac-input" class="form-control" type="text" name="location" placeholder="Enter a location" value="{{this.location}}">
+						<body>
+						<div class="map-container" name="eventMap">
+								 {{> googleMap name="ufMap" options=ufMapOptions}}
+							</div>
+						</body>
+					</div>
+
+					<div class="form-group">
+						<label> Event Date and Time: </label>
+						<input class="form-control" type="datetime-local" name="dateTime" value="{{this.dateTime}}">
+					</div>
+
+					<div class="form-group">
+						<label> Event Type: </label>
+						<select class="form-control" multiple name="type" value="{{this.type}}">
+							<option value="Camp">Camp</option>
+							<option value="Adventure">Adventure</option>
+							<option value="Community">Community</option>
+							<option value="Social">Social</option>
+							<option value="Hobbies">Hobbies</option>
+							<option value="Cancerous">Cancerous</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label> Event Description: </label>
+							<textarea class="form-control" name="description" form="update-event" value="{{this.description}}"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label> Contact: </label>
+							<input class="form-control" name="contact" type="tel" value="{{this.contact}}"> <br>
+					</div>
+
+					<div class="form-group" name="pub-option">
+						 <label> Privacy options: </label>
+								<input type="checkbox" name="privacy" checked="{{this.privacy}}"> Private event
+					</div>
+
+						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Update">
+
+					</form>
+				</div>
+			</div>
+
+</template>

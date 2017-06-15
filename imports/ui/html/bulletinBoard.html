@@ -8,5 +8,23 @@
 	<p>2. Thumbnails. Design of page intends to look like pin notices on the boards.</p>
 	<p>3. Enlarge View of the thumbnails</p>
 	<p>4. Scrolling View or Page 123 View style? Need to decide for user-friendliness</p>
+
+	<hr/>
+
+	<h1> <center> Events display </center> </h1>
+    <label class="hide-finished">
+      <input type="checkbox" checked="{{hideFinished}}">
+              Hide Finished Events
+    </label>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          {{#each userEvents}}
+            {{> generalEvents}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
 	
 </template>
