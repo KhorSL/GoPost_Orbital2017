@@ -1,4 +1,9 @@
 <template name='myEvents'>
+	{{#if checkValue delObj}}
+		<div class="deletedBanner">
+			<p class="deletedP">{{delObj}} have been deleted </p>
+		</div>
+	{{/if}}
 
 	<h1> Events Summary Page </h1>
 	
@@ -8,7 +13,7 @@
 	<p>2. Creation and Editing of Events, opens a new page</p>
 	<p>3. Download of Excel File</p>
 	<p>4. Management for all events </p>
-	
+
 	<h1> <center> Events display </center> </h1>
 		<label class="hide-finished">
 			<input type="checkbox" checked="{{hideFinished}}">
@@ -19,7 +24,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					{{#each userEvents}}
-						{{> userEvents}}
+						{{> events_User}}
 					{{/each}}
 				</div>
 			</div>

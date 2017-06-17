@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-
 import '../html/eventForm_Update.html';
 import '../css/eventForm.css';
 
