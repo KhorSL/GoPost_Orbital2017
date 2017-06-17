@@ -28,7 +28,7 @@ Template.loginPage.onRendered(function() {
         } else {
           //Log in Successfully
           $('#loginModal').modal('hide');
-          Router.go('/home');
+          Router.go('home');
         }
       });
     } //end of submitHandler

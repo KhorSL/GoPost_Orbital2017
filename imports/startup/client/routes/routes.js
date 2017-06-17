@@ -45,6 +45,16 @@ Router.route('/myEvents', {
   layoutTemplate: 'layout'
 });
 
+Router.route('/event_View/:_id', {
+  name: "event_View",
+  template: "event_View",
+  layoutTemplate: "layout",
+  data: function() {
+    var selection = this.params._id;
+    return Events.findOne({_id: selection});
+  }
+});
+
 Router.route('/create-event', {
   name: "create-event",
   template: "eventForm_Create",
@@ -65,14 +75,4 @@ Router.route('/settings', {
 	name: 'settings',
   template: 'settings',
   layoutTemplate: 'layout'
-});
-
-Router.route('/loginPage', {
-  name: 'login',
-  template: '/loginPage'
-});
-
-Router.route('/registerPage', {
-  name: 'register',
-  template: '/registerPage'
 });

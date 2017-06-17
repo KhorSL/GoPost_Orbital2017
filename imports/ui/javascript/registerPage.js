@@ -49,7 +49,7 @@ Template.registerPage.onRendered(function() {
         } else {
           Meteor.loginWithPassword(newUserData.email, newUserData.password);
           $('#registerModal').modal('hide');
-          Router.go('/home');
+          Router.go('home');
         } 
       }); //end of Method.call(insertUser)
     } //end of submitHandler

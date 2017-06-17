@@ -3,6 +3,8 @@ import { Template } from 'meteor/templating';
 
 import '../html/landing.html';
 import '../css/landing.css';
+import './loginPage.js';
+import './registerPage.js';
 
 Meteor.subscribe('events');
 
@@ -35,6 +37,9 @@ Template.landing.events({
 Template.landing.helpers({
   events: function() {
     return Events.find();
+  },
+  formatDate: function(date) {
+    return moment(date).format('Do MMM YYYY');
   }
 });
 

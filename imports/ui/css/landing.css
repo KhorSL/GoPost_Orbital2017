@@ -9,6 +9,7 @@
 }
 
  .carousel-landing {
+    height: 100%;
     margin-top: -70px;
     top: 0;
  }
@@ -21,6 +22,46 @@
     border: 0;
     border-radius: 0;
  }
+
+.paper {
+    background-color: white;
+}
+
+.corner_land { 
+    position: relative;
+    margin-bottom: 25px;
+    border: 0.5px solid lightgrey;
+}
+
+/* Corner Effect */
+.corner_land:after,
+.corner_land:before {
+    background: #f3f3f3;
+    content: '';
+    height: 20px;
+    position: absolute;
+    top: -5px;
+    width: 60px;
+    -webkit-box-shadow: 0 5px 10px -7px hsla(0,0%,0%,.5);
+       -moz-box-shadow: 0 5px 10px -7px hsla(0,0%,0%,.5);
+            box-shadow: 0 5px 10px -7px hsla(0,0%,0%,.5);
+}
+.corner_land:after {
+    left: -30px;
+    -webkit-transform: rotate(-45deg);
+       -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+         -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+}
+.corner_land:before {
+    right: -30px;
+    -webkit-transform: rotate(45deg);
+       -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+         -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+}
 
  .btn-xl {
   color: white;
@@ -354,7 +395,8 @@ a {
     margin-left: auto;
     margin-right: auto;
     padding: 15px 25px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .permalinkpage .container_land {

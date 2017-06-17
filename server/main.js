@@ -4,7 +4,7 @@ Meteor.startup(() => {
   // code to run on server at startup
 });
 
-UserEventsSchema = new SimpleSchema({
+EventsSchema = new SimpleSchema({
 	title: {
 		type: String,
 		label: "Title"
@@ -49,6 +49,14 @@ UserEventsSchema = new SimpleSchema({
 		},
 		denyUpdate: true
 	},
+	poster: {
+		type: String,
+		label: "Poster",
+		defaultValue: function() {
+			return Meteor.user().username;
+		},
+		denyUpdate: true
+	},
 	type: {
 		type: Array,
 		label: "Event Types"
@@ -85,11 +93,11 @@ UserEventsSchema = new SimpleSchema({
 	}
 });
 
-UserEvents.attachSchema(UserEventsSchema);
+Events.attachSchema(EventsSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
-		return UserEvents.find({
+		return Events.find({
 			$or: [
 				{ privacy: {$ne: true} },
 				{ owner: this.userId}
@@ -108,7 +116,7 @@ Meteor.methods({
 	},
 
 	addEvent: function(title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
-		UserEvents.insert({
+		return Events.insert({
 			// Img to further test
 			title: title,
 			description: description,
@@ -121,10 +129,12 @@ Meteor.methods({
 			contact: contact,
 			img: img,
 			owner: Meteor.userId(),
+			poster: Meteor.user().username,
 			createdAt: new Date()
 		});
 	},
 
+	/*
 	updateEvent: function(id, title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
 		var currEvent = UserEvents.findOne(id);
 
@@ -146,24 +156,25 @@ Meteor.methods({
 			}
 		});
 	},
+	*/
 
 	removeEvent: function(id){
-		UserEvents.remove(id);
+		return Events.remove(id);
 	},
 
 	toggleLikes: function(id) {
 		// Array of the current users that liked the post
-		var currLikers = UserEvents.find( {_id: id}, { likers: 1}).fetch()[0].likers;
+		var currLikers = Events.find( {_id: id}, { likers: 1}).fetch()[0].likers;
 		// Check if the current user is in the array
 		var q = _.find(currLikers, (x) => x == Meteor.userId());
 		
 		if(q == Meteor.userId()) {
-			UserEvents.update( {_id: id}, { 
+			Events.update( {_id: id}, { 
 				$inc: { likes: -1 },
 				$pull: { likers: Meteor.userId() } 
 			});
 		} else {
-			UserEvents.update( {_id: id}, { 
+			Events.update( {_id: id}, { 
 				$inc: { likes: 1 },
 				$push: { likers: Meteor.userId() } 
 			});

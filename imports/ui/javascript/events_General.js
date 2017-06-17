@@ -1,10 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import '../html/components/generalEvents.html';
+import '../html/components/events_General.html';
 
 if(Meteor.isClient) {
-	Template.generalEvents.helpers({
+	Template.events_General.helpers({
 		isPublic: function() {
 			return this.privacy !== true;
 		},
@@ -20,7 +20,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.generalEvents.events({
+	Template.events_General.events({
 		'click #toggle-like': function(event) {
 			var id = $(event.currentTarget).data( 'id' );
 			Meteor.call("toggleLikes", id);

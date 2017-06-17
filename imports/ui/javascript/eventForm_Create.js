@@ -25,21 +25,13 @@ Images.allow({
 ===========================================*/
 
 if(Meteor.isClient) {
-	Meteor.subscribe("userEvents");
 
 	Template.eventForm_Create.helpers({
-		userEvents: function() {
-			if (Session.get('done')) {
-				return UserEvents.find({checked: {$ne: true}});
-			} else {
-				return UserEvents.find();
-			}
-		},
-
+		/*
 		images: function() {
 			return Images.find();
 		},
-
+		*/
 		exampleMapOptions: function() {
 	    // Make sure the maps API has loaded
 	    if (GoogleMaps.loaded()) {
@@ -126,6 +118,8 @@ if(Meteor.isClient) {
 
 	Template.eventForm_Create.events({
 		'submit .new-event': function(event) {
+			event.preventDefault();
+
 			var title = event.target.title.value;
 			var description = event.target.description.value;
 			var location = event.target.location.value;
@@ -137,13 +131,13 @@ if(Meteor.isClient) {
 			var contact = event.target.contact.value;
 			var img = output.src;
 
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img);
-		
-			return false;
-		},
-
-		'change .hide-finished': function(event) {
-			Session.set('done', event.target.checked);
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				} else {
+					Router.go('event_View', { _id: result});
+				}
+			});
 		},
 
 		'change .img-input': function(event) {
