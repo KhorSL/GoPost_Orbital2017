@@ -6,7 +6,13 @@ import '../css/landing.css';
 import './loginPage.js';
 import './registerPage.js';
 
-Meteor.subscribe('events');
+Template.landing.onCreated(function() {
+  var template = Template.instance();
+
+  template.autorun(function() {
+    template.subscribe("events");
+  });
+});
 
 Template.landing.events({
   'click #loginBut': function(e) {

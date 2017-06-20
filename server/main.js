@@ -108,6 +108,26 @@ if(Meteor.isServer) {
 	Meteor.publish("events", function() {
     	return Events.find();
 	});
+
+	Meteor.publish('events_Filter', function(search, filterType, sBut) {
+		check(search, Match.OneOf(String, null, undefined));
+
+  		var query = {};
+      	var projection = {sort: {title: 1}};
+
+  		if(search) {
+    		var regex = new RegExp(search,'i');
+    		query = {
+      			$or: [
+        			{ title: regex }
+      			]
+    		};
+  		}
+
+  		return Events.find(
+  			query, projection
+  		);
+	});
 }
 
 Meteor.methods({

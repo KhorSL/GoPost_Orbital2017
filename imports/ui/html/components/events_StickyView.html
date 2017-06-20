@@ -1,35 +1,34 @@
 <template name='events_StickyView'>
-	<div class="row" id="frame">
-       	{{#each events}}
-          {{#if isPublic}}
-           	<div class="col-sm-4 sticky">
-              <a href="#" class="note">
-                <a href="{{pathFor route='event_View'}}">
-                  <i class="pin"></i>
-                	<div class="noteImg"><img src={{img}} class="img-responsive"></div>
-                  <div class="noteDetails">
-                    <h2 class="noteH2">{{title}}</h2>
-                  	<span class="glyphicon glyphicon-map-marker"></span>
-                      {{location}}
-                    <p>
-                      {{formatDate dateTime}}
-                    </p>
-                  </div> <!--end of noteDetails-->
-                </a> <!--end of a href event_view -->
-                <div class="noteFoot">
-                  <p>
-                    {{#if currentUser}}
-                      {{#if hasLiked}}
-                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
-                      {{else}}
-                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
-                      {{/if}}
-                    {{/if}}
-                  </p>
-                </div> <!--end of noteFoot -->
-              </a>  <!-- end of a note -->
-           	</div>
-          {{/if}}
-      	{{/each}}  
-   	</div><!--/row-->
+	<!--<div class="row" id="frame">
+      {{#each events_filtered}}-->
+        <div class="col-sm-4 sticky">
+          <a href="#" class="note">
+            <i class="pin"></i>
+            <a href="{{pathFor route='event_View'}}">
+              <div class="noteImg"><img src={{img}} class="img-responsive"></div>
+              <div class="noteDetails">
+                <h2 class="noteH2">{{title}}</h2>
+                <span class="glyphicon glyphicon-map-marker"></span>
+                  {{location}}
+                <p>
+                  {{formatDate dateTime}}
+                </p>
+              </div> <!--end of noteDetails-->
+            </a> <!--end of a href event_view -->
+            <div class="noteFoot">
+              <p>
+                {{#if currentUser}}
+                  {{#if hasLiked}}
+                    <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
+                  {{else}}
+                    <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
+                  {{/if}}
+                {{/if}}
+              </p>
+            </div> <!--end of noteFoot -->
+          </a>  <!-- end of a note -->
+        </div>
+    <!--{{/each}}
+    {{/if}}  
+  </div>  end of row -->
 </template>

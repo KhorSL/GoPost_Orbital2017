@@ -28,6 +28,7 @@ Template.loginPage.onRendered(function() {
         } else {
           //Log in Successfully
           $('#loginModal').modal('hide');
+          Session.set("viewToggle", false);
           Router.go('home');
         }
       });

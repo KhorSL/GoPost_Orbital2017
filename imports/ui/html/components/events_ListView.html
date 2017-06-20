@@ -1,0 +1,19 @@
+<template name='events_ListView'>
+	<a href="{{pathFor route='event_View'}}" class="list-group-item list-group-item-action flex-column align-items-start listColor">
+    	<div class="d-flex w-100 justify-content-between row">
+    		<div class="col-md-12 col-xs-12">
+	      		<h3 class="mb-1">{{title}}</h3>
+	      		<span class="glyphicon glyphicon-time"><small> {{dateTime}}</small></span>
+    		</div>
+    	</div>
+    	<div class="row"> 
+    		<div class="col-md-4 col-xs-4">
+    			<div class="view_Img"><img src={{img}} class="img-responsive"></div>
+    		</div>
+    		<div class="col-md-8 col-xs-8">
+    			<p class="mb-1 view_para">{{description}}</p>
+    			<small>Find Out More...</small>
+    		</div>
+    	</div>
+  	</a>
+</template>

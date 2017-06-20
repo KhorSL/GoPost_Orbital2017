@@ -1,3 +1,20 @@
+svg path,
+ svg rect {
+  fill: #FF6700;
+}
+
+.toggleViewBtn {
+  color: black !important;
+}
+
+.search_container {
+  padding-bottom: 20px;
+}
+
+.search_box {
+  width: 100%;
+}
+
 .blackboard_border {
 	background-image: url("/images/wood.png");
 	background-size: cover;

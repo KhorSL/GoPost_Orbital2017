@@ -2,17 +2,77 @@
   <div class="search_container">
     <h1> Main Bulletin Board </h1>
       
-    <h4> Features Available </h4>
-    <hr/>
-    <p>1. Filter + Sort By</p>
-    <p>2. Thumbnails. Design of page intends to look like pin notices on the boards.</p>
-    <p>3. Enlarge View of the thumbnails</p>
-    <p>4. Scrolling View or Page 123 View style? Need to decide for user-friendliness</p>
-  </div>
+    <div class="row">    
+      <div class="col-md-10 col-sm-10 col-xs-10">
+        <div class="input-group search_box">
+          <div class="input-group-btn search-panel">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <span id="search_concept">{{filter}}</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a id="all" href="#">All Events</a></li>
+              <li><a id="latest" href="#">Latest Events</a></li>
+              <li><a id="hot" href="#">Hot Events</a></li>
+              <li><a id="types" href="#">Event Types</a></li>
+              <li class="divider"></li>
+              <li><a id="soon" href="#">Coming Soon...</a></li>
+            </ul>
+          </div>
+            
+          <input type="hidden" name="search_param" value="all" id="search_param">         
+          <input type="text" class="form-control" name="search" placeholder="Search Events...">
+          <span class="input-group-btn">
+            <button id="searchBut" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-10">
+          <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
+          <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
+      </div> 
+    </div> <!-- end of row for search bar -->
 
-  <div class ="blackboard_border">
-    <div class="blackboard">
-       {{> events_StickyView}}
-  	</div> <!--end of black board -->
-  </div> <!-- end of black board border -->
+    <h4> Features Available </h4>
+    <p>1. Filter + Sort By (DONE)</p>
+    <p>2. Thumbnails. Design of page intends to look like pin notices on the boards.</p>
+    <p>3. Enlarge View of the thumbnails (DONE) </p>
+    <p>4. Scrolling View or Page 123 View style? Need to decide for user-friendliness</p>
+  </div> <!-- end of search container -->
+
+  <hr class="solidBlackLine"/>
+
+  {{#if viewType}} 
+
+    <div class="list-group">
+      {{#if searching}}
+        {{> loader}}
+      {{else}}
+        {{#each events_filtered}}
+          {{> events_ListView}}
+        {{else}}
+          <p class="alert alert-warning">Nothing found for {{query}}. Sorry.</p>
+        {{/each}}
+      {{/if}}
+    </div>
+
+  {{else}}
+
+    <div class ="blackboard_border">
+      <div class="blackboard">
+        <div class="row" id="frame">
+          {{#if searching}}
+            {{> loader}}
+          {{else}}
+            {{#each events_filtered}}
+              {{> events_StickyView}}
+            {{else}}
+              <p class="alert alert-warning">Nothing found for {{query}}. Sorry.</p>  
+            {{/each}}
+          {{/if}}  
+        </div><!--/row-->
+    	</div> <!--end of black board -->
+    </div> <!-- end of black board border -->
+
+  {{/if}}
+
 </template>

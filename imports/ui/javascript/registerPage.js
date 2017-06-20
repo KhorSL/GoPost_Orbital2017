@@ -49,6 +49,7 @@ Template.registerPage.onRendered(function() {
         } else {
           Meteor.loginWithPassword(newUserData.email, newUserData.password);
           $('#registerModal').modal('hide');
+          Session.set("viewToggle", false);
           Router.go('home');
         } 
       }); //end of Method.call(insertUser)

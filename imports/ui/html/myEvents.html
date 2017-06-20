@@ -1,7 +1,8 @@
 <template name='myEvents'>
 	{{#if checkValue delObj}}
-		<div class="deletedBanner">
-			<p class="deletedP">{{delObj}} have been deleted </p>
+		<div class="deletedBanner alert alert-success">
+			<span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+			{{delObj}} have been deleted
 		</div>
 	{{/if}}
 

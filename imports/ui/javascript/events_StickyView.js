@@ -3,14 +3,15 @@ import { Template } from 'meteor/templating';
 
 import '../html/components/events_StickyView.html';
 
-Meteor.subscribe('events');
+/*
+https://stackoverflow.com/questions/33065699/meteor-reactivevar-access-parent-tempate-from-child-template
+  var parentView = Blaze.currentView.parentView.parentView;
+  var parentInstance = parentView.templateInstance();
+*/
 
 Template.events_StickyView.helpers({
-  events: function() {
-    return Events.find();
-  },
   isPublic: function() {
-    return this.privacy !== true;
+    return this.privacy !== true; //Should put it in the find above
   },
   formatDate: function(date) {
   	return moment(date).format('Do MMM YYYY, h.mm a');

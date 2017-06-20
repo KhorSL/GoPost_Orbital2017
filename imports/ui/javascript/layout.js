@@ -5,9 +5,20 @@ import '../html/components/layout.html';
 import '../css/layout.css';
 
 Template.layout.events({
-  'click .logout': function(e){
+  	'click .logout': function(e){
         e.preventDefault();
         Meteor.logout();
         Router.go('/');
-    }
+    },
+   	'submit form' :function(e) {
+   		e.preventDefault();
+   		var searchText = $('[name=navbar_search]').val().trim();
+   		Session.set("navbar_search", searchText);
+      if(Router.current().route.path() === '/bulletinBoard') {
+        Session.set("searchQuery", searchText);
+        Session.set("sButton", (!Session.get("sButton")));
+        Session.set("searching", true); 
+      }
+      Router.go('bulletinBoard');
+   	}
 });
