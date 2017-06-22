@@ -24,6 +24,11 @@ Template.loginPage.onRendered(function() {
             validator.showErrors({
               password: "You have entered an incorrect password."    
             });
+          } else {
+            validator.showErrors({
+              emailAdd: "Invalid User. Please register.",
+              password: ""    
+            });
           }
         } else {
           //Log in Successfully

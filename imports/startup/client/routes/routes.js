@@ -59,7 +59,6 @@ Router.route('/create-event', {
   name: "create-event",
   template: "eventForm_Create",
   layoutTemplate: "layout"
-  //this.render('eventform');
 });
 
 Router.route('/update-event/:_id', {

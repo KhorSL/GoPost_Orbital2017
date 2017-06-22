@@ -7,12 +7,30 @@ svg path,
   color: black !important;
 }
 
+/*Panel Tab credits: https://codepen.io/wizly/pen/BlKxo/*/
+
+.search_tab {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #fec503;
+}
+
+.search_tab > li.active > a, 
+.search_tab > li.active > a:hover, 
+.search_tab > li.active > a:focus {
+  background-color: #f3f3f3;
+  border: 1px solid #fec503;
+}
+
 .search_container {
   padding-bottom: 20px;
 }
 
 .search_box {
   width: 100%;
+}
+
+.list-group_border {
+  margin-bottom: 0px; /*override original*/
 }
 
 .blackboard_border {

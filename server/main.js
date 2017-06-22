@@ -59,7 +59,7 @@ EventsSchema = new SimpleSchema({
 	},
 	type: {
 		type: Array,
-		label: "Event Types"
+		label: "Event Tags"
 	},
 	"type.$": {
 		type: String
@@ -109,7 +109,7 @@ if(Meteor.isServer) {
     	return Events.find();
 	});
 
-	Meteor.publish('events_Filter', function(search, filterType, sBut) {
+	Meteor.publish('events_Filter', function(search, filterType, tag, sBut) {
 		check(search, Match.OneOf(String, null, undefined));
 
   		var query = {};
@@ -122,17 +122,36 @@ if(Meteor.isServer) {
         			{ title: regex }
       			]
     		};
+  		} else {
+  			if(tag) {
+  				query = {
+  					$or: [
+  						{ type: tag }
+  					]
+  				}
+  			}
   		}
 
   		return Events.find(
   			query, projection
   		);
 	});
+
+	Meteor.publish("event_Tags", function () {
+		return Tags.find();
+	});
 }
 
 Meteor.methods({
 	insertUser: function(newUserData) {
 		return Accounts.createUser(newUserData);
+	},
+
+	addEventTag: function(tags) {
+		for(var i in tags) {
+			var tag = tags[i].trim();
+			Tags.update(tag, {tag: tag, createdAt: new Date()}, {upsert: true});
+		}
 	},
 
 	addEvent: function(title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){

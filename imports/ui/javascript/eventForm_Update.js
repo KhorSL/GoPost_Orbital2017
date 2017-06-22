@@ -87,6 +87,8 @@ if(Meteor.isClient) {
 
 	Template.eventForm_Update.onRendered(function() {
 	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
+	
+	  $('#tokenfield').tokenfield();
 	});
 
 	Template.eventForm_Update.events({
@@ -97,7 +99,7 @@ if(Meteor.isClient) {
 			var locationAddr = addr;
 			var locationGeo = geo;
 			var dateTime = event.target.dateTime.value;
-			var type = event.target.type.value;
+			var type = $('#tokenfield').val().split();
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			

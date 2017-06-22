@@ -114,6 +114,8 @@ if(Meteor.isClient) {
 
 	Template.eventForm_Create.onRendered(function() {
 	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
+	
+	  $('#tokenfield').tokenfield();
 	});
 
 	Template.eventForm_Create.events({
@@ -126,21 +128,23 @@ if(Meteor.isClient) {
 			var locationAddr = addr;
 			var locationGeo = geo;
 			var dateTime = event.target.dateTime.value;
-			var type = $('#event-type').val();
+			var type = $('#tokenfield').val().split(',');
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
-
+			
 			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
+					Meteor.call("addEventTag", type);
 					Router.go('event_View', { _id: result});
 				}
 			});
 		},
 
 		'change .img-input': function(event) {
+			event.preventDefault();
 			var input = event.target;
 			var reader = new FileReader();
 			reader.onload = function() {

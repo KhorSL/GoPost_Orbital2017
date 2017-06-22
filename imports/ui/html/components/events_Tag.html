@@ -1,0 +1,11 @@
+<template name='events_Tag'>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 tag_panel">
+			{{#each eventTags}}
+				<button class="btn tag_btn" role="button" name="{{tag}}" id="tag_btn" aria-hidden="true">{{tag}}</button>
+			{{else}}
+				<p class="alert alert-warning">No Tags are available at the moment.</p> 
+			{{/each}}
+		</div>
+	</div>
+</template>

@@ -4,6 +4,7 @@ import { Template } from 'meteor/templating';
 import '../html/bulletinBoard.html';
 import '../css/bulletinBoard.css';
 import './events_StickyView.js';
+import './events_Tag.js';
 import '../html/components/loader.html';
 import '../html/components/events_ListView.html';
 
@@ -24,12 +25,12 @@ Template.bulletinBoard.onCreated( () => {
 	}
 
   	template.autorun( () => {
-
   		var search = Session.get("searchQuery");	//var search = template.searchQuery.get();
   		var filter = Session.get("filterType");		//var filter = template.filterType.get();
   		var sButton = Session.get("sButton");		//var sButton = template.searchBut.get();
+  		var tag = Session.get("selected_tag");
 
-    	template.subscribe('events_Filter', search, filter, sButton,  () => {
+    	template.subscribe('events_Filter', search, filter, tag, sButton,  () => {
 	      	setTimeout( () => {
 	        	Session.set("searching", false);	//template.searching.set( false );
 	      	}, 300 );
@@ -58,6 +59,7 @@ Template.bulletinBoard.helpers({
 
   		var sq = Session.get("searchQuery"); 	//var sq = Template.instance().searchQuery.get();
   		var filter = $('[name=search_param]').val();
+  		var tag = Session.get("selected_tag");
   		var search = {};
 
   		if(sq !== '' && (typeof sq) !== 'undefined') {
@@ -69,7 +71,15 @@ Template.bulletinBoard.helpers({
 	      			]
 	    		};
 	    	}
-  		}	
+  		} else if (tag !== '' && (typeof tag) !== 'undefined')	{
+  			if(tag) {
+  				search = {
+	      			$or: [
+	        			{ type: tag }
+	      			]
+	    		};
+  			}
+  		}
 
   		if(filter === '' || (typeof filter) === 'undefined' || filter === 'all') {
   			return Events.find(search, {sort: {title: 1 }});
@@ -78,10 +88,10 @@ Template.bulletinBoard.helpers({
   		} else if(filter === 'hot') {
   			return Events.find(search, {sort: {likes: -1}});
   		} else if(filter === 'soon') {
+  			console.log(search);
   			return Events.find(search, {sort: {dateTime: -1}});
-  		} else if(filter === 'types') {
-  			return Events.find(search); 
-  			//Incomplete...Need to figure out how to sort by Category
+  		} else if(filter === 'location') {
+  			return Events.find(search, {sort: {location: 1}}); 
   		}
 
   		return false; 
@@ -106,6 +116,9 @@ Template.bulletinBoard.events({
 		$('.input-group #search_param').val("all");
 		Session.set("filterType", param); 	//Template.instance().filterType.set(param);
 		Session.set("searching", true);		//Template.instance().searching.set(true);
+		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
+		Session.set("searchQuery", "");		//For enabling full search
+		$('[name=search]').val("");			//For enabling full search
 	},
 	'click #latest': function(e) {
 		e.preventDefault();
@@ -114,6 +127,7 @@ Template.bulletinBoard.events({
 		$('.input-group #search_param').val("latest");
 		Session.set("filterType", param);	//Template.instance().filterType.set(param);
 		Session.set("searching", true);		//Template.instance().searching.set(true);
+		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
 	},
 	'click #hot': function(e) {
 		e.preventDefault();
@@ -122,14 +136,16 @@ Template.bulletinBoard.events({
 		$('.input-group #search_param').val("hot");
 		Session.set("filterType", param);	//Template.instance().filterType.set(param);
 		Session.set("searching", true);		//Template.instance().searching.set(true);
+		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
 	},
-	'click #types': function(e) {
+	'click #location': function(e) {
 		e.preventDefault();
-		var param = $('#types').text();
+		var param = $('#location').text();
 		/*$('.search-panel span#search_concept').text(param);*/
-		$('.input-group #search_param').val("types");
+		$('.input-group #search_param').val("location");
 		Session.set("filterType", param);	//Template.instance().filterType.set(param);
 		Session.set("searching", true);		//Template.instance().searching.set(true);
+		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
 	},
 	'click #soon': function(e) {
 		e.preventDefault();
@@ -138,6 +154,7 @@ Template.bulletinBoard.events({
 		$('.input-group #search_param').val("soon");
 		Session.set("filterType", param);	//Template.instance().filterType.set(param);
 		Session.set("searching", true);		//Template.instance().searching.set(true);
+		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
 	},
 	'click #searchBut': function(e) {
 		e.preventDefault();
@@ -148,10 +165,12 @@ Template.bulletinBoard.events({
 		if(searchText !== '') {
 			Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
 	      	Session.set("searching", true);			//Template.instance().searching.set(true);
+	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
 	    }
 
 	    if(searchText === '') {
 	      	Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
+	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
 	    }
 	}
 });

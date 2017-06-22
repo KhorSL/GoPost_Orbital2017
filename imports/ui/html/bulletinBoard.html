@@ -1,49 +1,56 @@
 <template name='bulletinBoard'>
   <div class="search_container">
-    <h1> Main Bulletin Board </h1>
-      
-    <div class="row">    
-      <div class="col-md-10 col-sm-10 col-xs-10">
-        <div class="input-group search_box">
-          <div class="input-group-btn search-panel">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              <span id="search_concept">{{filter}}</span> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a id="all" href="#">All Events</a></li>
-              <li><a id="latest" href="#">Latest Events</a></li>
-              <li><a id="hot" href="#">Hot Events</a></li>
-              <li><a id="types" href="#">Event Types</a></li>
-              <li class="divider"></li>
-              <li><a id="soon" href="#">Coming Soon...</a></li>
-            </ul>
+
+    <ul class="nav nav-tabs search_tab">
+      <li class="active"><a  href="#1" data-toggle="tab">Search</a></li>
+      <li><a href="#2" data-toggle="tab">Categories</a></li>
+    </ul>
+
+    <div class="tab-content ">
+      <div class="tab-pane active" id="1"> <!--Search Bar Panel -->
+
+         <div class="row">    
+          <div class="col-md-10 col-sm-10 col-xs-10">
+            <div class="input-group search_box">
+              <div class="input-group-btn search-panel">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span id="search_concept">{{filter}}</span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a id="all" href="#">All Events</a></li>
+                  <li><a id="latest" href="#">Latest Events</a></li>
+                  <li><a id="hot" href="#">Hot Events</a></li>
+                  <li><a id="location" href="#">Location</a></li>
+                  <li class="divider"></li>
+                  <li><a id="soon" href="#">Coming Soon...</a></li>
+                </ul>
+              </div>
+                
+              <input type="hidden" name="search_param" value="all" id="search_param">         
+              <input type="text" class="form-control" name="search" placeholder="Search Events...">
+              <span class="input-group-btn">
+                <button id="searchBut" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
           </div>
-            
-          <input type="hidden" name="search_param" value="all" id="search_param">         
-          <input type="text" class="form-control" name="search" placeholder="Search Events...">
-          <span class="input-group-btn">
-            <button id="searchBut" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-          </span>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-2 col-xs-10">
-          <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
-          <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
-      </div> 
-    </div> <!-- end of row for search bar -->
+          <div class="col-md-2 col-sm-2 col-xs-10">
+              <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
+              <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
+          </div> 
 
-    <h4> Features Available </h4>
-    <p>1. Filter + Sort By (DONE)</p>
-    <p>2. Thumbnails. Design of page intends to look like pin notices on the boards.</p>
-    <p>3. Enlarge View of the thumbnails (DONE) </p>
-    <p>4. Scrolling View or Page 123 View style? Need to decide for user-friendliness</p>
+        </div> <!-- end of row for search bar -->
+      </div> <!-- End of Tab 1 -->
+      
+      <div class="tab-pane" id="2"> <!--Categories Panel -->
+        {{> events_Tag}}
+      </div> <!-- End of Tab 2 -->
+    </div> <!--end of Tab-Content -->
   </div> <!-- end of search container -->
-
-  <hr class="solidBlackLine"/>
 
   {{#if viewType}} 
 
-    <div class="list-group">
+    <div class="blackboard_border">
+    <div class="list-group list-group_border">
       {{#if searching}}
         {{> loader}}
       {{else}}
@@ -54,7 +61,7 @@
         {{/each}}
       {{/if}}
     </div>
-
+  </div>
   {{else}}
 
     <div class ="blackboard_border">

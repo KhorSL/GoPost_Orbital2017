@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 //Import default Materials.
 import '/imports/ui/lib/bootstrap.css';
-import '/imports/ui/lib/bootstrap.js';
+import '/imports/ui/lib/bootstrap-tokenfield.css';
 
 //Import to load templates
 import '/imports/ui/javascript/bulletinBoard.js';
@@ -13,6 +13,7 @@ import '/imports/ui/javascript/event_View.js';
 import '/imports/ui/javascript/events_User.js';
 import '/imports/ui/javascript/events_General.js';
 import '/imports/ui/javascript/events_StickyView.js';
+import '/imports/ui/javascript/events_Tag.js';
 import '/imports/ui/javascript/eventForm_Create.js';
 import '/imports/ui/javascript/eventForm_Update.js';
 import '/imports/ui/javascript/home.js';
