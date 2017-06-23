@@ -59,7 +59,7 @@ Tutorial : https://bit.ly/19CkiR2*/
 
 .note {
 	height: auto;
-  margin: 10px;
+  margin:10px;
   border: 1px solid rgba(0,0,0,.25);
   text-decoration:none;
   display:block;
@@ -101,9 +101,9 @@ div.sticky:nth-child(even) a{
 }
 
 div.sticky:nth-child(3n) a{
-  -o-transform:rotate(5deg);
-  -webkit-transform:rotate(5deg);
-  -moz-transform:rotate(5deg);
+  -o-transform:rotate(2deg);
+  -webkit-transform:rotate(2deg);
+  -moz-transform:rotate(2deg);
   position:relative;
   background:#ccf;
 }
@@ -120,10 +120,20 @@ div.sticky:nth-child(5n) a{
   font-family: "Reenie Beanie",arial,sans-serif;
 }
 
+.noteContent {
+  text-align: center;
+}
+
 .noteH2 {
 	font-size:140%;
   font-weight:bold;
   margin-top: 5px;
+}
+
+.noteImgBorder { 
+  height:100px;
+  width:100px;
+  margin: auto;
 }
 
 .noteImg {
@@ -132,6 +142,19 @@ div.sticky:nth-child(5n) a{
 
 .noteDetails {
   margin-bottom: 5px;
+  /*word-break: break-all;*/
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/*ellipsis Credit : https://css-tricks.com/almanac/properties/t/text-overflow/ */
+
+.noteDetails_sub {
+  width:100%;
 }
 
 /*sticky notes credit: 

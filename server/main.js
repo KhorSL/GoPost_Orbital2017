@@ -109,7 +109,7 @@ if(Meteor.isServer) {
     	return Events.find();
 	});
 
-	Meteor.publish('events_Filter', function(search, filterType, tag, sBut) {
+	Meteor.publish('events_Filter', function(search, tag, sBut) {
 		check(search, Match.OneOf(String, null, undefined));
 
   		var query = {};

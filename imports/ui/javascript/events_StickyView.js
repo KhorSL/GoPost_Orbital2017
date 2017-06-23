@@ -24,6 +24,11 @@ Template.events_StickyView.helpers({
   	} else {
   		return false;
   	}
+  },
+  event_Liked: function() {
+    return Events.findOne({_id: this._id});
+    /*Non Reactive Sort with Reactive Data: 
+    https://stackoverflow.com/questions/27125046/how-to-access-another-collection-by-id-in-meteor-template*/
   }
 });
 

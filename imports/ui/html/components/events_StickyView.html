@@ -3,29 +3,42 @@
       {{#each events_filtered}}-->
         <div class="col-sm-4 sticky">
           <a href="#" class="note">
-            <i class="pin"></i>
-            <a href="{{pathFor route='event_View'}}">
-              <div class="noteImg"><img src={{img}} class="img-responsive thumbnail"></div>
-              <div class="noteDetails">
-                <h2 class="noteH2">{{title}}</h2>
-                <span class="glyphicon glyphicon-map-marker"></span>
-                  {{location}}
+            <div class="noteContent">
+              <i class="pin"></i>
+              <a href="{{pathFor route='event_View'}}">
+                <div class="noteImgBorder"><img src={{img}} class="img-responsive thumbnail noteImg"></div>
+                <div class="noteDetails">
+                  <div class="noteDetails_sub ellipsis">
+                    <h2 class="noteH2">{{title}}</h2>
+                  </div>
+                  <div class="noteDetails_sub ellipsis">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                      {{location}}
+                  </div>
+                  <div class="noteDetails_sub ellipsis">
+                    <span class="glyphicon glyphicon-time"></span>
+                      {{formatDate dateTime}}
+                  </div>
+                  <div class="noteDetails_sub ellipsis"> 
+                    <span class="glyphicon glyphicon-tag"></span>
+                      {{type}} 
+                  </div>
+                </div> <!--end of noteDetails-->
+              </a> <!--end of a href event_view -->
+              <div class="noteFoot">
                 <p>
-                  {{formatDate dateTime}}
+                  {{#with event_Liked}}
+                    {{#if currentUser}}
+                      {{#if hasLiked}}
+                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
+                      {{else}}
+                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
+                      {{/if}}
+                    {{/if}}
+                  {{/with}}
                 </p>
-              </div> <!--end of noteDetails-->
-            </a> <!--end of a href event_view -->
-            <div class="noteFoot">
-              <p>
-                {{#if currentUser}}
-                  {{#if hasLiked}}
-                    <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
-                  {{else}}
-                    <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
-                  {{/if}}
-                {{/if}}
-              </p>
-            </div> <!--end of noteFoot -->
+              </div> <!--end of noteFoot -->
+            </div> <!-- end of noteContent -->
           </a>  <!-- end of a note -->
         </div>
     <!--{{/each}}
