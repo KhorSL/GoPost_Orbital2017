@@ -9,6 +9,12 @@ Router.route('/home', {
   layoutTemplate: 'layout'
 });
 
+Router.route('/aboutUs', {
+  name: 'aboutUs',
+  template: 'aboutUs',
+  layoutTemplate: 'layout'
+});
+
 Router.route('/bulletinBoard', {
 	name: 'bulletinBoard',
   template: 'bulletinBoard',
@@ -68,6 +74,12 @@ Router.route('/update-event/:_id', {
   data: function () {
     return UserEvents.findOne({_id: this.params._id});
   },
+});
+
+Router.route('/myFriends', {
+  name: 'myFriends',
+  template: 'myFriends',
+  layoutTemplate: 'layout'
 });
 
 Router.route('/settings', {

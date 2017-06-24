@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
+import '../html/components/loader.html';
 import '../html/bulletinBoard.html';
 import '../css/bulletinBoard.css';
 import './events_StickyView.js';
+import './events_ListView.js';
 import './events_Tag.js';
-import '../html/components/loader.html';
-import '../html/components/events_ListView.html';
 
 Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();

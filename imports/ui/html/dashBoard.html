@@ -1,11 +1,105 @@
 <template name='dashBoard'>
+  <div id="content">
+    <div class="outer">
 
-	<h1> User Dashboard (More of Management) </h1>
-	
-	<h4> Features Available </h4>
-	<hr/>
-	<p>1. User Profile Picture</p>
-	<p>2. Calender</p>
-	<p>3. Subscription (newsletter), flyers (likes), registration forms, own events. View more...</p>
+      <div class="inner">
+        <div class="text-center">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="box">
+                <header><h5>Profile Pic</h5></header>
+                <p>This is his image profile</p>
+              </div>
+            </div>
 
+            <div class="col-lg-8">
+              <div class="box">
+                <header><h5>Profile Details</h5></header>
+                <p>This is his profile Detail</p>
+              </div>
+            </div>
+          </div> <!-- end of calendar Role -->
+        </div>
+        <hr>
+
+        <div class="text-center">
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a class="quick-btn" href="#menu1" data-toggle="tab">
+                <span>default</span> 
+                <span class="label label-default">2</span> 
+              </a> 
+            </li>
+            <li>
+              <a class="quick-btn" href="#menu2" data-toggle="tab">
+                <span>default</span> 
+                <span class="label label-default">2</span> 
+              </a> 
+            </li>
+            <li>
+              <a class="quick-btn" href="#menu3" data-toggle="tab">
+                <span>default</span> 
+                <span class="label label-default">2</span> 
+              </a> 
+            </li>
+            <li>
+              <a class="quick-btn" href="#menu4" data-toggle="tab">
+                <span>default</span> 
+                <span class="label label-default">2</span> 
+              </a> 
+            </li>
+            <li>
+              <a class="quick-btn" href="#menu5" data-toggle="tab">
+                <span>default</span> 
+                <span class="label label-default">2</span> 
+              </a> 
+            </li>
+          </ul>
+        </div> <!-- end of configuration tab Buttons -->
+
+        <div class="row">
+          <div class="col-lg-12 tab-content">
+            <div class="box tab-pane fade in active" id="menu1">
+              <header><h5>Menu 1</h5></header>
+              <p>Some content.</p>
+            </div>
+
+            <div class="box tab-pane fade" id="menu2">
+              <header><h5>Menu 2</h5></header>
+              <p>Some content.</p>
+            </div>
+
+            <div class="box tab-pane fade" id="menu3">
+              <header><h5>Menu 3</h5></header>
+              <p>Some content.</p>
+            </div>
+
+            <div class="box tab-pane fade" id="menu4">
+              <header><h5>Menu 4</h5></header>
+              <p>Some content.</p>
+            </div>
+
+            <div class="box tab-pane fade" id="menu5">
+              <header><h5>Menu 5</h5></header>
+              <p>Some content.</p>
+            </div>
+          </div>
+        </div> <!-- end of Tab Content -->
+
+        <hr>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="box">
+              <header><h5>Calendar</h5></header>
+              <div id="calendar_content" class="body">
+                <div id='calendar'></div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of calendar Role -->
+
+      </div><!-- /.inner -->
+    </div><!-- /.outer -->
+  </div><!-- /#content -->
 </template>
