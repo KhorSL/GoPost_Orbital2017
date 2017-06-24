@@ -1,7 +1,40 @@
 import { Meteor } from 'meteor/meteor';
-
 Meteor.startup(() => {
   // code to run on server at startup
+});
+
+UserSchema = new SimpleSchema({
+  User: {
+    type: String,
+    label: "User"
+  },
+
+  Gender: {
+    type: String,
+    label: "Gender"
+  },
+
+  Age: {
+    type: Number,
+    label: "Age"
+  },
+
+  LikedList: {
+    type: Array,
+		label:"LikedList",
+		defaultValue: []
+  },
+  "LikedList.$": {
+    type: String
+  },
+  FollowingList: {
+    type: Array,
+		label:"Following",
+		defaultValue: []
+  },
+  "FollowingList.$": {
+		type: String
+	}
 });
 
 EventsSchema = new SimpleSchema({
@@ -93,6 +126,7 @@ EventsSchema = new SimpleSchema({
 	}
 });
 
+Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 
 if(Meteor.isServer) {
@@ -137,6 +171,10 @@ if(Meteor.isServer) {
   		);
 	});
 
+  Meteor.publish("userDetail", function(){
+    return Users.find("Age");
+  });
+
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});
@@ -173,6 +211,13 @@ Meteor.methods({
 		});
 	},
 
+  insertUserData: function(username,gender,age){
+    Users.insert({
+      User: username,
+      Gender: gender,
+      Age: age
+    });
+  },
 	/*
 	updateEvent: function(id, title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
 		var currEvent = UserEvents.findOne(id);
@@ -206,17 +251,25 @@ Meteor.methods({
 		var currLikers = Events.find( {_id: id}, { likers: 1}).fetch()[0].likers;
 		// Check if the current user is in the array
 		var q = _.find(currLikers, (x) => x == Meteor.userId());
-		
+    var currUserLL = Users.find({ User: Meteor.userId()}).fetch()[0].LikedList;
+
 		if(q == Meteor.userId()) {
-			Events.update( {_id: id}, { 
+			Events.update( {_id: id}, {
 				$inc: { likes: -1 },
-				$pull: { likers: Meteor.userId() } 
-			});
+				$pull: { likers: Meteor.userId() },
+        });
+      Users.update({User:Meteor.userId()}, {
+        $pull: {LikedList:id}
+      });
 		} else {
-			Events.update( {_id: id}, { 
+			Events.update( {_id: id}, {
 				$inc: { likes: 1 },
-				$push: { likers: Meteor.userId() } 
+				$push: { likers: Meteor.userId() },
+        //Add to the ll.
 			});
+      Users.update({User:Meteor.userId()}, {
+        $push: { LikedList: id}
+      });
 		}
 	}
 });
