@@ -1,5 +1,7 @@
 <template name='bulletinBoard'>
   <div class="search_container">
+    
+    {{> advertisement}}
 
     <ul class="nav nav-tabs search_tab">
       <li class="active"><a  href="#1" data-toggle="tab">Search</a></li>
@@ -10,7 +12,7 @@
       <div class="tab-pane active" id="1"> <!--Search Bar Panel -->
 
          <div class="row">    
-          <div class="col-md-10 col-sm-10 col-xs-10">
+          <div class="col-md-10 col-sm-10 col-xs-9">
             <div class="input-group search_box">
               <div class="input-group-btn search-panel">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -33,7 +35,7 @@
               </span>
             </div>
           </div>
-          <div class="col-md-2 col-sm-2 col-xs-10">
+          <div class="col-md-2 col-sm-2 col-xs-3">
               <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
               <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
           </div> 
