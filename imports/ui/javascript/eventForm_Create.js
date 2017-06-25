@@ -45,6 +45,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.onCreated(function() {
+
 	  var output; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
 	  geo = ""; //Global var.. for location geometry
@@ -116,6 +117,7 @@ if(Meteor.isClient) {
 	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
 	
 	  $('#tokenfield').tokenfield();
+	  this.$('.datetimepicker').datetimepicker();
 	});
 
 	Template.eventForm_Create.events({
@@ -132,12 +134,13 @@ if(Meteor.isClient) {
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
-			
+
 			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
 					Meteor.call("addEventTag", type);
+					return false;
 					Router.go('event_View', { _id: result});
 				}
 			});
@@ -161,6 +164,54 @@ if(Meteor.isClient) {
 				//Meteor.call("addImage", newFile);
 			});
 			*****************************************/
+		},
+
+		'click .previous': function(event){
+			event.preventDefault();
+			
+			var current_fs, next_fs, previous_fs; //fieldsets
+			var left, opacity, scale; //fieldset properties which we will animate
+			var animating; //flag to prevent quick multi-click glitches
+
+			if(animating) return false;
+			animating = true;
+			
+			current_fs = $(event.target).parent();
+			previous_fs = $(event.target).parent().prev();
+			
+			//de-activate current step on progressbar
+			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+			
+			//show the previous fieldset
+			previous_fs.show();
+			
+			//hide current fieldset
+			current_fs.hide();
+			animating = false;
+		},
+
+		'click .next': function(event){
+			event.preventDefault();
+			var current_fs, next_fs, previous_fs; //fieldsets
+			var left, opacity, scale; //fieldset properties which we will animate
+			var animating; //flag to prevent quick multi-click glitches
+			
+			if(animating) return false;
+			animating = true;
+
+			current_fs = $(event.target).parent();
+			next_fs = $(event.target).parent().next();
+
+			//activate next step on progressbar using the index of next_fs
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass('active');
+
+			//show the next fieldset
+			next_fs.show();
+
+			//hide the current fieldset with style
+			current_fs.hide();
+			animating = false;
+			
 		}
 	});
 }

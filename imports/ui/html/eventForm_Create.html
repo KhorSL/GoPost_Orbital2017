@@ -1,10 +1,18 @@
 <template name="eventForm_Create">
-	<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
-		<div class="panel-heading"> Create event </div>
+	<!-- progressbar -->
+	<ul id="progressbar">
+		<li class="active">Create Event </li>
+		<li> Create Registration Form </li>
+		<li> Confirm Submit </li>
+	</ul>
+
+	<div class="panel panel-default form-panel" id="new-event-panel">
+		<!-- <div class="panel-heading"> Create event </div> -->
 		<div class="panel-body">
 				
-			<form class="new-event" id="new-event">
-					
+			<form role="form" method="post" class="new-event" id="new-event">
+				
+				<fieldset>
 				<div class="form-group">
 					<label for="title">Event Title:</label>           
 					<input type="text" class="form-control" name="title" placeholder="A new event" required>
@@ -29,7 +37,10 @@
 
 				<div class="form-group">
 					<label> Event Date and Time: </label>
-					<input class="form-control" type="datetime-local" name="dateTime">
+					<div class="input-group datetimepicker">
+						<input class="set-due-date form-control" type="text" name="dateTime">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+					</div>
 				</div>
 				
 				<div class="form-group">
@@ -52,10 +63,44 @@
 					<label> Privacy options: </label>
 					<input type="checkbox" name="privacy"> Private event
 				</div>
+				
+				<button type="button" class="btn next">Next</button>
+				</fieldset>
 
-				<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
+				<fieldset>
+					<div class="form-top">
+						<div class="form-top-left">
+							<h3>Step 2 / 3</h3>
+							<p>Create Your Registration Form:</p>
+							<p> Work in progress... </p>
+						</div>
+		                <div class="form-top-right">
+						</div>
+					</div>
+					
+
+					<button type="button" class="btn previous">Previous</button>
+					<button type="button" class="btn next">Next</button>
+				</fieldset>
+
+				<fieldset>
+					<div class="form-top">
+						<div class="form-top-left">
+							<h3>Step 3 / 3</h3>
+							<p>Confirm to submit</p>
+							<p> Work in progress... </p>
+						</div>
+		                <div class="form-top-right">
+						</div>
+					</div>
+					
+					
+					<button type="button" class="btn previous">Previous</button>
+					<input class="btn btn-warning" type="submit" value="Submit">
+				</fieldset>
 
 			</form>
-		</div> 
-	</div>
+		</div> <!-- End of panel body -->
+	</div> <!-- End of panel -->
+	
 </template>
