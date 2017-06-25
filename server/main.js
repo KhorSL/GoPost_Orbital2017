@@ -143,6 +143,10 @@ if(Meteor.isServer) {
     	return Events.find();
 	});
 
+	Meteor.publish("events_limit", function(limit) {
+    	return Events.find({}, {sort: {createdAt: -1}, limit: limit});
+	});
+
 	Meteor.publish('events_Filter', function(search, tag, sBut) {
 		check(search, Match.OneOf(String, null, undefined));
 

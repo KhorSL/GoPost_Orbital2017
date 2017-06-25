@@ -1,10 +1,20 @@
 <template name='myBoard'>
+ <div class="search_container">
 
-	<h1> User's own Bulletin Board (More for Viewing) </h1>
-	
-	<h4> Features Available </h4>
-	<hr/>
-	<p>1. Bulletin Board of my liked, subscribed, signed up, own events</p>
-	<p>2. Should highlight the signed up events</p>
+    <ul class="nav nav-tabs search_tab">
+      <li class="active"><a  href="#1" data-toggle="tab">Subscriptions</a></li>
+      <li><a href="#2" data-toggle="tab">Likes</a></li>
+    </ul>
 
+    <div class="tab-content ">
+      <div class="tab-pane active" id="1"> <!--Subscriptions -->
+        <p>Going to include a panel for subscribed users...</p>
+        <p>A feed to read the post from Posters</p>
+      </div> <!-- End of Tab 1 -->
+      
+      <div class="tab-pane" id="2"> <!--Likes Panel -->
+        <p>A simple read for all the likes</p>
+      </div> <!-- End of Tab 2 -->
+    </div> <!--end of Tab-Content -->
+  </div> <!-- end of search container -->
 </template>

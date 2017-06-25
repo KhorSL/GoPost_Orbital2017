@@ -3,12 +3,6 @@ Router.route('/', {
 	template: 'landing'
 });
 
-Router.route('/home', {
-  name: 'home',
-  template: 'home',
-  layoutTemplate: 'layout'
-});
-
 Router.route('/aboutUs', {
   name: 'aboutUs',
   template: 'aboutUs',

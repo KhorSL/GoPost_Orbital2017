@@ -40,7 +40,7 @@
   padding-top: 16px;
   text-align: center;
   text-decoration: none;
-  width: 90px;
+  width: 120px;
   position: relative;
 }
 .quick-btn span {
@@ -60,6 +60,25 @@
   width: 40px;
   height: 30px;
   padding-top: 6px;
+}
+
+.hrRemove {
+  margin-bottom: 0;
+}
+
+.dash_tabs > li {
+  float:none;
+  display:inline-block;
+  *display:inline; /* ie7 fix */
+  zoom:1; /* hasLayout ie7 trigger */
+}
+
+.dash_tabs {
+  text-align:center;
+}
+
+.dash_calendar_add {
+  padding-left:0;
 }
 
 /*********************************************************/

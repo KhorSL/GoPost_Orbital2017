@@ -59,7 +59,7 @@ Template.registerPage.onRendered(function() {
           Meteor.call('insertUserData',result,gender,age); //Result is the _id of the account
           $('#registerModal').modal('hide');
           Session.set("viewToggle", false);
-          Router.go('home');
+          Router.go('bulletinBoard');
         }
       }); //end of Method.call(insertUser)
     } //end of submitHandler
