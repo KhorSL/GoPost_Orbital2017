@@ -29,7 +29,7 @@ UserSchema = new SimpleSchema({
   },
   FollowingList: {
     type: Array,
-		label:"Following",
+		label:"FollowingList",
 		defaultValue: []
   },
   "FollowingList.$": {
@@ -178,6 +178,10 @@ if(Meteor.isServer) {
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});
+
+  Meteor.publish("additionalUserDetails",function(){
+    return Users.find();
+  });
 }
 
 Meteor.methods({
@@ -271,5 +275,36 @@ Meteor.methods({
         $push: { LikedList: id}
       });
 		}
-	}
+	},
+
+  toggleSubscription: function(id){
+    // Array of people currUser is following
+    var currSubList = Users.find({User: Meteor.userId()}).fetch()[0].FollowingList;
+    // Check if the owner of the profile is being followed by currUser
+    var q = _.find(currSubList, (x) => x == id);
+    if(q == id) { //If followed, remove
+      Users.update({User:Meteor.userId()}, {
+        $pull: {FollowingList:id}
+      });
+		} else {
+      Users.update({User:Meteor.userId()}, {
+        $push: {FollowingList:id}
+      });
+		}
+  },
+
+  /*
+  getFollowers: function(id){
+    // Array of people currUser is following
+    var currSubList = Users.find({User: Meteor.userId()}).fetch()[0].FollowingList;
+    // Check if the owner of the profile is being followed by currUser
+    var q = _.find(currSubList, (x) => x == id);
+    if(q == id) { //If followed, remove
+      console.log("Detected");
+      return true;
+    } else {
+      return false;
+    }
+  }
+  */
 });

@@ -22,7 +22,7 @@
 					            	<li><a href="{{pathFor route='bulletinBoard'}}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Discover</a></li>
 					            	<li><a href="{{pathFor route='myBoard'}}"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> My Notices</a></li>
 					            	<li role="separator" class="divider"></li>
-					            	<li><a href="{{pathFor route='dashBoard'}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> DashBoard</a></li>
+					            	<li><a href="{{pathFor route='normalDashBoard'}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> DashBoard</a></li>
 					            	<li><a href="{{pathFor route='myEvents'}}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> My Events</a></li>
 					            	<li><a href="{{pathFor route='create-event'}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create Event</a></li>
 					            	<li role="separator" class="divider"></li>
@@ -47,7 +47,7 @@
 			        	</div>
 			        		<button type="submit" class="btn btn-default">Search</button>
 			      	</form>
-			      	
+
 			      	{{#if currentUser}}
 				      	<ul class="nav navbar-nav navbar-right">
 				        	<li><a href="{{pathFor route='chatBoard'}}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>

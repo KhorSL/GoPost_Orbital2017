@@ -11,14 +11,43 @@
                 <p>This is his image profile</p>
               </div>
             </div>
-
+            {{#if isUser}} <!-- curr User is the owner of the dashboard !-->
+            <!-- if this is not the user himself !-->
             <div class="col-lg-8">
               <div class="box">
                 <header><h5>Profile Details</h5></header>
                 <p>This is his profile Detail</p>
               </div>
             </div>
-          </div> <!-- end of calendar Role -->
+            {{else}}
+              <div class="col-lg-6">
+                <div class="box">
+                  <header><h5>Profile Details</h5></header>
+                  <p>This is his profile Detail</p>
+                  <p>{{this.username}}</p>
+                </div>
+              </div>
+
+              <div class="col-lg-2">
+                <div class="box">
+                  <header><h5>Actions</h5></header>
+                  <br>
+                  <ul align="left" >
+                  {{#if hasSubscribed}} <!-- Toggle Subscription !-->
+                    <button type ="button" id ="subscribe">Unsubscribe</button>
+                  {{else}}
+                    <button type ="button" id ="subscribe">Subscribe</button>
+                  {{/if}}
+
+                </ul>
+                <ul>
+                  <button type ="button" name = "email"> Email / Contact </button>
+                </ul>
+              </div>
+              </div>
+              <!-- End of else !-->
+            {{/if}} <!-- End of if isUser !-->
+            </div> <!-- end of calendar row col-lg add to 12 max-->
         </div>
         <hr>
 
@@ -27,7 +56,7 @@
             <li class="active">
               <a class="quick-btn" href="#menu1" data-toggle="tab">
                 <span>default</span>
-                <span class="label label-default">2</span>
+                <span class="label label-default">1</span>
               </a>
             </li>
             <li>
@@ -39,19 +68,19 @@
             <li>
               <a class="quick-btn" href="#menu3" data-toggle="tab">
                 <span>default</span>
-                <span class="label label-default">2</span>
+                <span class="label label-default">3</span>
               </a>
             </li>
             <li>
               <a class="quick-btn" href="#menu4" data-toggle="tab">
                 <span>default</span>
-                <span class="label label-default">2</span>
+                <span class="label label-default">4</span>
               </a>
             </li>
             <li>
               <a class="quick-btn" href="#menu5" data-toggle="tab">
                 <span>default</span>
-                <span class="label label-default">2</span>
+                <span class="label label-default">5</span>
               </a>
             </li>
           </ul>
