@@ -175,42 +175,29 @@ if(Meteor.isServer) {
   		);
 	});
 
-	Meteor.publish("events_Subscribers",function(curUser, sBut) {
-		
-		var query = {};
-		var postQuery = "";
-/*
-		if(posters) {
-			for(var i in posters) {
-				var postID = posters[i].trim();
-				var field = {};
-				postQuery += (field["owner"] = postID;
-				if(i < posters.length) {
-					postQuery += ',';
-				}
-			}
-			postQuery = postQuery.substring(0, postQuery.length-1); //remove the last ","
-		}*/
+	Meteor.publish("events_Subscribers",function(curUser, sBut, likeSub) {
 
-		var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.FollowingList;});
+		if(likeSub) {
+			var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.LikedList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"_id": {"$in" : posterIDs}});
+			return posterEvents;
+		} else {
+			var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.FollowingList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"owner": {"$in" : posterIDs}});
+			return posterEvents;
+		}
 
-		var posterEvents = Events.find({"owner": {"$in" : posterIDs}});
+		/*Credits: https://forums.meteor.com/t/mongodb-returning-array-field/6472/4*/
+		/*Credits: https://stackoverflow.com/questions/30650978/meteor-find-using-in-with-array-of-ids*/
 
-		console.log(posterIDs);
-		console.log(posterEvents.count());
-		/*
-		if(posters) {
-			query = {
-      			$or: [
-      				postQuery
-      			]
-    		};
-		}*/
-
-		console.log(query);
-		console.log(Events.find(query).count());
-		return Events.find(query);
+		return false;
 	}); 
+
+	Meteor.publish("userDetails_Cur", function(curUser) {
+		return Users.find({"User": curUser});
+	});
 
   	Meteor.publish("userDetail", function(){
     	return Users.find("Age");

@@ -1,10 +1,17 @@
 <template name='myBoard'>
  <div class="board_container">
-
-    <ul class="nav nav-tabs search_tab">
-      <li class="active"><a href="#1" data-toggle="tab">Subscriptions</a></li>
-      <li><a href="#2" data-toggle="tab">Likes</a></li>
-    </ul>
+  <div class="row">
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <ul class="nav nav-tabs sub_tab">
+        <li class="active"><a href="#1" id="sub_but" data-toggle="tab">Subscriptions</a></li>
+        <li><a href="#2" id="like_but" data-toggle="tab">Likes</a></li>
+      </ul>
+    </div> <!-- end of tab button -->
+    <div class="col-md-3 col-sm-3 col-xs-3">
+      <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
+      <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
+    </div> <!-- end of toggle button -->
+  </div> <!-- end of row for toggle and tab button -->
 
     <div class="tab-content ">
       <div class="tab-pane active" id="1"> <!--Subscriptions -->
@@ -18,15 +25,6 @@
       </div> <!-- End of Tab 2 -->
     </div> <!--end of Tab-Content -->
   </div> <!-- end of board container -->
-
-  <hr>
-
-  <div class="row board_container">
-    <div class="col-md-2 col-sm-2 col-xs-3">
-      <span class="btn glyphicon glyphicon-th-list {{#if viewType}}toggleViewBtn{{/if}}" role="button" id="toggle-list" aria-hidden="true"></span>
-      <span class="btn glyphicon glyphicon-th-large {{#unless viewType}}toggleViewBtn{{/unless}}" role="button" id="toggle-grid" aria-hidden="true"></span>
-    </div> 
-  </div> <!-- end of row for toggle button -->
 
   {{#if viewType}} 
 

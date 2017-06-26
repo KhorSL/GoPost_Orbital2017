@@ -9,22 +9,19 @@ import './events_ListView.js';
 
 Template.myBoard.onCreated( () => {
 	let template = Template.instance();
-
-	var items = "L4Zr8D4ZCMWskAzeZ,Z8KzSp8TTx8EgZZYN";
-  	var posters = items.split(',');
-  	Session.set("posters", posters);
+	template.subscribe('userDetails_Cur', Meteor.userId());
 
 	Session.set("searching", false);
 	Session.set("switchButton", false);
-	Session.set("viewToggle", true);
+	Session.set("likeSub", false); //like = true, sub = false;
 	Session.set("Initial_Limit", 20);
 	Session.set("limit", Session.get("Initial_Limit"));
 
   	template.autorun( () => {
-  		var posters = Session.get("posters"); //Need to get asrray of all subscribed posters first. Have to wait for wen zong.
-  		var sButton = Session.get("sButton");
+  		var sButton = Session.get("switchButton");
+  		var likeSub = Session.get("likeSub");
 
-    	template.subscribe('events_Subscribers', Meteor.userId(), sButton, () => {
+    	template.subscribe('events_Subscribers', Meteor.userId(), sButton, likeSub, () => {
 	      	setTimeout( () => {
 	        	Session.set("searching", false);
 	      	}, 300 );
@@ -61,29 +58,44 @@ Template.myBoard.helpers({
     	return Session.get("searching");
   	},
   	events_subscribed: function() {
-  		var posters = Session.get("posters");
-  		var limit = Session.get("limit");
+  		var likeSub = Session.get("likeSub"); 
 
-  		var query = {};
-		var postQuery = "";
-
-		console.log(posters);
-
-  		return Events.find(query, {sort: {title: 1 }, limit: limit}); 
+  		if(likeSub) {
+			var posterIDs = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.LikedList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"_id": {"$in" : posterIDs}});
+			return posterEvents;
+		} else {
+			var posterIDs = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.FollowingList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"owner": {"$in" : posterIDs}});
+			return posterEvents;
+		}
+		return false;
   	}
 });
 
 Template.myBoard.events({
 	'click #toggle-list': function(e) {
 		e.preventDefault();
-		Session.set("viewToggle", true);	//Template.instance().viewToggle.set(true);
+		Session.set("viewToggle", true);
 		Session.set("searching", true);
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
+		Session.set("switchButton", (!Session.get("switchButton")));	//Trigger Reactivity
 	},
 	'click #toggle-grid': function(e) {
 		e.preventDefault();
-		Session.set("viewToggle", false);	//Template.instance().viewToggle.set(false);
+		Session.set("viewToggle", false);
 		Session.set("searching", true);
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
+		Session.set("switchButton", (!Session.get("switchButton")));	//Trigger Reactivity
+	},
+	'click #sub_but': function(e) {
+		e.preventDefault();
+		Session.set("searching", true);
+		Session.set("likeSub", false);
+	},
+	'click #like_but': function(e) {
+		e.preventDefault();
+		Session.set("searching", true);
+		Session.set("likeSub", true);
 	}
 });
