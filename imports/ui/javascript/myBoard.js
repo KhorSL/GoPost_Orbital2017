@@ -3,26 +3,28 @@ import { Template } from 'meteor/templating';
 
 import '../html/myBoard.html';
 import '../html/components/loader.html';
+import '../css/myBoard.css';
 import './events_StickyView.js';
 import './events_ListView.js';
-import './events_Tag.js';
 
 Template.myBoard.onCreated( () => {
 	let template = Template.instance();
 
-	Session.set("searchQuery", "");
+	var items = "L4Zr8D4ZCMWskAzeZ,Z8KzSp8TTx8EgZZYN";
+  	var posters = items.split(',');
+  	Session.set("posters", posters);
+
 	Session.set("searching", false);
-	Session.set("searchBut", false);
+	Session.set("switchButton", false);
 	Session.set("viewToggle", true);
 	Session.set("Initial_Limit", 20);
 	Session.set("limit", Session.get("Initial_Limit"));
 
   	template.autorun( () => {
-  		var search = Session.get("searchQuery");
+  		var posters = Session.get("posters"); //Need to get asrray of all subscribed posters first. Have to wait for wen zong.
   		var sButton = Session.get("sButton");
-  		var tag = Session.get("selected_tag");
 
-    	template.subscribe('events_Filter', search, tag, sButton, () => {
+    	template.subscribe('events_Subscribers', Meteor.userId(), sButton, () => {
 	      	setTimeout( () => {
 	        	Session.set("searching", false);
 	      	}, 300 );
@@ -58,39 +60,16 @@ Template.myBoard.helpers({
 	searching: function() {
     	return Session.get("searching");
   	},
-  	query: function() {
-    	return Session.get("searchQuery");
-  	},
-  	events_filtered: function() {
-
-  		var sq = Session.get("searchQuery"); 	
-  		var tag = Session.get("selected_tag");
+  	events_subscribed: function() {
+  		var posters = Session.get("posters");
   		var limit = Session.get("limit");
-  		var search = {};
-  		var regex;
 
-  		if(sq !== '' && (typeof sq) !== 'undefined') {
-  			if(sq) {
-	    		regex = new RegExp(sq,'i');
-	    		search = {
-	      			$or: [
-	        			{ 
-	        				title: regex 
-	        			}
-	      			]
-	    		};
-	    	}
-  		} else if (tag !== '' && (typeof tag) !== 'undefined')	{
-  			if(tag) {
-  				search = {
-	      			$or: [
-	        			{ type: tag }
-	      			]
-	    		};
-  			}
-  		}
+  		var query = {};
+		var postQuery = "";
 
-  		return Events.find(search, {sort: {title: 1 }, limit: limit}); //safety hit
+		console.log(posters);
+
+  		return Events.find(query, {sort: {title: 1 }, limit: limit}); 
   	}
 });
 
@@ -106,24 +85,5 @@ Template.myBoard.events({
 		Session.set("viewToggle", false);	//Template.instance().viewToggle.set(false);
 		Session.set("searching", true);
 		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
-	},
-	'click #searchBut': function(e) {
-		e.preventDefault();
-		var searchText = $('[name=search]').val().trim();
-
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
-
-		if(searchText !== '') {
-			Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
-	      	Session.set("searching", true);			//Template.instance().searching.set(true);
-	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
-	   	 	Session.set("limit", Session.get("Initial_Limit"));
-	    }
-
-	    if(searchText === '') {
-	      	Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
-	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
-	    	Session.set("limit", Session.get("Initial_Limit"));
-	    }
 	}
 });

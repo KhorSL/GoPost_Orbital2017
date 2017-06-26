@@ -175,9 +175,46 @@ if(Meteor.isServer) {
   		);
 	});
 
-  Meteor.publish("userDetail", function(){
-    return Users.find("Age");
-  });
+	Meteor.publish("events_Subscribers",function(curUser, sBut) {
+		
+		var query = {};
+		var postQuery = "";
+/*
+		if(posters) {
+			for(var i in posters) {
+				var postID = posters[i].trim();
+				var field = {};
+				postQuery += (field["owner"] = postID;
+				if(i < posters.length) {
+					postQuery += ',';
+				}
+			}
+			postQuery = postQuery.substring(0, postQuery.length-1); //remove the last ","
+		}*/
+
+		var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.FollowingList;});
+
+		var posterEvents = Events.find({"owner": {"$in" : posterIDs}});
+
+		console.log(posterIDs);
+		console.log(posterEvents.count());
+		/*
+		if(posters) {
+			query = {
+      			$or: [
+      				postQuery
+      			]
+    		};
+		}*/
+
+		console.log(query);
+		console.log(Events.find(query).count());
+		return Events.find(query);
+	}); 
+
+  	Meteor.publish("userDetail", function(){
+    	return Users.find("Age");
+  	});
 
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
@@ -215,13 +252,13 @@ Meteor.methods({
 		});
 	},
 
-  insertUserData: function(username,gender,age){
-    Users.insert({
-      User: username,
-      Gender: gender,
-      Age: age
-    });
-  },
+  	insertUserData: function(username,gender,age){
+    	Users.insert({
+      		User: username,
+      		Gender: gender,
+      		Age: age
+    	});
+  	},
 	/*
 	updateEvent: function(id, title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
 		var currEvent = UserEvents.findOne(id);
@@ -255,25 +292,28 @@ Meteor.methods({
 		var currLikers = Events.find( {_id: id}, { likers: 1}).fetch()[0].likers;
 		// Check if the current user is in the array
 		var q = _.find(currLikers, (x) => x == Meteor.userId());
-    var currUserLL = Users.find({ User: Meteor.userId()}).fetch()[0].LikedList;
+    	var currUserLL = Users.find({ User: Meteor.userId()}).fetch()[0].LikedList;
 
 		if(q == Meteor.userId()) {
 			Events.update( {_id: id}, {
 				$inc: { likes: -1 },
 				$pull: { likers: Meteor.userId() },
-        });
-      Users.update({User:Meteor.userId()}, {
-        $pull: {LikedList:id}
-      });
+        	});
+      
+      		Users.update({User:Meteor.userId()}, {
+        		$pull: {LikedList:id}
+      		});
+		
 		} else {
 			Events.update( {_id: id}, {
 				$inc: { likes: 1 },
 				$push: { likers: Meteor.userId() },
-        //Add to the ll.
+        		//Add to the ll.
 			});
-      Users.update({User:Meteor.userId()}, {
-        $push: { LikedList: id}
-      });
+      		
+      		Users.update({User:Meteor.userId()}, {
+        		$push: { LikedList: id}
+      		});
 		}
 	}
 });
