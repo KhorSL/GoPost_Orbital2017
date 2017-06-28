@@ -45,5 +45,10 @@ Template.event_View.events({
   'click .update' :function(e) {
     var id = e.target.id;
     Router.go("update-event", {_id: id});
+  },
+
+  'click .signUp' :function(e) {
+    var id = e.target.id;
+    Router.go("sign-up", {_id: id});
   }
 });
