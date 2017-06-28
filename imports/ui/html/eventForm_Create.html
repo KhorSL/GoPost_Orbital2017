@@ -36,9 +36,17 @@
 				</div>
 
 				<div class="form-group">
-					<label> Event Date and Time: </label>
+					<label> Event Date and Time (Start): </label>
 					<div class="input-group datetimepicker">
-						<input class="set-due-date form-control" type="text" name="dateTime">
+						<input class="set-due-date form-control" type="text" name="start" onkeydown="return false">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label> Event Date and Time (End): </label>
+					<div class="input-group datetimepicker">
+						<input class="set-due-date form-control" type="text" name="end" onkeydown="return false">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 					</div>
 				</div>
@@ -70,11 +78,12 @@
 				<fieldset>
 					<div class="form-top">
 						<div class="form-top-left">
-							<h3>Step 2 / 3</h3>
-							<p>Create Your Registration Form:</p>
-							<p> Work in progress... </p>
+							<h2>Create Your Registration Form:</h2>
+							<p> Check the fields that you want to include. </p>
 						</div>
-		                <div class="form-top-right">
+
+		                <div class="">
+		                	{{> eventForm_RegistrationForm}}
 						</div>
 					</div>
 					

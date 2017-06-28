@@ -1,0 +1,156 @@
+[{
+        "text": "Name",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Contact (Mobile)",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Contact (Email)",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Full Address",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Address: Region",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Shirt Size (SML)",
+        "choices": [{
+                "text": "XS"
+            },
+            {
+                "text": "S"
+            },
+            {
+                "text": "M"
+            },
+            {
+                "text": "L"
+            },
+            {
+                "text": "XL"
+            }
+        ],
+        "result": []
+    },
+
+    {
+        "text": "Shirt Size (123)",
+        "choices": [{
+                "text": 1
+            },
+            {
+                "text": 2
+            },
+            {
+                "text": 3
+            },
+            {
+                "text": 4
+            },
+            {
+                "text": 5
+            }
+        ],
+        "result": []
+    },
+
+    {
+        "text": "Gender",
+        "choices": [{
+                "text": "Male"
+            },
+            {
+                "text": "Female"
+            },
+            {
+                "text": "Non-binary"
+            }
+        ],
+        "result": []
+    },
+
+    {
+        "text": "Dietary Preferences",
+        "choices": [{
+                "text": "Halal"
+            },
+            {
+                "text": "Non-Halal"
+            },
+            {
+                "text": "Vegeterian"
+            }
+        ],
+        "result": []
+    },
+
+    {
+        "text": "Allergies",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Blood Type",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Faculty",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Major",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "NOK Name",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "NOK Contact (Mobile)",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "NOK Contact (Email)",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "NOK Full Address",
+        "type": "freetext",
+        "result": []
+    },
+
+    {
+        "text": "Additional Info",
+        "type": "freetext",
+        "results": []
+    }
+]

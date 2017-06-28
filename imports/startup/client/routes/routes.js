@@ -87,3 +87,12 @@ Router.route('/settings', {
   template: 'settings',
   layoutTemplate: 'layout'
 });
+
+Router.route('/signUp/:_id', {
+  name: 'sign-up',
+  template: 'eventForm_signUp',
+  layoutTemplate: 'layout',
+  data: function () {
+    return RegistrationForms.findOne({eventId: this.params._id});
+  },
+});

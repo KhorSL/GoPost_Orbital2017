@@ -86,13 +86,147 @@ EventsSchema = new SimpleSchema({
 		label: "Privacy",
 		optional: true
 	},
-	dateTime: {
-		type: String,
-		label: "Date and Time",
+	start: {
+		type: Date,
+		label: "Start",
+		optional: true
+	},
+	end: {
+		type: Date,
+		label: "End",
 		optional: true
 	}
 });
 
+RegistrationFormsSchema = new SimpleSchema({
+	owner: {
+		type: String,
+		label: "Owner",
+		defaultValue: function() {
+			return Meteor.userId();
+		},
+		denyUpdate: true
+	},
+	createdAt: {
+		type: Date,
+		label: "Created At",
+		defaultValue: function() {
+			return new Date();
+		},
+		denyUpdate: true
+	},
+	eventId: {
+		type: String,
+		label: "Event ID",
+		denyUpdate: true
+	},
+	eventTitle: {
+		type: String,
+		label: "Event Title"
+	},
+	description: {
+		type: Boolean,
+		label: "Description",
+		optional: true
+	},
+	name: {
+		type: Boolean,
+		label: "Name",
+		optional: true
+	},
+	contact_mobile: {
+		type: Boolean,
+		label: "Contact (Mobile)",
+		optional: true
+	},
+	contact_email: {
+		type: Boolean,
+		label: "Contact (Email)",
+		optional: true
+	},
+	address_full: {
+		type: Boolean,
+		label: "Full Address",
+		optional: true
+	},
+	address_region: {
+		type: Boolean,
+		label: "Address Region",
+		optional: true
+	},
+	shirtSize_SML: {
+		type: Boolean,
+		label: "Shirt Size (SML)",
+		optional: true
+	},
+	shirtSize_123: {
+		type: Boolean,
+		label: "Shirt Size (123)",
+		optional: true
+	},
+	shirtSize_Chart: {
+		type: Boolean,
+		label: "Shirt Size Chart",
+		optional: true
+	},
+	nationality: {
+		type: Boolean,
+		label: "Nationality",
+		optional: true
+	},
+	gender: {
+		type: Boolean,
+		label: "Gender",
+		optional: true
+	},
+	allergies: {
+		type: Boolean,
+		label: "Allergies",
+		optional: true
+	},
+	dietaryPref: {
+		type: Boolean,
+		label: "Dietary Preferences",
+		optional: true
+	},
+	bloodType: {
+		type: Boolean,
+		label: "Blood Type",
+		optional: true
+	},
+	faculty: {
+		type: Boolean,
+		label: "Faculty",
+		optional: true
+	},
+	major: {
+		type: Boolean,
+		label: "Major",
+		optional: true
+	},
+	nokInfo: {
+		type: Boolean,
+		label: "Next-of-kin Information",
+		optional: true
+	},
+	additional: {
+		type: Boolean,
+		label: "Additional Information",
+		optional: true
+	},
+	matric: {
+		type: Boolean,
+		label: "Additional Information",
+		optional: true
+	},
+	nric: {
+		type: Boolean,
+		label: "Additional Information",
+		optional: true
+	}
+});
+
+RegistrationForms.attachSchema(RegistrationFormsSchema);
 Events.attachSchema(EventsSchema);
 
 if(Meteor.isServer) {
@@ -140,6 +274,14 @@ if(Meteor.isServer) {
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});
+
+	Meteor.publish("rfTemplates", function() {
+		return RegistrationForms.find();
+	});
+
+	Meteor.publish("signUps", function() {
+		return SignUps.find();
+	});
 }
 
 Meteor.methods({
@@ -154,7 +296,67 @@ Meteor.methods({
 		}
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
+	addRegistrationForm: function(eventId, title, description, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, shirtSize_Chart, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
+		return RegistrationForms.insert({
+			owner: Meteor.userId(),
+			createdAt: new Date(),
+			eventId: eventId,
+			eventTitle: title,
+			description: description,
+			name: name,
+			contact_mobile: contact_mobile,
+			contact_email: contact_email,
+			address_full: address_full,
+			address_region: address_region,
+			shirtSize_SML: shirtSize_SML,
+			shirtSize_123: shirtSize_123,
+			shirtSize_Chart: shirtSize_Chart,
+			nationality: nationality,
+			gender: gender,
+			allergies: allergies,
+			dietaryPref: dietaryPref,
+			bloodType: bloodType,
+			faculty: faculty,
+			major: major,
+			nokInfo: nokInfo,
+			additional: additional,
+			matric: matric,
+			nric: nric
+		});
+	},
+
+	addSignUp: function(eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, additional) {
+		return SignUps.insert({
+			participantId: Meteor.userId(),
+			createdAt: new Date(),
+			eventId: eventId,
+			firstName: firstName,
+			lastName: lastName,
+			nric: nric,
+			matric: matric,
+			gender: gender,
+			nationality: nationality,
+			address: address,
+			city: city,
+			region: region,
+			postal: postal,
+			faculty: faculty,
+			major: major,
+			mobile: mobile,
+			email: email,
+			dietaryPref: dietaryPref,
+			allergies: allergies,
+			shirtSize_SML: shirtSize_SML,
+			shirtSize_123: shirtSize_123,
+			nok_rs: nok_rs,
+			nok_firstName: nok_firstName,
+			nok_lastName: nok_lastName,
+			nok_mobile: nok_mobile,
+			additional: additional
+		});
+	},
+
+	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, type, privacy, contact, img){
 		return Events.insert({
 			// Img to further test
 			title: title,
@@ -162,7 +364,8 @@ Meteor.methods({
 			location: location,
 			locationAddr: locationAddr,
 			locationGeo: locationGeo,
-			dateTime: dateTime,
+			start: start,
+			end: end,
 			type: type,
 			privacy: privacy,
 			contact: contact,
@@ -198,7 +401,8 @@ Meteor.methods({
 	*/
 
 	removeEvent: function(id){
-		return Events.remove(id);
+		Events.remove(id);
+		RegistrationForms.remove({ eventId: id });
 	},
 
 	toggleLikes: function(id) {

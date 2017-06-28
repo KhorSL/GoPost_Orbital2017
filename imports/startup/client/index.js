@@ -29,6 +29,8 @@ import '/imports/ui/javascript/layout.js';
 import '/imports/ui/javascript/loginPage.js';
 import '/imports/ui/javascript/registerPage.js';
 import '/imports/ui/javascript/settings.js';
+import '/imports/ui/javascript/eventForm_RegistrationForm.js';
+import '/imports/ui/javascript/eventForm_signUp.js';
 
 //Import to load routes
 import './routes/routes.js';
