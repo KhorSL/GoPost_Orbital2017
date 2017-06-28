@@ -3,3 +3,4 @@ import { Template } from 'meteor/templating';
 
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
+import '../lib/fullcalendar.css';

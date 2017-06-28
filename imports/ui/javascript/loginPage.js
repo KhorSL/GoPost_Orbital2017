@@ -34,7 +34,7 @@ Template.loginPage.onRendered(function() {
           //Log in Successfully
           $('#loginModal').modal('hide');
           Session.set("viewToggle", false);
-          Router.go('home');
+          Router.go('bulletinBoard');
         }
       });
     } //end of submitHandler

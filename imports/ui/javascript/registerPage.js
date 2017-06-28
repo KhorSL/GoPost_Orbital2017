@@ -13,6 +13,8 @@ Template.registerPage.onRendered(function() {
       var em = $('[name=emailAddr]').val();
       var pw1 = $('[name=password1]').val();
       var pw2 = $('[name=password2]').val();
+      var gender = $('[name=gender]').val();
+      var age = $('[name=age]').val();
 
       if($.trim(un) == '') {
         validator.showErrors({
@@ -30,28 +32,35 @@ Template.registerPage.onRendered(function() {
       var newUserData = {
         username: $.trim(un),
         email: $.trim(em),
-        password: $.trim(pw1)
+        password: $.trim(pw1),
       };
-      
+
+      var additionalData = {
+        username: $.trim(un),
+        gender: $.trim(gender),
+        age: $.trim(age)
+      };
+
       Meteor.call('insertUser', newUserData, function(error, result) {
         if(error) {
           //Three possible Error (Email already exists) (Need to set a username or email) (password may not be empty)
           if(error.reason == "Username already exists."){
             validator.showErrors({
-              userName: "That Username have already been taken."      
+              userName: "That Username have already been taken."
             });
           }
           if(error.reason == "Email already exists."){
             validator.showErrors({
-              emailAddr: "That email already belongs to a registered user."  
+              emailAddr: "That email already belongs to a registered user."
             });
           }
         } else {
           Meteor.loginWithPassword(newUserData.email, newUserData.password);
+          Meteor.call('insertUserData',result,gender,age); //Result is the _id of the account
           $('#registerModal').modal('hide');
           Session.set("viewToggle", false);
-          Router.go('home');
-        } 
+          Router.go('bulletinBoard');
+        }
       }); //end of Method.call(insertUser)
     } //end of submitHandler
   }); //end of validate

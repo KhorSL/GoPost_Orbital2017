@@ -10,12 +10,18 @@ Template.landing.onCreated(function() {
   var template = Template.instance();
 
   template.autorun(function() {
-    template.subscribe("events");
+    template.subscribe("events_limit", 20);
   });
 });
 
 Template.landing.events({
   'click #loginBut': function(e) {
+    e.preventDefault();
+    
+    $('#loginModal').modal('show');
+  },
+
+  'click #logMoreBut': function(e) {
     e.preventDefault();
     
     $('#loginModal').modal('show');
@@ -42,7 +48,7 @@ Template.landing.events({
 
 Template.landing.helpers({
   events: function() {
-    return Events.find();
+    return Events.find({}, {sort: {createdAt: -1}, limit: 20});
   },
   formatDate: function(date) {
     return moment(date).format('Do MMM YYYY');

@@ -1,7 +1,40 @@
 import { Meteor } from 'meteor/meteor';
-
 Meteor.startup(() => {
   // code to run on server at startup
+});
+
+UserSchema = new SimpleSchema({
+  User: {
+    type: String,
+    label: "User"
+  },
+
+  Gender: {
+    type: String,
+    label: "Gender"
+  },
+
+  Age: {
+    type: Number,
+    label: "Age"
+  },
+
+  LikedList: {
+    type: Array,
+		label:"LikedList",
+		defaultValue: []
+  },
+  "LikedList.$": {
+    type: String
+  },
+  FollowingList: {
+    type: Array,
+		label:"Following",
+		defaultValue: []
+  },
+  "FollowingList.$": {
+		type: String
+	}
 });
 
 EventsSchema = new SimpleSchema({
@@ -227,6 +260,7 @@ RegistrationFormsSchema = new SimpleSchema({
 });
 
 RegistrationForms.attachSchema(RegistrationFormsSchema);
+Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 
 if(Meteor.isServer) {
@@ -241,6 +275,10 @@ if(Meteor.isServer) {
 
 	Meteor.publish("events", function() {
     	return Events.find();
+	});
+
+	Meteor.publish("events_limit", function(limit) {
+    	return Events.find({}, {sort: {createdAt: -1}, limit: limit});
 	});
 
 	Meteor.publish('events_Filter', function(search, tag, sBut) {
@@ -270,6 +308,34 @@ if(Meteor.isServer) {
   			query, projection
   		);
 	});
+
+	Meteor.publish("events_Subscribers",function(curUser, sBut, likeSub) {
+
+		if(likeSub) {
+			var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.LikedList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"_id": {"$in" : posterIDs}});
+			return posterEvents;
+		} else {
+			var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.FollowingList;});
+			posterIDs = _.flatten(posterIDs);
+			var posterEvents = Events.find({"owner": {"$in" : posterIDs}});
+			return posterEvents;
+		}
+
+		/*Credits: https://forums.meteor.com/t/mongodb-returning-array-field/6472/4*/
+		/*Credits: https://stackoverflow.com/questions/30650978/meteor-find-using-in-with-array-of-ids*/
+
+		return false;
+	}); 
+
+	Meteor.publish("userDetails_Cur", function(curUser) {
+		return Users.find({"User": curUser});
+	});
+
+  	Meteor.publish("userDetail", function(){
+    	return Users.find("Age");
+  	});
 
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
@@ -376,6 +442,13 @@ Meteor.methods({
 		});
 	},
 
+  	insertUserData: function(username,gender,age){
+    	Users.insert({
+      		User: username,
+      		Gender: gender,
+      		Age: age
+    	});
+  	},
 	/*
 	updateEvent: function(id, title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
 		var currEvent = UserEvents.findOne(id);
@@ -410,17 +483,28 @@ Meteor.methods({
 		var currLikers = Events.find( {_id: id}, { likers: 1}).fetch()[0].likers;
 		// Check if the current user is in the array
 		var q = _.find(currLikers, (x) => x == Meteor.userId());
-		
+    	var currUserLL = Users.find({ User: Meteor.userId()}).fetch()[0].LikedList;
+
 		if(q == Meteor.userId()) {
-			Events.update( {_id: id}, { 
+			Events.update( {_id: id}, {
 				$inc: { likes: -1 },
-				$pull: { likers: Meteor.userId() } 
-			});
+				$pull: { likers: Meteor.userId() },
+        	});
+      
+      		Users.update({User:Meteor.userId()}, {
+        		$pull: {LikedList:id}
+      		});
+		
 		} else {
-			Events.update( {_id: id}, { 
+			Events.update( {_id: id}, {
 				$inc: { likes: 1 },
-				$push: { likers: Meteor.userId() } 
+				$push: { likers: Meteor.userId() },
+        		//Add to the ll.
 			});
+      		
+      		Users.update({User:Meteor.userId()}, {
+        		$push: { LikedList: id}
+      		});
 		}
 	}
 });
