@@ -117,7 +117,7 @@ if(Meteor.isClient) {
 	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
 	
 	  $('#tokenfield').tokenfield();
-	  //this.$('.datetimepicker').datetimepicker();
+	  $('.datetimepicker').datetimepicker();
 	});
 
 	Template.eventForm_Create.events({
