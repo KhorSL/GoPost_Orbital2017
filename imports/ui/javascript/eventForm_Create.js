@@ -114,10 +114,43 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.onRendered(function() {
-	  GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
-	
-	  $('#tokenfield').tokenfield();
-	  $('.datetimepicker').datetimepicker();
+		//Google Map API
+		GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
+		//Tags-input
+		$('#tokenfield').tokenfield();
+		//Boostrap datetimepicker
+		$('.datetimepicker').datetimepicker();
+		// Validator
+		var validator = $("#new-event").validate({
+  			rules: {
+  			  title: "required",
+  			  description: "required",
+  			  location: "required",
+  			  start: "required",
+  			  end: "required",
+  			  contact: "required",
+  			  type: "required"
+  			},
+  			groups: {
+			  duration: "start end"
+			},
+			errorPlacement: function(error, element) {
+			  if (element.attr("name") == "start" || element.attr("name") == "end" ) {
+			    error.insertAfter("#end");
+			  } else {
+			    error.insertAfter(element);
+			  }
+			},
+			messages: {
+				title: "Please specify event title",
+				description: "Please enter description",
+				location: "Please specify the location",
+				start: "Please specify start date",
+				end: "Please specify end date",
+				contact: "Please enter contact details",
+				type: "Please specify event type"
+  			}
+  		});
 	});
 
 	Template.eventForm_Create.events({
@@ -181,14 +214,6 @@ if(Meteor.isClient) {
 				output.src = dataURL;
 			};
 			reader.readAsDataURL(input.files[0]);
-			
-			/****************************************
-			FS.Utility.eachFile(event, function(file){
-				var newFile = new FS.File(file);
-				console.log(newFile);
-				//Meteor.call("addImage", newFile);
-			});
-			*****************************************/
 		},
 
 		'click .previous': function(event){
@@ -209,18 +234,45 @@ if(Meteor.isClient) {
 			
 			//show the previous fieldset
 			previous_fs.show();
-			
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 			//hide current fieldset
 			current_fs.hide();
 			animating = false;
 		},
 
-		'click .next': function(event){
+		'click .next-s1': function(event){
 			event.preventDefault();
 			var current_fs, next_fs, previous_fs; //fieldsets
 			var left, opacity, scale; //fieldset properties which we will animate
 			var animating; //flag to prevent quick multi-click glitches
-			
+
+			if(!$("#new-event").valid()) {
+				return false;
+			} else {
+				var title = $('input[name="title"]').val();
+				var description = $('textarea[name="description"]').val();
+				var location = $('input[name="location"]').val();
+				var start = $('input[name="start"]').val();
+				var end = $('input[name="end"]').val();
+				var type = $('#tokenfield').val().split(',');
+				var privacy = $('input[name="privacy"]').is(':checked');
+				var contact = $('input[name="contact"]').val();
+				var img = $('input[name="img"]').val();
+
+				$('input[name="c-title"]').val(title);
+				$('textarea[name="c-description"]').val(description);
+				$('input[name="c-location"]').val(location);
+				$('input[name="c-start"]').val(start);
+				$('input[name="c-end"]').val(end);
+				$('input[name="c-contact"]').val(contact);
+
+				if(privacy) {
+					$('input[name="c-privacy"]').val("Private Event");
+				} else {
+					$('input[name="c-privacy"]').val("Public Event");
+				}
+			}
+
 			if(animating) return false;
 			animating = true;
 
@@ -232,11 +284,34 @@ if(Meteor.isClient) {
 
 			//show the next fieldset
 			next_fs.show();
-
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 			//hide the current fieldset with style
 			current_fs.hide();
 			animating = false;
 			
+		},
+
+		'click .next-s2': function(event){
+			event.preventDefault();
+			var current_fs, next_fs, previous_fs; //fieldsets
+			var left, opacity, scale; //fieldset properties which we will animate
+			var animating; //flag to prevent quick multi-click glitches
+
+			if(animating) return false;
+			animating = true;
+
+			current_fs = $(event.target).parent();
+			next_fs = $(event.target).parent().next();
+
+			//activate next step on progressbar using the index of next_fs
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass('active');
+
+			//show the next fieldset
+			next_fs.show();
+			$("html, body").animate({ scrollTop: 0 }, "slow");
+			//hide the current fieldset with style
+			current_fs.hide();
+			animating = false;
 		}
 	});
 }
