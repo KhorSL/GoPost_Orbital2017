@@ -61,6 +61,16 @@ Router.route('/create-event', {
   layoutTemplate: "layout"
 });
 
+// Prevent unauthorised access
+Router.onBeforeAction(function () {    
+    if  (!Meteor.userId() && !Meteor.loggingIn()) {
+        this.redirect('landing');
+        this.stop();
+    } else {
+        this.next();
+    }
+},{except: ['landing'] });
+
 Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
