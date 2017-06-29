@@ -166,6 +166,11 @@ if(Meteor.isClient) {
 				} else {
 					Meteor.call("addEventTag", type);
 					Meteor.call("addRegistrationForm", result, title, rf_description, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_shirtSize_chart, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
+					Meteor.call("addEvent_User", result, function(error2, result2) {
+						if(error2) {
+							console.log(error2.reason);
+						}
+					});
 					Router.go('event_View', { _id: result});
 				}
 			});

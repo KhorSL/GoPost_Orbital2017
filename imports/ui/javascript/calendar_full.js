@@ -4,99 +4,120 @@ import { Template } from 'meteor/templating';
 import '../html/components/calendar_full.html';
 import '../css/dashBoard.css';
 import '../lib/fullcalendar.css';
+import './calendar_modal.js';
+
+Template.calendar_full.onCreated(function() {
+  let template = Template.instance();
+  template.subscribe("events_Calendar_create", Meteor.userId());
+  template.subscribe("events_Calendar_added", Meteor.userId()); //This is for user added events on calender
+  /*Credits: https://themeteorchef.com/tutorials/reactive-calendars-with-fullcalendar*/
+});
 
 Template.calendar_full.onRendered(function() {
-	var date = new Date();
-   	var d = date.getDate();
-   	var m = date.getMonth();
-   	var y = date.getFullYear();
 
-   	var hdr = {};
+  /* initialize the calendar ------------------------------------*/
+  $('#calendar').fullCalendar({
+    header: { left: '', center: 'title', right: 'prev,today,month,agendaWeek,listWeek,next' },
+    timezone:'local',
+    eventLimit: true,
+    eventLimitText: 3,
+    forceEventDuration: true,
 
-  	if ($(window).width() <= 767) {
-     	hdr = { left: 'title', center: 'month,agendaWeek,agendaDay,listWeek', right: 'prev,today,next' };
-   	} else {
-        hdr = { left: '', center: 'title', right: 'prev,today,month,agendaWeek,agendaDay,listWeek,next' };
-  	}
-
-   	var initDrag = function initDrag(e) {
-       	// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-       	// it doesn't need to have a start or end
-
-
-   		var eventObject = {
-       		title: $.trim(e.text()), // use the element's text as the event title
-
-         	className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
-       	};
-     	// store the Event Object in the DOM element so we can get to it later
-      	e.data('eventObject', eventObject);
-
-       	// make the event draggable using jQuery UI
-      	e.draggable({
-          	zIndex: 999,
-           	revert: true, // will cause the event to go back to its
-           	revertDuration: 0 //  original position after the drag
-        });
-  	};
-
-   	var addEvent = function addEvent(title, priority) {
-    	title = title.length === 0 ? "Untitled Event" : title;
-
-       	priority = priority.length === 0 ? "label label-default" : priority;
-
-       	var html = $('<li class="external-event"><span class="' + priority + '">' + title + '</span></li>');
-
-       	jQuery('#external-events').append(html);
-       	initDrag(html);
-   	};
-
-  	/* initialize the external events
-         -----------------------------------------------------------------*/
-
-   	$('#external-events li.external-event').each(function () {
-      	initDrag($(this));
-   	});
-
-   	$('#add-event').click(function () {
-   		var title = $('#title').val();
-      	var priority = $('input:radio[name=priority]:checked').val();
-      	$('#title').val('');
-       	addEvent(title, priority);
-    });
-
-    /* initialize the calendar
-         -----------------------------------------------------------------*/
-	$('#calendar').fullCalendar({
-        // put your options and callbacks here
-        header: hdr,
-        editable: true,
-       	droppable: true, // this allows things to be dropped onto the calendar !!!
-       	drop: function drop(date) {
-          	// this function is called when something is dropped
-
-          	// retrieve the dropped element's stored Event Object
-          	var originalEventObject = $(this).data('eventObject');
-
-         	// we need to copy it, so that multiple events don't have a reference to the same object
-          	 var copiedEventObject = $.extend({}, originalEventObject);
-
-          	// assign it the date that was reported
-      		copiedEventObject.start = date;
-
-      		console.log(this);
-      		console.log(copiedEventObject);
-
-       		// render the event on the calendar
-         	// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-         	$('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-          	
-          	//remove the event from the table
-       		$(this).remove();
-       	},
+    //Event method to get EventObject from database
+    events: function(start, end, timezone, callback) {
       
-      	windowResize: function windowResize(event, ui) {
-     		$('#calendar').fullCalendar('render');
-       	}
-    });
+      var event_ids = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.CreatedEventList});
+      event_ids = _.flatten(event_ids);
+
+      let data1 = Events.find({"_id" : {$in : event_ids}}).fetch().map((event) => {
+        event.editable = false;
+        event.className = "label_cal label-default";
+        return event;
+      });
+
+      let data2 = Cal_Events.find({"owner" : Meteor.userId()}).fetch().map((event) => {
+        event.editable = !isPast(moment(event.start).format());
+        event.className = event.className;
+        return event;
+      });
+
+      let data = data1.concat(data2);
+
+      if(data) {
+        callback(data);
+      }
+    },
+
+    eventDrop: function(event, delta, revert) {
+      let date = event.start.format();
+
+      if(event.allDay) {
+        var defaultDuration = moment.duration($('#calendar').fullCalendar('option', 'defaultTimedEventDuration')); // get the default and convert it to proper type
+        var end = event.end || event.start.clone().add(defaultDuration); // If there is no end, compute it
+      } else {
+        var defaultDuration = moment.duration($('#calendar').fullCalendar('option', 'defaultAllDayEventDuration')); // get the default and convert it to proper type
+        var end = event.end || event.start.clone().add(defaultDuration); // If there is no end, compute it
+      }
+      /*Credits above: https://stackoverflow.com/questions/33746441/how-to-get-end-time-on-drop-and-eventdrop-with-external-elements-in-fullcalendar*/
+
+      if (!isPast(date)) {
+        let update = {
+          _id: event._id,
+          start: event.start.toDate(),
+          end: event.end.toDate()
+        };
+
+        Meteor.call('moveCalendarEvents', update, function(error) {
+          if ( error ) {
+            console.log(error.reason);
+          }
+        });
+      } else {
+        revert();
+        alert( 'Sorry, you can\'t move items to the past!');
+      }
+    },
+
+    dayClick: function(date) {
+      if(!isPast(date)) { //Disable editing of dates that have passed
+        Session.set('calendarModal', {
+          type: 'add',
+          date: date.format()
+        });
+        $('#add-edit-calendar-modal').modal('show');
+      }
+    },
+    eventClick: function(event) {
+      if(event.editable) { //Disable to editing of created events
+        Session.set('calendarModal', {
+          type: 'edit',
+          event: event._id
+        });
+        $('#add-edit-calendar-modal').modal('show');
+      }
+    },
+    eventResize: function(event, delta, revertFunc) {
+      let update = {
+        _id: event._id,
+        start: event.start.toDate(),
+        end: event.end.toDate()
+      };
+
+      Meteor.call('moveCalendarEvents', update, function(error) {
+        if ( error ) {
+          console.log(error.reason);
+        }
+       });
+    } 
+  });
+
+  Tracker.autorun( () => {
+    Events.find().fetch();
+    $('#calendar').fullCalendar('refetchEvents');
+  });
 });
+
+let isPast = (date) => {
+  let today = moment().format();
+  return moment(today).isAfter(date);
+};

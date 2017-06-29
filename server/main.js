@@ -4,36 +4,49 @@ Meteor.startup(() => {
 });
 
 UserSchema = new SimpleSchema({
-  User: {
-    type: String,
-    label: "User"
-  },
-
-  Gender: {
-    type: String,
-    label: "Gender"
-  },
-
-  Age: {
-    type: Number,
-    label: "Age"
-  },
-
-  LikedList: {
-    type: Array,
+  	User: {
+    	type: String,
+    	label: "User"
+  	},
+  	Gender: {
+    	type: String,
+    	label: "Gender"
+  	},
+  	Age: {
+    	type: Number,
+    	label: "Age"
+  	},
+  	LikedList: {
+    	type: Array,
 		label:"LikedList",
 		defaultValue: []
-  },
-  "LikedList.$": {
-    type: String
-  },
-  FollowingList: {
-    type: Array,
+  	},
+  	"LikedList.$": {
+    	type: String
+  	},
+  	FollowingList: {
+    	type: Array,
 		label:"Following",
 		defaultValue: []
-  },
-  "FollowingList.$": {
+  	},
+  	"FollowingList.$": {
 		type: String
+	},
+	CreatedEventList: {
+		type: Array,
+		label:"User own created Events",
+		defaultValue: []
+	},
+	"CreatedEventList.$": {
+	    type: String
+	},
+	SignUpEventList: {
+		type: Array,
+		label: "User's signed up Events",
+		defaultValue: []
+	},
+	"SignUpEventList.$": {
+	    type: String
 	}
 });
 
@@ -128,6 +141,51 @@ EventsSchema = new SimpleSchema({
 		type: Date,
 		label: "End",
 		optional: true
+	}
+});
+
+Cal_EventsSchema = new SimpleSchema({
+	title: {
+		type: String,
+		label: "Title"
+	},
+	start: {
+		type: Date,
+		label: "Start"
+	},
+	end: {
+		type: Date,
+		label: "End",
+		optional: true
+	},
+	allDay: {
+		type: Boolean,
+		label: "allDay",
+		optional: true
+	},
+	notes: {
+		type: String,
+		label: "Notes"
+	},
+	className: {
+		type: String,
+		label: "className"
+	},
+	createdAt: {
+		type: Date,
+		label: "Created At",
+		defaultValue: function() {
+			return new Date();
+		},
+		denyUpdate: true
+	},
+	owner: {
+		type: String,
+		label: "Owner",
+		defaultValue: function() {
+			return Meteor.userId();
+		},
+		denyUpdate: true
 	}
 });
 
@@ -262,6 +320,7 @@ RegistrationFormsSchema = new SimpleSchema({
 RegistrationForms.attachSchema(RegistrationFormsSchema);
 Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
+Cal_Events.attachSchema(Cal_EventsSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
@@ -329,6 +388,20 @@ if(Meteor.isServer) {
 		return false;
 	}); 
 
+	//This is for user created events
+	Meteor.publish("events_Calendar_create", function(curUser) {
+		var event_ids = Users.find({"User": curUser}).map(function (obj) {return obj.CreatedEventList});
+		event_ids = _.flatten(event_ids);
+		var posterEvents = Events.find({"_id" : {$in : event_ids}});
+
+		return posterEvents;
+	});
+
+	//This is for user added events on calender
+	Meteor.publish("events_Calendar_added", function(curUser) {
+		return Cal_Events.find({"owner": curUser});
+	});
+
 	Meteor.publish("userDetails_Cur", function(curUser) {
 		return Users.find({"User": curUser});
 	});
@@ -360,6 +433,13 @@ Meteor.methods({
 			var tag = tags[i].trim();
 			Tags.update(tag, {tag: tag, createdAt: new Date()}, {upsert: true});
 		}
+	},
+
+	addEvent_User: function(event_id) {
+		return Users.update({"User" : Meteor.userId()}, {"$addToSet" : {
+			"CreatedEventList" : event_id
+		}});
+		/*Credits http://tgrall.github.io/blog/2015/04/21/mongodb-playing-with-arrays/*/
 	},
 
 	addRegistrationForm: function(eventId, title, description, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, shirtSize_Chart, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
@@ -506,5 +586,45 @@ Meteor.methods({
         		$push: { LikedList: id}
       		});
 		}
+	},
+
+	addCalendarEvents: function(event) {
+		return Cal_Events.insert({
+			title: event.title,
+			start: event.start,
+			end: event.end,
+			className: event.className,
+			allDay: event.allDay,
+			notes: event.notes,
+			owner: Meteor.userId(),
+			createdAt: new Date()
+		});
+	},
+
+	editCalendarEvents: function(event) {
+		return Cal_Events.update(event._id, {
+			$set: {
+				title: event.title,
+				start: event.start,
+				end: event.end,
+				className: event.className,
+				allDay: event.allDay,
+				notes: event.notes
+			}
+		});
+	},
+
+	delCalendarEvents: function(event_id) {
+		return Cal_Events.remove(event_id);
+	},
+
+	moveCalendarEvents: function(event) {
+		return Cal_Events.update(event._id, {
+			$set: {
+				start: event.start,
+				end: event.end
+			}
+		});
 	}
+
 });
