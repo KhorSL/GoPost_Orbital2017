@@ -5,6 +5,7 @@ import { Template } from 'meteor/templating';
 import '/imports/ui/lib/bootstrap.css';
 import '/imports/ui/lib/bootstrap-tokenfield.css';
 import '/imports/ui/lib/fullcalendar.css';
+import '/imports/ui/lib/bootstrap-datetimepicker.css';
 
 //Import to load templates
 import '/imports/ui/javascript/aboutUs.js';
