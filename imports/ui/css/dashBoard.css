@@ -286,3 +286,74 @@
 .box > .block {
   padding: 0;
 }
+
+.label_cal {
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+
+/* BEGIN FULLCALENDAR STYLES */
+.fc-event.label_cal {
+  border: 1px solid #808080;
+  color: #fff;
+  font-size: .85em;
+  cursor: default;
+  background-color: #999999;
+}
+.fc-event.label_cal.label-default {
+  border-color: #6a6a6a;
+  background-color: #777777;
+}
+.fc-event.label_cal.label-default[href]:hover,
+.fc-event.label_cal.label-default[href]:focus {
+  background-color: #5e5e5e;
+}
+.fc-event.label_cal.label-primary {
+  border-color: #2e6da4;
+  background-color: #337ab7;
+}
+.fc-event.label_cal.label-primary[href]:hover,
+.fc-event.label_cal.label-primary[href]:focus {
+  background-color: #286090;
+}
+.fc-event.label_cal.label-success {
+  border-color: #4cae4c;
+  background-color: #5cb85c;
+}
+.fc-event.label_cal.label-success[href]:hover,
+.fc-event.label_cal.label-success[href]:focus {
+  background-color: #449d44;
+}
+.fc-event.label_cal.label-info {
+  border-color: #46b8da;
+  background-color: #5bc0de;
+}
+.fc-event.label_cal.label-info[href]:hover,
+.fc-event.label_cal.label-info[href]:focus {
+  background-color: #31b0d5;
+}
+.fc-event.label_cal.label-warning {
+  border-color: #eea236;
+  background-color: #f0ad4e;
+}
+.fc-event.label_cal.label-warning[href]:hover,
+.fc-event.label_cal.label-warning[href]:focus {
+  background-color: #ec971f;
+}
+.fc-event.label_cal.label-danger {
+  border-color: #d43f3a;
+  background-color: #d9534f;
+}
+.fc-event.label_cal.label-danger[href]:hover,
+.fc-event.label_cal.label-danger[href]:focus {
+  background-color: #c9302c;
+}
+/* END FULLCALENDAR STYLES */
+/* Credits: https://github.com/puikinsh/Bootstrap-Admin-Template/blob/master/public/assets/css/main.css; */
