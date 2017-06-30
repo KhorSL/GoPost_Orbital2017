@@ -103,6 +103,10 @@ EventsSchema = new SimpleSchema({
 		},
 		denyUpdate: true
 	},
+	category: {
+		type: String,
+		label: "Event Category"
+	},
 	type: {
 		type: Array,
 		label: "Event Tags"
@@ -502,7 +506,7 @@ Meteor.methods({
 		});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, type, privacy, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, privacy, contact, img){
 		return Events.insert({
 			// Img to further test
 			title: title,
@@ -512,6 +516,7 @@ Meteor.methods({
 			locationGeo: locationGeo,
 			start: start,
 			end: end,
+			category: cat,
 			type: type,
 			privacy: privacy,
 			contact: contact,
