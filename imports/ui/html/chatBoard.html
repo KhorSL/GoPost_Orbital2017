@@ -1,7 +1,129 @@
 <template name='chatBoard'>
-	<h1> PM Services </h1>
-	
-	<h4> Features Available </h4>
-	<hr/>
-	<p>Coming Soon...</p>
+    <div class="chat_container row">
+        <div class="col-sm-4 chat_sidebar">
+    	 	<div class="row">
+    	 		<div id="custom-search-input">
+               		<div class="input-group col-md-12">
+                  		<input type="text" name="search_query" class="search-query form-control" placeholder="Conversation" />
+                  		{{#if search_Tag}}
+                  		<button class="btn btn-danger cross_mar" id="crossBut" type="button">
+                  			<span class=" glyphicon glyphicon-remove"></span>
+                  		</button>
+                  		{{/if}}
+                  		<button class="btn btn-danger" id="searchBut" type="button">
+                  			<span class=" glyphicon glyphicon-search"></span>
+                  		</button>
+               		</div>
+            	</div> <!-- end of custom search bar -->
+    	 	</div>
+    	 	<div class ="row">
+	    	 	<ul class="nav nav-pills nav-justified chat-pills">
+	    			<li class="active"><a data-toggle="pill" href="#messages"> Messages </a></li>
+	    			<li><a data-toggle="pill" href="#friend"> Friends </a></li>
+	    			<li><a data-toggle="pill" href="#channel"> Channel </a></li>
+	  			</ul>
+            	
+            	<div class="tab-content">
+    				<div id="messages" class="tab-pane fade in active">
+    					<div class="member_list">
+               				<ul class="list-unstyled">
+                  				{{#each convos}}
+                  					<li class="left clearfix" id="startChat" {{active}}>
+						               	<span class="chat-img pull-left">
+						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
+						               	</span>
+			                     			
+			                     		<div class="chat-body clearfix">
+			                        		<div class="header_sec">
+			                           			<strong class="primary-font">{{Username}}</strong> 
+			                           			<strong class="pull-right">09:45AM</strong>
+			                        		</div>
+			                        		<div class="contact_sec">
+			                           			<strong class="primary-font">(123) 123-456</strong> 
+			                           			<span class="badge pull-right">3</span>
+			                        		</div>
+			                     		</div>
+		                  			</li>
+                  				{{else}}
+              						<li><p class="alert alert-warning">No Messages.</p></li>  
+                  				{{/each}}
+                  			</ul>
+                  		</div>
+				    </div>
+				    <div id="friend" class="tab-pane fade">
+				    	<div class="member_list">
+               				<ul class="list-unstyled">
+                  				{{#each friend}}
+		                  			<li class="left clearfix" id="startChat" {{active}}>
+						               	<span class="chat-img pull-left">
+						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
+						               	</span>
+			                     			
+			                     		<div class="chat-body clearfix">
+			                        		<div class="header_sec">
+			                           			<strong class="primary-font">{{Username}}</strong> 
+			                           			<strong class="pull-right">09:45AM</strong>
+			                        		</div>
+			                        		<div class="contact_sec">
+			                           			<strong class="primary-font">(123) 123-456</strong> 
+			                           			<span class="badge pull-right">3</span>
+			                        		</div>
+			                     		</div>
+		                  			</li>
+                  				{{else}}
+              						<li><p class="alert alert-warning">No Friends Found.</p></li> 
+                  				{{/each}}
+                  			</ul>
+                  		</div>
+				    </div>
+				    <div id="channel" class="tab-pane fade">
+				    	<ul>
+					    	{{#each channel}}
+					    		<li><a href="#">#{{name}}</a></li>
+					    	{{/each}}
+				    	</ul>
+				    </div>
+  				</div> <!-- tab-content -->
+        	</div> <!-- end of row -->
+         </div> <!-- end of chat_sidebar -->
+		 
+		 
+         <div class="col-sm-8 message_section">
+		 	<div class="row">
+		 		<!--
+		 		<div class="new_message_head">
+		 			<div class="pull-left">
+		 				<span class="glyphicon glyphicon-plus" role="button" id="New_Message" aria-hidden="true"></span>
+		 			</div>
+		 		</div> new_message_head-->
+		 
+		 		<div class="chat_area">
+		 			<div class="chat-history">
+		 				<ul class="chat-ul">
+				 			{{#if searching}}
+		        				{{> loader}}
+		      				{{else}}
+		      					{{#if Template.subscriptionsReady}}
+		        					{{#each messages}}
+		          						{{> chat_messageView}}
+		        					{{else}}
+		          						<p class="alert alert-warning">Empty.</p>
+		        					{{/each}}
+		      					{{/if}}
+		      				{{/if}}
+	      				</ul> <!-- end of chat-ul -->
+      				</div> <!--end of chat-history-->
+		 		</div><!--chat_area-->
+
+          		<div class="message_write"> 
+    	 			<textarea class="form-control" id="type_msg" placeholder="type a message" {{to_target}}></textarea>
+		 			<div class="clearfix"></div>
+		 			<div class="chat_bottom">
+		 				<button id="sendBtn" class="pull-right btn btn-success" type="button" {{to_target}}>Send</button>
+ 					</div>
+		 		</div> <!-- end of message_write -->
+		 	
+		 	</div> <!-- end of row -->
+       	</div> <!--end of message_section-->
+   	</div> <!-- end of chat container -->
 </template>

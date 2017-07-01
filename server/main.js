@@ -8,6 +8,10 @@ UserSchema = new SimpleSchema({
     	type: String,
     	label: "User"
   	},
+  	Username: {
+  		type: String,
+  		label: "Username"
+  	},
   	Gender: {
     	type: String,
     	label: "Gender"
@@ -46,6 +50,14 @@ UserSchema = new SimpleSchema({
 		defaultValue: []
 	},
 	"SignUpEventList.$": {
+	    type: String
+	},
+	MessageList: {
+		type: Array,
+		label: "Message's List",
+		defaultValue: []
+	},
+	"MessageList.$": {
 	    type: String
 	}
 });
@@ -321,10 +333,44 @@ RegistrationFormsSchema = new SimpleSchema({
 	}
 });
 
+ChannelsSchema = new SimpleSchema({
+	name: {
+    	type: String,
+    	label: 'The name of the channel.'
+  	}
+});
+
+MessagesSchema = new SimpleSchema({
+	channel: {
+    	type: String,
+    	label: 'The ID of the channel this message belongs to.',
+    	optional: true
+  	},
+  	to: {
+    	type: String,
+    	label: 'The ID of the user this message was sent directly to.',
+    	optional: true
+  	},
+  	owner: {
+    	type: String,
+    	label: 'The ID of the user that created this message.'
+  	},
+  	timestamp: {
+    	type: Date,
+    	label: 'The date and time this message was created.'
+  	},
+  	message: {
+    	type: String,
+    	label: 'The content of this message.'
+  	}
+});
+
 RegistrationForms.attachSchema(RegistrationFormsSchema);
 Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 Cal_Events.attachSchema(Cal_EventsSchema);
+Messages.attachSchema(MessagesSchema);
+Channels.attachSchema(ChannelsSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
@@ -410,6 +456,10 @@ if(Meteor.isServer) {
 		return Users.find({"User": curUser});
 	});
 
+	Meteor.publish("userDetails_All", function(curUser) {
+		return Users.find();
+	});
+
   	Meteor.publish("userDetail", function(){
     	return Users.find("Age");
   	});
@@ -424,6 +474,28 @@ if(Meteor.isServer) {
 
 	Meteor.publish("signUps", function() {
 		return SignUps.find();
+	});
+
+	Meteor.publish("conversation", function(sender, recever) {
+		if(recever === "") {
+			return Messages.find(
+				{$or: [
+					{"owner" : sender}, 
+					{"to" : sender}
+				]
+			});
+		} else {
+			return Messages.find(
+				{$or: [
+					{"owner" : sender}, 
+					{"to" : sender}
+				]
+			});
+		}
+	});
+
+	Meteor.publish("channels", function() {
+		return Channels.find();
 	});
 }
 
@@ -527,9 +599,10 @@ Meteor.methods({
 		});
 	},
 
-  	insertUserData: function(username,gender,age){
+  	insertUserData: function(userid, username,gender,age){
     	Users.insert({
-      		User: username,
+      		User: userid,
+      		Username: username,
       		Gender: gender,
       		Age: age
     	});
@@ -630,6 +703,16 @@ Meteor.methods({
 				end: event.end
 			}
 		});
-	}
+	},
+
+	newMessage: function(details) {
+		return Messages.insert({
+			channel: details.channel,
+			to: details.to,
+			owner: details.from,
+			timestamp: new Date(),
+			message: details.msg
+		});
+  	},
 
 });

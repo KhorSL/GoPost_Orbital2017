@@ -1,0 +1,23 @@
+<template name="chat_messageView">
+   	{{#if sending}}
+   		<li>
+            <div class="message-data">
+           		<span class="message-data-time">{{formatDate timestamp}} </span>
+              	<span class="message-data-name"><i class="fa fa-circle you"></i>{{username}}</span>
+            </div>
+            <div class="message you-message">
+            	{{message}}
+            </div>
+       	</li>
+   	{{else}}
+   		<li class="clearfix">
+            <div class="message-data align-right">
+            	<span class="message-data-time">{{formatDate timestamp}} </span>
+             	<span class="message-data-name">{{username}}</span> <i class="fa fa-circle me"></i>
+            </div>
+            <div class="message me-message float-right">
+            	{{message}}
+            </div>
+       	</li>
+   	{{/if}}
+</template>
