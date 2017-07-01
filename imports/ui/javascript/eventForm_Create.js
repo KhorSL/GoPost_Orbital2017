@@ -45,7 +45,6 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.onCreated(function() {
-
 	  var output; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
 	  geo = ""; //Global var.. for location geometry
@@ -114,6 +113,42 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.onRendered(function() {
+		//Limiting the number of question user can add
+		maxFields = 5;
+		currFields = 0;
+
+		//Adding the first field to the custom form
+		if(currFields >= maxFields) {
+				alert("You have reached the maximum number of fields you can add. Please consider to revise your Registration Form. Thank you.");
+				return false;
+		}
+
+		var intId = $("#buildyourform div").length + 1;
+		var fieldWrapper = $("<div class=\"fieldwrapper row form-group\" id=\"field" + intId + "\"/>");
+		var fName = $("<div class=\"col-sm-12\"><label>Field Title</label><input type=\"text\" class=\"fieldname form-control\"></div>");
+		var fType = $("<div class=\"col-sm-6\"><label>Field Type</label><select class=\"fieldtype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+		var removeButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove\"></div>");
+		
+		removeButton.click(function() {
+			console.log("remove");
+		    $(this).parent().remove();
+		    currFields--;
+		});
+
+		fieldWrapper.append(fName);
+		fieldWrapper.append(fType);
+		fieldWrapper.append(removeButton);
+		$("#buildyourform").append(fieldWrapper);
+		currFields++;
+
+		//Selection of custom form field changed function
+		fieldTypeChange = function (selected) {
+			var ft = $('.fieldtype').val();
+
+			if(ft === 'checkbox') {
+				$('.fieldwrapper').append('<select><option>Val1</option></select>');
+			}
+		};
 		//Google Map API
 		GoogleMaps.load({ v: '3', key: 'AIzaSyAjcdra9n9ZRlWG2M3ktzU6r_JLQP_Xm0I', libraries: 'geometry,places' });
 		//Tags-input
@@ -318,6 +353,30 @@ if(Meteor.isClient) {
 			//hide the current fieldset with style
 			current_fs.hide();
 			animating = false;
+		},
+
+		'click #add': function(event) {
+			if(currFields >= maxFields) {
+				alert("You have reached the maximum number of fields you can add. Please consider to revise your Registration Form. Thank you.");
+				return false;
+			}
+
+			var intId = $("#buildyourform div").length + 1;
+			var fieldWrapper = $("<div class=\"fieldwrapper row form-group\" id=\"field" + intId + "\"/>");
+			var fName = $("<div class=\"col-sm-12\"><label>Field Title</label><input type=\"text\" class=\"fieldname form-control\"></div>");
+			var fType = $("<div class=\"col-sm-6\"><label>Field Type</label><select class=\"fieldtype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+			var removeButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove\"></div>");
+			
+			removeButton.click(function() {
+			    $(this).parent().remove();
+			    currFields--;
+			});
+
+			fieldWrapper.append(fName);
+			fieldWrapper.append(fType);
+			fieldWrapper.append(removeButton);
+			$("#buildyourform").append(fieldWrapper);
+			currFields++;
 		}
 	});
 }
