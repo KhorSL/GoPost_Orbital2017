@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
+<<<<<<< HEAD
 
 Template.dashBoard.onCreated(() => {
     Meteor.subscribe("additionalUserDetails");
@@ -37,3 +38,11 @@ Template.dashBoard.events({
 
   }
 });
+=======
+import '../lib/fullcalendar.css';
+import './calendar_full.js';
+
+Template.dashBoard.onCreated(function() {
+	Meteor.subscribe('userDetails_Cur', Meteor.userId());
+});
+>>>>>>> master

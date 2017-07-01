@@ -3,6 +3,10 @@
   font-family: "Kaushan Script", "Helvetica Neue", Helvetica, Arial, cursive;
 }
 
+.logMore {
+    text-align: center;
+}
+
 @font-face {
   font-family: "Kaushan Script";
   src: url(/fonts/KaushanScript-Regular.otf);

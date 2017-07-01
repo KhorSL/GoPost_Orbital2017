@@ -19,6 +19,7 @@ Template.events_Tag.events({
 		var selected_tag = e.target.name;
 		Session.set("selected_tag", selected_tag);
 		Session.set("searchQuery", "");						//Invalid Filter + Search to make way for Tag Search
+		Session.set("selected_cat", "");					//Invalid cat Search to make way for Filter + Search
 		Session.set("searching", true);
 		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
 	}

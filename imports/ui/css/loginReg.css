@@ -74,6 +74,15 @@ input.error {
   margin-bottom: 8px;
 }
 
+.reg_border {
+  font-family: "Open Sans";
+  box-sizing: border-box;
+  width: 100%;
+  outline: none;
+  border: 1px solid rgb(89,90,92);
+  margin-bottom: 8px;
+}
+
 .login-form input[type="text"]:focus,
 .login-form input[type="email"]:focus,
 .login-form input[type="password"]:focus,

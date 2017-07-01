@@ -1,12 +1,20 @@
 <template name="eventForm_Create">
-	<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
-		<div class="panel-heading"> Create event </div>
+	<!-- progressbar -->
+	<ul id="progressbar">
+		<li class="active">Create Event </li>
+		<li> Create Registration Form </li>
+		<li> Confirm Submit </li>
+	</ul>
+
+	<div class="panel panel-default form-panel" id="new-event-panel">
+		<!-- <div class="panel-heading"> Create event </div> -->
 		<div class="panel-body">
 				
-			<form class="new-event" id="new-event">
-					
+			<form role="form" method="post" class="new-event" id="new-event">
+				
+				<fieldset>
 				<div class="form-group">
-					<label for="title">Event Title:</label>           
+					<label for="title">Event Title:</label>
 					<input type="text" class="form-control" name="title" placeholder="A new event" required>
 				</div>
 
@@ -26,14 +34,44 @@
 						</div>
 					</body>
 				</div>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label> Event Date and Time (Start): </label>
+							<div class="input-group datetimepicker">
+    							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    							<input class="set-due-date form-control" type="text" name="start" onkeydown="return false"/>
+  							</div>
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label> Event Date and Time (End): </label>
+							<div class="input-group datetimepicker">
+    							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    							<input class="set-due-date form-control" type="text" name="end" onkeydown="return false"/>
+  							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="form-group">
-					<label> Event Date and Time: </label>
-					<input class="form-control" type="datetime-local" name="dateTime">
+					<label> Event Categories: </label>
+					<select class="form-control" id="event_cat">
+				      <option name= "myOption" value= "Camp">Camp</option>
+				      <option name= "myOption" value= "CCA">CCA</option>
+				      <option name= "myOption" value= "Community">Community</option>
+				      <option name= "myOption" value= "Competition">Competition</option>
+				      <option name= "myOption" value= "Internship">Internship</option>
+				      <option name= "myOption" value= "Workshop">Workshop</option>
+				      <option name= "myOption" value= "Others">Others</option>
+				   </select>
 				</div>
 				
 				<div class="form-group">
-					<label> Event Tags: </label>
+					<label> Event Hashtags: </label>
 					<input type="text" class="form-control" id="tokenfield" value="Camp,Community,Competition,Event,Internship,Workshop"/>
 					<small>*Create your own Tags and press 	&lt; ENTER &gt;</small>
 				</div>
@@ -52,10 +90,72 @@
 					<label> Privacy options: </label>
 					<input type="checkbox" name="privacy"> Private event
 				</div>
+				{{#if currentUser}}
+				<button type="button" class="btn next-s1">Next</button>
+				{{/if}}
+				</fieldset>
 
-				<input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit">
+				<fieldset>
+					<div class="form-top">
+						<div class="form-top-left">
+							<h2>Create your Registration Form</h2>
+							<p> Check the fields that you want to include. </p>
+						</div>
+					</div>
+
+		                <div class="">
+		                	{{> eventForm_RegistrationForm}}
+						</div>
+					
+					<button type="button" class="btn previous">Previous</button>
+					<button type="button" class="btn next-s2">Next</button>
+				</fieldset>
+
+				<fieldset>
+					<div class="form-top">
+						<h2>Confirm the details of your event</h2>
+						<p>Press previous to check and update any changes.</p>
+					</div>
+					
+					<div class="well">
+						<div class="row">
+							<div class="form-group col-sm-6">
+								<label for="c-title">Event Title</label>
+								<input type="text" class="form-control" name="c-title" disabled>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="c-location">Location</label>
+								<input type="text" class="form-control" name="c-location" disabled>
+							</div>
+							<div class="form-group col-sm-12">
+								<label for="c-description">Description</label>
+								<textarea class="form-control" name="c-description" disabled></textarea>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="c-start">Start Date</label>
+								<input type="text" class="form-control" name="c-start" disabled>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="c-end">End Date</label>
+								<input type="text" class="form-control" name="c-end" disabled>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="c-contact">Contact</label>
+								<input type="text" class="form-control" name="c-contact" disabled>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="c-privacy">Privacy</label>
+								<input type="text" class="form-control" name="c-privacy" disabled>
+							</div>
+						</div>
+					</div>
+					
+					<button type="button" class="btn previous">Previous</button>
+					<input class="btn btn-warning" type="submit" value="Submit">
+				</fieldset>
 
 			</form>
-		</div> 
-	</div>
+		</div> <!-- End of panel body -->
+	</div> <!-- End of panel -->
+	
 </template>

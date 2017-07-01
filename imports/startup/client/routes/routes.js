@@ -3,12 +3,6 @@ Router.route('/', {
 	template: 'landing'
 });
 
-Router.route('/home', {
-  name: 'home',
-  template: 'home',
-  layoutTemplate: 'layout'
-});
-
 Router.route('/aboutUs', {
   name: 'aboutUs',
   template: 'aboutUs',
@@ -73,6 +67,16 @@ Router.route('/create-event', {
   layoutTemplate: "layout"
 });
 
+// Prevent unauthorised access
+Router.onBeforeAction(function () {    
+    if  (!Meteor.userId() && !Meteor.loggingIn()) {
+        this.redirect('landing');
+        this.stop();
+    } else {
+        this.next();
+    }
+},{except: ['landing'] });
+
 Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
@@ -93,3 +97,15 @@ Router.route('/settings', {
   template: 'settings',
   layoutTemplate: 'layout'
 });
+<<<<<<< HEAD
+=======
+
+Router.route('/signUp/:_id', {
+  name: 'sign-up',
+  template: 'eventForm_signUp',
+  layoutTemplate: 'layout',
+  data: function () {
+    return RegistrationForms.findOne({eventId: this.params._id});
+  },
+});
+>>>>>>> master

@@ -5,7 +5,7 @@
 
     <ul class="nav nav-tabs search_tab">
       <li class="active"><a  href="#1" data-toggle="tab">Search</a></li>
-      <li><a href="#2" data-toggle="tab">Categories</a></li>
+      <li><a href="#2" data-toggle="tab">Event Tags</a></li>
     </ul>
 
     <div class="tab-content ">
@@ -18,11 +18,24 @@
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                   <span id="search_concept">{{filter}}</span> <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                   <li><a id="all" href="#">All Events</a></li>
                   <li><a id="latest" href="#">Latest Events</a></li>
                   <li><a id="hot" href="#">Hot Events</a></li>
                   <li><a id="location" href="#">Location</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-submenu">
+                    <a tabindex="-1" id="type" href="#">Event Categories</a>
+                    <ul class="dropdown-menu">
+                      <li><a id="Camp" href="#">Camp</a></li>
+                      <li><a id="CCA" href="#">CCA</a></li>
+                      <li><a id="Community" href="#">Community</a></li>
+                      <li><a id="Competition" href="#">Competition</a></li>
+                      <li><a id="Internship" href="#">Internship</a></li>
+                      <li><a id="Workshop" href="#">Workshop</a></li>
+                      <li><a id="Others" href="#">Others</a></li>
+                    </ul>
+                  </li>
                   <li class="divider"></li>
                   <li><a id="soon" href="#">Coming Soon...</a></li>
                 </ul>
@@ -51,7 +64,7 @@
 
   {{#if viewType}} 
 
-    <div class="blackboard_border">
+  <div class="blackboard_border">
     <div class="list-group list-group_border">
       {{#if searching}}
         {{> loader}}
