@@ -417,10 +417,6 @@ if(Meteor.isServer) {
 		return Users.find({"User": curUser});
 	});
 
-  	Meteor.publish("userDetail", function(){
-    	return Users.find("Age");
-  	});
-
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});
@@ -435,6 +431,7 @@ if(Meteor.isServer) {
 	Meteor.publish("signUps", function() {
 		return SignUps.find();
 	});
+
 }
 
 Meteor.methods({

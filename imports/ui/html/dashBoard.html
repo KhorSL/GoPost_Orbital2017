@@ -13,12 +13,12 @@
             <div class="col-lg-6">
               <div class="box">
                 <header><h5>Profile Details</h5></header>
-                <p>This is the Profile Detail</p>
-                <p>Username: {{userName}}</p>
-                <p>Gender: </p>
+                <p>Username: {{username}}</p>
+                <p>Gender: {{Gender}}</p>
                 <p>Age: {{Age}}</p>
               </div>
             </div>
+
             {{#if isUser}} <!-- curr User is the owner of the dashboard !-->
             <!-- Visiting your own profile !-->
             <div class="col-lg-2">
@@ -27,6 +27,8 @@
                 <br>
                 <ul>
                   <button type ="button" id="changePic">Change Profile Picture</button>
+                </ul>
+                <ul>
                   <button type ="button" id="edit">Edit Profile</button>
                 </ul>
               </div>
@@ -47,8 +49,7 @@
                     <button type ="button" name = "email" value = "mailto:test@hotmail.com" > Email / Contact </button>
                   </ul>
                 </div>
-              </div>
-              <!-- End of else !-->
+              </div><!-- End of else !-->
             {{/if}} <!-- End of if isUser !-->
             </div> <!-- end of calendar row col-lg add to 12 max-->
         </div>
