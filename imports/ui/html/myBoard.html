@@ -1,4 +1,52 @@
 <template name='myBoard'>
+	<div class ="content">
+		<div class = "outer" >
+			<div class = "inner">
+				<div class = "text-center">
+					<h1> User Bulletin Board </h1>
+				</div>
+				<div class ="text-center">
+					<ul class ="nav nav-tabs">
+						<li class="active">
+							<a class ="quick-btn" href="#liked" data-toggle="tab">
+								<span>default</span>
+								<span class="label label-default">Liked</span>
+							</a>
+						</li>
+
+						<li>
+							<a class ="quick-btn" href="#following" data-toggle="tab">
+								<span>default</span>
+								<span class="label label-default">Following</span>
+							</a>
+						</li>
+					</ul>
+
+			</div> <!-- End of tabs !-->
+			<div class="row">
+				<div class="col-lg-12 tab-content">
+					<div class="box tab-pane fade in active" id="liked">
+						<header><h5>Events Liked</h5></header>
+						<p>Events that you liked</p>
+					</div>
+
+					<div class="box tab-pane fade" id="following">
+						<header><h5>Followed Users</h5></header>
+						<p>Events created by users you followed</p>
+					</div>
+				</div>
+			</div> <!-- End of tab !-->
+				<!-- <h1> User's own Bulletin Board (More for Viewing) </h1>
+
+				<h4> Features Available </h4>
+				<hr/>
+				<p>1. Bulletin Board of my liked, subscribed, signed up, own events</p>
+				<p>2. Should highlight the signed up events</p>
+				!-->
+			</div> <!-- End of Inner !-->
+		</div> <!-- End of Outer !-->
+	</div> <!-- End of content !-->
+
  <div class="board_container">
   <div class="row">
     <div class="col-md-9 col-sm-9 col-xs-9">
@@ -19,14 +67,14 @@
           <p>Display of subsribed Users Profile Picture in Round shape. Display User's Name below the round image if possible or do an hover display for user name. ++ Button to link to myFriend Page for full list of user.</p>
         </div>
       </div> <!-- End of Tab 1 -->
-      
+
       <div class="tab-pane" id="2"> <!--Likes Panel -->
         <p>All your likes Contents</p>
       </div> <!-- End of Tab 2 -->
     </div> <!--end of Tab-Content -->
   </div> <!-- end of board container -->
 
-  {{#if viewType}} 
+  {{#if viewType}}
 
   <div class="blackboard_border">
     <div class="list-group list-group_border">
@@ -52,14 +100,12 @@
             {{#each events_subscribed}}
               {{> events_StickyView}}
             {{else}}
-              <p class="alert alert-warning">No contents available. Sorry.</p>  
+              <p class="alert alert-warning">No contents available. Sorry.</p>
             {{/each}}
-          {{/if}} 
+          {{/if}}
         </div><!--end of row-->
       </div> <!--end of black board -->
     </div> <!-- end of black board border -->
 
   {{/if}}
 </template>
-
-<!--0011460384-->

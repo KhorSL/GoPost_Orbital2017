@@ -12,7 +12,7 @@ Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();
 
 	Session.set("searchQuery", "");			//template.searchQuery = new ReactiveVar();
-  	Session.set("filterType", "Filter By"); //template.filterType  = new ReactiveVar( "Filter By" );
+  Session.set("filterType", "Filter By"); //template.filterType  = new ReactiveVar( "Filter By" );
 	Session.set("searching", false); 		//template.searching   = new ReactiveVar( false );
 	Session.set("searchBut", false);		//template.searchBut	 = new ReactiveVar( false );
 	//Session.set("viewToggle", false);		//template.viewToggle	 = new ReactiveVar( false );
@@ -93,8 +93,8 @@ Template.bulletinBoard.helpers({
 	    		regex = new RegExp(sq,'i');
 	    		search = {
 	      			$or: [
-	        			{ 
-	        				title: regex 
+	        			{
+	        				title: regex
 	        			}
 	      			]
 	    		};
@@ -131,10 +131,10 @@ Template.bulletinBoard.helpers({
 		  				search = {title: regex, dateTime: {$gte : currentDate}}
 		  			} else {
 		  				search = {dateTime: {$gte : currentDate}}
-		  			}	
+		  			}
 		  			return Events.find(search, {sort: {dateTime: 1}, limit: limit});
 		  		case 'location':
-		  			return Events.find(search, {sort: {location: 1}, limit: limit}); 
+		  			return Events.find(search, {sort: {location: 1}, limit: limit});
   			}
   		} else {
   			return Events.find(search, {sort: {title: 1 }, limit: limit}); //safety hit

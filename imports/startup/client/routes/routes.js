@@ -33,8 +33,14 @@ Router.route('/chatBoard', {
   layoutTemplate: 'layout'
 });
 
-Router.route('/dashBoard', {
+Router.route('/dashBoard/:owner', {
 	name: 'dashBoard',
+  template: 'dashBoard',
+  layoutTemplate: 'layout'
+});
+
+Router.route('/dashBoard/:_id', { //Normal Dashboard routing
+	name: 'normalDashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout'
 });
@@ -62,7 +68,7 @@ Router.route('/create-event', {
 });
 
 // Prevent unauthorised access
-Router.onBeforeAction(function () {    
+Router.onBeforeAction(function () {
     if  (!Meteor.userId() && !Meteor.loggingIn()) {
         this.redirect('landing');
         this.stop();
