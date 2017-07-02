@@ -3,10 +3,9 @@ import { Template } from 'meteor/templating';
 
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
-<<<<<<< HEAD
 
 Template.dashBoard.onCreated(() => {
-    Meteor.subscribe("additionalUserDetails");
+     Meteor.subscribe('userDetails_Cur', Meteor.userId());
 });
 
 Template.dashBoard.helpers({
@@ -23,7 +22,15 @@ Template.dashBoard.helpers({
   	} else {
   		return false;
   	}
+  },
+  whichUser: function(){
+  if (Router.current().params.owner === Meteor.userId()){ //Visiting own dashboard
+    return Users.find({User: Meteor.userId()});
+  } else {
+    return Users.find({User: Router.current().params.owner});
   }
+  },
+
 });
 
 Template.dashBoard.events({
@@ -38,11 +45,3 @@ Template.dashBoard.events({
 
   }
 });
-=======
-import '../lib/fullcalendar.css';
-import './calendar_full.js';
-
-Template.dashBoard.onCreated(function() {
-	Meteor.subscribe('userDetails_Cur', Meteor.userId());
-});
->>>>>>> master

@@ -20,7 +20,6 @@ UserSchema = new SimpleSchema({
     	type: Array,
 		label:"LikedList",
 		defaultValue: []
-<<<<<<< HEAD
   },
   "LikedList.$": {
     type: String
@@ -28,7 +27,6 @@ UserSchema = new SimpleSchema({
   FollowingList: {
     type: Array,
 		label:"FollowingList",
-=======
   	},
   	"LikedList.$": {
     	type: String
@@ -36,7 +34,6 @@ UserSchema = new SimpleSchema({
   	FollowingList: {
     	type: Array,
 		label:"Following",
->>>>>>> master
 		defaultValue: []
   	},
   	"FollowingList.$": {
@@ -400,7 +397,7 @@ if(Meteor.isServer) {
 		/*Credits: https://stackoverflow.com/questions/30650978/meteor-find-using-in-with-array-of-ids*/
 
 		return false;
-	}); 
+	});
 
 	//This is for user created events
 	Meteor.publish("events_Calendar_create", function(curUser) {
@@ -428,11 +425,9 @@ if(Meteor.isServer) {
 		return Tags.find();
 	});
 
-<<<<<<< HEAD
   Meteor.publish("additionalUserDetails",function(){
     return Users.find();
   });
-=======
 	Meteor.publish("rfTemplates", function() {
 		return RegistrationForms.find();
 	});
@@ -440,7 +435,6 @@ if(Meteor.isServer) {
 	Meteor.publish("signUps", function() {
 		return SignUps.find();
 	});
->>>>>>> master
 }
 
 Meteor.methods({
@@ -591,25 +585,24 @@ Meteor.methods({
 				$inc: { likes: -1 },
 				$pull: { likers: Meteor.userId() },
         	});
-      
+
       		Users.update({User:Meteor.userId()}, {
         		$pull: {LikedList:id}
       		});
-		
+
 		} else {
 			Events.update( {_id: id}, {
 				$inc: { likes: 1 },
 				$push: { likers: Meteor.userId() },
         		//Add to the ll.
 			});
-      		
+
       		Users.update({User:Meteor.userId()}, {
         		$push: { LikedList: id}
       		});
 		}
 	},
 
-<<<<<<< HEAD
   toggleSubscription: function(id){
     // Array of people currUser is following
     var currSubList = Users.find({User: Meteor.userId()}).fetch()[0].FollowingList;
@@ -640,7 +633,7 @@ Meteor.methods({
     }
   }
   */
-=======
+
 	addCalendarEvents: function(event) {
 		return Cal_Events.insert({
 			title: event.title,
@@ -679,6 +672,4 @@ Meteor.methods({
 			}
 		});
 	}
-
->>>>>>> master
 });

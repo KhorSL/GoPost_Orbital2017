@@ -68,7 +68,7 @@ Router.route('/create-event', {
 });
 
 // Prevent unauthorised access
-Router.onBeforeAction(function () {    
+Router.onBeforeAction(function () {
     if  (!Meteor.userId() && !Meteor.loggingIn()) {
         this.redirect('landing');
         this.stop();
@@ -97,8 +97,6 @@ Router.route('/settings', {
   template: 'settings',
   layoutTemplate: 'layout'
 });
-<<<<<<< HEAD
-=======
 
 Router.route('/signUp/:_id', {
   name: 'sign-up',
@@ -108,4 +106,3 @@ Router.route('/signUp/:_id', {
     return RegistrationForms.findOne({eventId: this.params._id});
   },
 });
->>>>>>> master
