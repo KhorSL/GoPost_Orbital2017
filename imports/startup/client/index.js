@@ -14,6 +14,7 @@ import '/imports/ui/javascript/bulletinBoard.js';
 import '/imports/ui/javascript/calendar_full.js';
 import '/imports/ui/javascript/calendar_modal.js';
 import '/imports/ui/javascript/chatBoard.js';
+import '/imports/ui/javascript/chat_channelModal.js';
 import '/imports/ui/javascript/chat_messageView.js';
 import '/imports/ui/javascript/dashBoard.js';
 import '/imports/ui/javascript/event_View.js';

@@ -166,6 +166,7 @@ if(Meteor.isClient) {
 			var end = event.target.end.value;
 			var category = $("#event_cat").val();
 			var type = $('#tokenfield').val().split(',');
+			var channel = false;
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
@@ -194,7 +195,7 @@ if(Meteor.isClient) {
 			var rf_matric = event.target.rf_matric.checked;
 			var rf_nric = event.target.rf_nric.checked;
 			
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, privacy, contact, img, function(error, result) {
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, privacy, contact, img, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {

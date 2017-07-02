@@ -51,6 +51,7 @@ Router.route('/myEvents', {
   layoutTemplate: 'layout'
 });
 
+/*Credits: http://meteortips.com/second-meteor-tutorial/iron-router-part-2/*/
 Router.route('/event_View/:_id', {
   name: "event_View",
   template: "event_View",

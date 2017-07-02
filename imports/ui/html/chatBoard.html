@@ -3,8 +3,8 @@
         <div class="col-sm-4 chat_sidebar">
     	 	<div class="row">
     	 		<div id="custom-search-input">
-               		<div class="input-group col-md-12">
-                  		<input type="text" name="search_query" class="search-query form-control" placeholder="Conversation" />
+               		<div class="input-group col-md-12 chat_search">
+                  		<input type="text" id="search_query" name="search_query" class="search-query form-control" placeholder="Search friend" />
                   		{{#if search_Tag}}
                   		<button class="btn btn-danger cross_mar" id="crossBut" type="button">
                   			<span class=" glyphicon glyphicon-remove"></span>
@@ -18,17 +18,17 @@
     	 	</div>
     	 	<div class ="row">
 	    	 	<ul class="nav nav-pills nav-justified chat-pills">
-	    			<li class="active"><a data-toggle="pill" href="#messages"> Messages </a></li>
-	    			<li><a data-toggle="pill" href="#friend"> Friends </a></li>
-	    			<li><a data-toggle="pill" href="#channel"> Channel </a></li>
+	    			<li class="active"><a data-toggle="pill" href="#messages">Messages</a></li>
+	    			<li><a data-toggle="pill" href="#friend">Friends</a></li>
+	    			<li><a data-toggle="pill" href="#channel">Channel</a></li>
 	  			</ul>
             	
             	<div class="tab-content">
     				<div id="messages" class="tab-pane fade in active">
     					<div class="member_list">
                				<ul class="list-unstyled">
-                  				{{#each convos}}
-                  					<li class="left clearfix" id="startChat" {{active}}>
+                  				{{#each messages}}
+                  					<li class="left clearfix {{active}}" id="startChat">
 						               	<span class="chat-img pull-left">
 						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
 						               	</span>
@@ -49,12 +49,12 @@
                   				{{/each}}
                   			</ul>
                   		</div>
-				    </div>
+				    </div> <!-- end of messages content -->
 				    <div id="friend" class="tab-pane fade">
 				    	<div class="member_list">
                				<ul class="list-unstyled">
                   				{{#each friend}}
-		                  			<li class="left clearfix" id="startChat" {{active}}>
+		                  			<li class="left clearfix {{active}}" id="startChat">
 						               	<span class="chat-img pull-left">
 						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
 						               	</span>
@@ -75,14 +75,31 @@
                   				{{/each}}
                   			</ul>
                   		</div>
-				    </div>
+				    </div> <!-- end of friend content -->
 				    <div id="channel" class="tab-pane fade">
-				    	<ul>
-					    	{{#each channel}}
-					    		<li><a href="#">#{{name}}</a></li>
-					    	{{/each}}
-				    	</ul>
-				    </div>
+				    	<div class="member_list">
+					    	<ul class="list-unstyled">
+					    		<li class="left clearfix" id="createChannel">
+					    			<div class="chat-body clearfix">
+				                        <div class="header_sec">
+				                           	<strong class="primary-font">Start a Channel</strong> 
+				                           	<span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+				                        </div>
+				                     </div>
+					    		</li>
+						    	{{#each channels}}
+		                  			<li class="left clearfix {{active}}" id="startChannel">
+			                        	<div class="header_sec">
+			                           		<strong class="primary-font">{{this}}</strong> 
+			                           		<strong class="pull-right">09:45AM</strong>
+			                        	</div>
+		                  			</li>
+                  				{{else}}
+              						<li><p class="alert alert-warning">No Channel Found.</p></li> 
+                  				{{/each}}
+				    		</ul>
+				    	</div> 
+				    </div> <!-- end of channel content -->
   				</div> <!-- tab-content -->
         	</div> <!-- end of row -->
          </div> <!-- end of chat_sidebar -->
@@ -90,12 +107,12 @@
 		 
          <div class="col-sm-8 message_section">
 		 	<div class="row">
-		 		<!--
+
 		 		<div class="new_message_head">
 		 			<div class="pull-left">
-		 				<span class="glyphicon glyphicon-plus" role="button" id="New_Message" aria-hidden="true"></span>
+		 				{{messaging}}
 		 			</div>
-		 		</div> new_message_head-->
+		 		</div>
 		 
 		 		<div class="chat_area">
 		 			<div class="chat-history">
@@ -104,7 +121,7 @@
 		        				{{> loader}}
 		      				{{else}}
 		      					{{#if Template.subscriptionsReady}}
-		        					{{#each messages}}
+		        					{{#each msgHistory}}
 		          						{{> chat_messageView}}
 		        					{{else}}
 		          						<p class="alert alert-warning">Empty.</p>
@@ -125,5 +142,7 @@
 		 	
 		 	</div> <!-- end of row -->
        	</div> <!--end of message_section-->
+
+       	{{> chat_channelModal}}
    	</div> <!-- end of chat container -->
 </template>

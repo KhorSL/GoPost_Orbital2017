@@ -12,7 +12,7 @@ Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();
 
 	Session.set("searchQuery", "");			//template.searchQuery = new ReactiveVar();
-  Session.set("filterType", "Filter By"); //template.filterType  = new ReactiveVar( "Filter By" );
+ 	Session.set("filterType", "Filter By"); //template.filterType  = new ReactiveVar( "Filter By" );
 	Session.set("searching", false); 		//template.searching   = new ReactiveVar( false );
 	Session.set("searchBut", false);		//template.searchBut	 = new ReactiveVar( false );
 	//Session.set("viewToggle", false);		//template.viewToggle	 = new ReactiveVar( false );

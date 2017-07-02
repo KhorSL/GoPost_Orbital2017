@@ -44,7 +44,11 @@
    padding: 2px 5px;
    position: absolute;
    right: 0;
-   z-index: 9999;
+   z-index: 10;
+}
+
+.chat_search {
+  width: 100%;
 }
 
 .search-query:focus + button {
@@ -56,11 +60,12 @@
   border: medium none;
 }
 .new_message_head {
-  background: #f5f3f3 none repeat scroll 0 0;
+  background: #e8e6e7 none repeat scroll 0 0;
   float: left;
   font-size: 13px;
   font-weight: 600;
   padding: 17px 10px;
+  height: 54px;
   width: 100%;
   border-bottom: 1px solid #dddddd; 
 }
@@ -124,6 +129,11 @@
   background: #428bca none repeat scroll 0 0;
   color: #fff;
   cursor:pointer;
+}
+
+.member_list li.active {
+  color: #FFF;
+  background-color: #fed136;
 }
 
 .chat_area {

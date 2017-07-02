@@ -51,14 +51,6 @@ UserSchema = new SimpleSchema({
 	},
 	"SignUpEventList.$": {
 	    type: String
-	},
-	MessageList: {
-		type: Array,
-		label: "Message's List",
-		defaultValue: []
-	},
-	"MessageList.$": {
-	    type: String
 	}
 });
 
@@ -114,6 +106,10 @@ EventsSchema = new SimpleSchema({
 			return Meteor.user().username;
 		},
 		denyUpdate: true
+	},
+	channel: {
+		type: Boolean,
+		label: "Check if channel created"
 	},
 	category: {
 		type: String,
@@ -333,13 +329,6 @@ RegistrationFormsSchema = new SimpleSchema({
 	}
 });
 
-ChannelsSchema = new SimpleSchema({
-	name: {
-    	type: String,
-    	label: 'The name of the channel.'
-  	}
-});
-
 MessagesSchema = new SimpleSchema({
 	channel: {
     	type: String,
@@ -370,7 +359,6 @@ Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 Cal_Events.attachSchema(Cal_EventsSchema);
 Messages.attachSchema(MessagesSchema);
-Channels.attachSchema(ChannelsSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
@@ -476,8 +464,9 @@ if(Meteor.isServer) {
 		return SignUps.find();
 	});
 
-	Meteor.publish("conversation", function(sender, recever) {
-		if(recever === "") {
+	Meteor.publish("conversation", function(sender, recever, channel) {
+		if(channel === "") {
+			//Direct Messages
 			return Messages.find(
 				{$or: [
 					{"owner" : sender}, 
@@ -485,17 +474,9 @@ if(Meteor.isServer) {
 				]
 			});
 		} else {
-			return Messages.find(
-				{$or: [
-					{"owner" : sender}, 
-					{"to" : sender}
-				]
-			});
+			//Channel Messages
+			return Messages.find({"channel" : channel});
 		}
-	});
-
-	Meteor.publish("channels", function() {
-		return Channels.find();
 	});
 }
 
@@ -578,7 +559,7 @@ Meteor.methods({
 		});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, privacy, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, privacy, contact, img){
 		return Events.insert({
 			// Img to further test
 			title: title,
@@ -590,6 +571,7 @@ Meteor.methods({
 			end: end,
 			category: cat,
 			type: type,
+			channel : channel,
 			privacy: privacy,
 			contact: contact,
 			img: img,
@@ -714,5 +696,21 @@ Meteor.methods({
 			message: details.msg
 		});
   	},
+
+  	startChannel: function(curUser, event_id, event_title, channel) {
+		Events.update({"_id": event_id},{"$set" : {
+			"channel" : channel
+		}});
+
+		var msg = "New channel have been created.";
+
+		return Messages.insert({
+			channel: event_title,
+			to: "",
+			owner: curUser,
+			timestamp: new Date(),
+			message: msg
+		});
+  	}
 
 });
