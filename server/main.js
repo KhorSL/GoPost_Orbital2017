@@ -538,7 +538,7 @@ Meteor.methods({
     	});
   	},
 
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, type, privacy, contact, img){
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, cat, type, privacy, contact, img){
 		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
@@ -553,6 +553,7 @@ Meteor.methods({
 			locationGeo: locationGeo,
 			start: start,
 			end: end,
+			category: cat,
 			type: type,
 			privacy: privacy,
 			contact: contact,
