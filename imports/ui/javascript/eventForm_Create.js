@@ -369,7 +369,7 @@ if(Meteor.isClient) {
 			var animating; //flag to prevent quick multi-click glitches
 
 			if(!$("#new-event").valid()) {
-				//return false;
+				return false;
 			} else {
 				// for confirmation page
 				var title = $('input[name="title"]').val();
