@@ -102,11 +102,43 @@
 							<p> Check the fields that you want to include. </p>
 						</div>
 					</div>
-
-		                <div class="">
-		                	{{> eventForm_RegistrationForm}}
-						</div>
 					
+					<div class="panel-group">
+		                <div class="panel panel-default">
+		                	<div class="panel-heading" data-toggle="collapse" href="#rf-default">
+		                		<h4 class="panel-title">Default Options</h4>
+		                		<span class="caret pull-right"></span>
+		                	</div>
+		                	<div id="rf-default" class="panel-collapse collapse">
+								<div class="panel-body">
+		                			{{> eventForm_RegistrationForm}}
+		                		</div>
+		                	</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+		                <div class="panel panel-default">
+		                	<div class="panel-heading" data-toggle="collapse" href="#rf-custom">
+		                		<h4 class="panel-title">Build Your Form</h4>
+		                		<span class="caret pull-right"></span>
+		                	</div>
+		                	<div id="rf-custom" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<button type="button" value="Add a field" class="add btn btn-link" id="add">
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+		                				<div class="">
+		                					<div id="buildyourform">
+		                					</div>
+		                				</div>
+		                			</div>
+		                		</div>
+		                	</div>
+						</div>
+					</div>
+
 					<button type="button" class="btn previous">Previous</button>
 					<button type="button" class="btn next-s2">Next</button>
 				</fieldset>
