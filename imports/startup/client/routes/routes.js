@@ -75,9 +75,16 @@ Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
   layoutTemplate: "layout",
+  waitOn: function () {
+        return Meteor.subscribe('events');
+    },
+  action: function () {
+        // render all templates and regions for this route
+        this.render();
+    },
   data: function () {
-    return UserEvents.findOne({_id: this.params._id});
-  },
+    return Events.findOne({_id: this.params._id});
+  }
 });
 
 Router.route('/myFriends', {

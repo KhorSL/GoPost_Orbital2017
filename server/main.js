@@ -69,10 +69,13 @@ EventsSchema = new SimpleSchema({
 		optional: true
 	},
 	locationGeo: {
-		type: Object,
+		type: Array,
 		label: "Location Geometry",
 		optional: true,
-		blackbox: true //to skip the validation of things in the object
+		//blackbox: true //to skip the validation of things in the object
+	},
+	"locationGeo.$": {
+		type: String
 	},
 	createdAt: {
 		type: Date,
@@ -534,29 +537,29 @@ Meteor.methods({
       		Age: age
     	});
   	},
-	/*
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, dateTime, type, privacy, contact, img){
-		var currEvent = UserEvents.findOne(id);
+
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, type, privacy, contact, img){
+		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
 			throw new Meteor.Error('not authorized');
 		}
 
-		UserEvents.update(id, {$set: {
+		Events.update(id, {$set: {
 			title: title,
 			description: description,
 			location: location,
 			locationAddr: locationAddr,
 			locationGeo: locationGeo,
-			dateTime: dateTime,
+			start: start,
+			end: end,
 			type: type,
 			privacy: privacy,
 			contact: contact,
-			img: img,
+			img: img
 			}
 		});
 	},
-	*/
 
 	removeEvent: function(id){
 		Events.remove(id);

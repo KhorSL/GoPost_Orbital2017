@@ -47,7 +47,7 @@ if(Meteor.isClient) {
 	Template.eventForm_Create.onCreated(function() {
 	  var output; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
-	  geo = ""; //Global var.. for location geometry
+	  geo = []; //Global var.. for location geometry
 
 	  // We can use the `ready` callback to interact with the map API once the map is ready.
 	  GoogleMaps.ready('exampleMap', function(map) {
@@ -91,7 +91,8 @@ if(Meteor.isClient) {
   					console.log("Returned place contains no geometry");
   					return;
   				}
-  				geo = place.geometry;
+  				
+  				geo = [place.geometry.location.lat(), place.geometry.location.lng()];
 
   				// Create a marker for the new place
 		      	markers.push(new google.maps.Marker( {
@@ -124,29 +125,108 @@ if(Meteor.isClient) {
 		}
 
 		var intId = $("#buildyourform div").length + 1;
-		var fieldWrapper = $("<div class=\"fieldwrapper row form-group\" id=\"field" + intId + "\"/>");
-		var fName = $("<div class=\"col-sm-12\"><label>Field Title</label><input type=\"text\" class=\"fieldname form-control\"></div>");
-		var fType = $("<div class=\"col-sm-6\"><label>Field Type</label><select class=\"fieldtype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
-		var removeButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove\"></div>");
+		var qnsWrapper = $("<div class=\"qnswrapper\" id=\"field" + intId + "\"/>");
+
+		var qnsHeader = $("<div class=\"qnsheader row form-group\" id=\"qHeader" + intId + "\"/>");
+		var qnsName = $("<div class=\"col-sm-8\"><label>Field Title</label><input type=\"text\" class=\"qnsname form-control\"></div>");
+		var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+
+		var qnsBody = $("<div class=\"qnsbody row form-group\" id=\"qBody" + intId + "\"/>");
+		var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
+
+		var qnsFooter = $("<div class=\"qnsfooter row form-group\" id=\"qFooter" + intId + "\"/>");
+		var qnsRemoveButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove Question\"></div>");
 		
-		removeButton.click(function() {
-			console.log("remove");
-		    $(this).parent().remove();
+		currFields++;
+
+		qnsRemoveButton.click(function() {
+			if(currFields <= 1) {
+				alert("You need to include at least 1 question in your Registration Form. Thank you.");
+				return false;
+			}
+
+		    $(this).parent().parent().remove();
 		    currFields--;
 		});
 
-		fieldWrapper.append(fName);
-		fieldWrapper.append(fType);
-		fieldWrapper.append(removeButton);
-		$("#buildyourform").append(fieldWrapper);
-		currFields++;
+		qnsHeader.append(qnsName);
+		qnsHeader.append(qnsType);
+
+		qnsBody.append(qnsDisplay);
+
+		qnsFooter.append(qnsRemoveButton);
+
+		qnsWrapper.append(qnsHeader);
+		qnsWrapper.append(qnsBody);
+		qnsWrapper.append(qnsFooter);
+
+		$("#buildyourform").append(qnsWrapper);
+		
 
 		//Selection of custom form field changed function
 		fieldTypeChange = function (selected) {
-			var ft = $('.fieldtype').val();
+			var ft = $(selected).val(); //Field type
+			var qHeaderId = $(selected).parent().parent().attr('id').replace("qHeader", ""); //Question Header ID
+			var qnsDp = "fDisplay" + qHeaderId; //The id of the div to display the various type of question options
+
+			//option fields
+			var optWrapper = $("<div class=\"optWrapper row form-group\" id=\"opt" + qHeaderId + "\"/>");
+			var optAddButton = $("<div class=\"col-sm-3\" id=\"add" + optId + "\"><input type=\"button\" class=\"optAdd btn btn-default\" value=\"Add Options\"></div>");
+			//initial option field ID
+			var optId = 1;
+			//Option fields as a wrapper; include a remove button and an add button
+			var optUserFields = $("<div class=\"col-sm-9\"/>");
+			var optEachUF = $("<div class=\"row\"/>");
+			var optFields = $("<div class=\"col-sm-10\" id=\"opt" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
+			var optRemoveButton = $("<div class=\"col-sm-2\" id=\"remove" + optId + "\"><input type=\"button\" class=\"optRemove btn btn-default\" value=\"-\"></div>");
+			
+			optEachUF.append(optFields);
+			optEachUF.append(optRemoveButton);
+			optUserFields.append(optEachUF);
+
+			optAddButton.click(function() {
+				if(optId > 15) {
+					return false;
+				}
+
+				optId++;
+				var optEachUF = $("<div class=\"row\"/>");
+				var optFields = $("<div class=\"col-sm-10\" id=\"opt" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
+				var optRemoveButton = $("<div class=\"col-sm-2\" id=\"remove" + optId + "\"><input type=\"button\" class=\"optRemove btn btn-default\" value=\"-\"></div>");
+			
+				optRemoveButton.click(function() {
+					if(optId <= 1) {
+						return false;
+					}
+
+			    	$(this).parent().remove();
+			    	optId--;
+				});
+
+				optEachUF.append(optFields);
+				optEachUF.append(optRemoveButton);
+
+				optUserFields.append(optEachUF);
+			});	
+
+			optWrapper.append(optAddButton);
+
+			optRemoveButton.click(function() {
+				if(optId <= 1) {
+					return false;
+				}
+
+			    $(this).parent().remove();
+			    optId--;
+			});		
+
+			optWrapper.append(optUserFields);
+
 
 			if(ft === 'checkbox') {
-				$('.fieldwrapper').append('<select><option>Val1</option></select>');
+				$("#"+qnsDp).append(optWrapper);
+			} else {
+				$("#" + "opt" + qHeaderId).remove();
 			}
 		};
 		//Google Map API
@@ -288,8 +368,9 @@ if(Meteor.isClient) {
 			var animating; //flag to prevent quick multi-click glitches
 
 			if(!$("#new-event").valid()) {
-				return false;
+				//return false;
 			} else {
+				// for confirmation page
 				var title = $('input[name="title"]').val();
 				var description = $('textarea[name="description"]').val();
 				var location = $('input[name="location"]').val();
@@ -362,20 +443,40 @@ if(Meteor.isClient) {
 			}
 
 			var intId = $("#buildyourform div").length + 1;
-			var fieldWrapper = $("<div class=\"fieldwrapper row form-group\" id=\"field" + intId + "\"/>");
-			var fName = $("<div class=\"col-sm-12\"><label>Field Title</label><input type=\"text\" class=\"fieldname form-control\"></div>");
-			var fType = $("<div class=\"col-sm-6\"><label>Field Type</label><select class=\"fieldtype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
-			var removeButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove\"></div>");
+			var qnsWrapper = $("<div class=\"qnswrapper\" id=\"field" + intId + "\"/>");
+
+			var qnsHeader = $("<div class=\"qnsheader row form-group\" id=\"qHeader" + intId + "\"/>");
+			var qnsName = $("<div class=\"col-sm-8\"><label>Field Title</label><input type=\"text\" class=\"qnsname form-control\"></div>");
+			var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+
+			var qnsBody = $("<div class=\"qnsbody row form-group\" id=\"qBody" + intId + "\"/>");
+			var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
+
+			var qnsFooter = $("<div class=\"qnsfooter row form-group\" id=\"qFooter" + intId + "\"/>");
+			var qnsRemoveButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove Question\"></div>");
 			
-			removeButton.click(function() {
-			    $(this).parent().remove();
+			qnsRemoveButton.click(function() {
+				if(currFields <= 1) {
+					alert("You need to include at least 1 question in your Registration Form. Thank you.");
+					return false;
+				}
+
+			    $(this).parent().parent().remove();
 			    currFields--;
 			});
 
-			fieldWrapper.append(fName);
-			fieldWrapper.append(fType);
-			fieldWrapper.append(removeButton);
-			$("#buildyourform").append(fieldWrapper);
+			qnsHeader.append(qnsName);
+			qnsHeader.append(qnsType);
+
+			qnsBody.append(qnsDisplay);
+
+			qnsFooter.append(qnsRemoveButton);
+
+			qnsWrapper.append(qnsHeader);
+			qnsWrapper.append(qnsBody);
+			qnsWrapper.append(qnsFooter);
+
+			$("#buildyourform").append(qnsWrapper);
 			currFields++;
 		}
 	});
