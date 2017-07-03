@@ -34,6 +34,15 @@ if(Meteor.isClient) {
 		formatDate: function(date) {
   			return moment(date).format('MM/DD/YYYY h:mm A');
   		},
+
+  		catSelection: function(selected) {
+			var currEvent = Events.findOne({_id: this._id});
+  			if(selected === currEvent.category) {
+  				return true;
+  			} else {
+  				return false;
+  			}
+  		}
 	});
 
 	Template.eventForm_Update.onCreated(function() {
@@ -122,13 +131,14 @@ if(Meteor.isClient) {
 			var locationGeo = geo;
 			var start = event.target.start.value;
 			var end = event.target.end.value;
+			var category = $("#event_cat").val();
 			var type = $('#tokenfield').val().split();
 			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
 			var eventId = this._id;
 
-			Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, start, end, type, privacy, contact, img, function(error, result) {
+			Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, start, end, category, type, privacy, contact, img, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
