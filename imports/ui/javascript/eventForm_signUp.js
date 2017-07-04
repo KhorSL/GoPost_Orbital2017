@@ -5,12 +5,83 @@ import '../html/eventForm_signUp.html';
 
 if(Meteor.isClient) {
 	Meteor.subscribe("signUps");
-
 	Template.eventForm_signUp.onRendered(function() {
 		Meteor.subscribe("rfTemplates");
 	});
 
+	Template.eventForm_signUp.helpers({
+		// This function coheck if the curren user had submitted the form
+		checkPriorSignup: function(eventId) {
+			var submission = SignUps.findOne({ $and: [
+				{eventId: eventId},
+				{participantId: Meteor.userId()}
+				]
+			});
+
+			// if submission is pending submission != null
+			if(submission != null) {
+				return false;
+			} else {
+				return true;
+			}
+		},
+
+		//This function checks the confirmation status of the registration
+		checkConfirmation: function(eventId) {
+			var submission = SignUps.findOne({ $and: [
+				{eventId: eventId},
+				{participantId: Meteor.userId()},
+				{confirmation: false}
+				]
+			});
+
+			// if submission is pending submission != null
+			if(submission != null) {
+				return false;
+			} else {
+				submission = SignUps.findOne({ $and: [
+					{eventId: eventId},
+					{participantId: Meteor.userId()},
+					{confirmation: true}
+					]
+				});
+
+				if(submission != null) {
+					return true;
+				} else {
+					console.log("error"); // submission should be true if not false.
+				}
+			}
+		}
+	});
+
 	Template.eventForm_signUp.events({
+		'click #withdraw': function(event) {
+			event.preventDefault();
+			// confirmation to witdraw from event
+			if(!confirm("You are about to withdraw from this event. Are you sure?")) {
+				return false;
+			}
+
+			var eventId = this.eventId;
+			var submission = SignUps.findOne({ $and: [
+				{eventId: eventId},
+				{participantId: Meteor.userId()}
+				]
+			});
+
+			var submissionId = submission._id;
+
+			Meteor.call("withdrawSignUp", submissionId, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				} else {
+					Session.set('delObj', "registration");
+  					Router.go('event_View', { _id: eventId});
+				}
+			});
+		},
+
 		'submit #new-signUp': function(event) {
 			event.preventDefault();
 
@@ -36,9 +107,10 @@ if(Meteor.isClient) {
 			if(this.address_full) {
 				var address = event.target.address.value;
 				var city = event.target.city.value;
-				var region = event.target.region.value;
 				var postal = event.target.postal.value;
 			}
+
+			if(this.region) var region = event.target.region.value;
 
 			if(this.faculty) { var faculty = event.target.faculty.value; }
 			

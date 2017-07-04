@@ -532,6 +532,22 @@ Meteor.methods({
 	},
 
 	addSignUp: function(eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, additional) {
+		Users.update({User: Meteor.userId()}, {$addToSet: {
+			SignUpEventList: eventId
+		}});
+		//console.log((Users.findOne({User: Meteor.userId()})));
+		// 2nd point of check if current user sign up before
+		var priorSubmission = SignUps.findOne({ $and: [
+			{eventId: eventId},
+			{participantId: Meteor.userId()}
+			]
+		});
+		//console.log(priorSubmission);
+		if(priorSubmission != null) {
+			console.log("Signed up before");
+			return false;
+		}
+
 		return SignUps.insert({
 			participantId: Meteor.userId(),
 			createdAt: new Date(),
@@ -558,8 +574,13 @@ Meteor.methods({
 			nok_firstName: nok_firstName,
 			nok_lastName: nok_lastName,
 			nok_mobile: nok_mobile,
-			additional: additional
+			additional: additional,
+			confirmation: false
 		});
+	},
+
+	withdrawSignUp: function(submissionId) {
+		return SignUps.remove(submissionId);
 	},
 
 	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, privacy, contact, img){
