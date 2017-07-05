@@ -5,6 +5,7 @@ import '../html/eventForm_signUp.html';
 
 if(Meteor.isClient) {
 	Meteor.subscribe("signUps");
+	Meteor.subscribe("userDetails");
 	Template.eventForm_signUp.onRendered(function() {
 		Meteor.subscribe("rfTemplates");
 	});
@@ -72,11 +73,11 @@ if(Meteor.isClient) {
 
 			var submissionId = submission._id;
 
-			Meteor.call("withdrawSignUp", submissionId, function(error, result) {
+			Meteor.call("withdrawSignUp", submissionId, eventId, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
-					Session.set('delObj', "registration");
+					/* withdrawal confimation message code here */
   					Router.go('event_View', { _id: eventId});
 				}
 			});

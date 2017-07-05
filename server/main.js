@@ -455,6 +455,10 @@ if(Meteor.isServer) {
     	return Users.find("Age");
   	});
 
+  	Meteor.publish("userDetails", function() {
+  		return Users.find();
+  	});
+
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});
@@ -536,7 +540,7 @@ Meteor.methods({
 			SignUpEventList: eventId
 		}});
 		//console.log((Users.findOne({User: Meteor.userId()})));
-		// 2nd point of check if current user sign up before
+		// One point of check if current user sign up before
 		var priorSubmission = SignUps.findOne({ $and: [
 			{eventId: eventId},
 			{participantId: Meteor.userId()}
@@ -579,7 +583,16 @@ Meteor.methods({
 		});
 	},
 
-	withdrawSignUp: function(submissionId) {
+	withdrawSignUp: function(submissionId, eventId) {
+		// Remove the eventId from SignUpEventList
+		Users.update({User: Meteor.userId()}, {$pull: 
+			{
+				SignUpEventList: eventId
+			}
+		});
+
+		//console.log(Users.findOne({User: Meteor.userId()}));
+		//Remove the entire sign up form the user submitted previous
 		return SignUps.remove(submissionId);
 	},
 
@@ -639,8 +652,26 @@ Meteor.methods({
 	},
 
 	removeEvent: function(id){
+		// Removes the event itself
 		Events.remove(id);
+
+		// Remove eventId from CreatedEventList
+		Users.update({User: Meteor.userId()}, {$pull: 
+			{
+				CreatedEventList: id
+			}
+		});
+
+		//Removes the registration forms template
 		RegistrationForms.remove({ eventId: id });
+
+		//Indicate that event is removed to user that sign up for this event, and allow them to remove from their SignUpEventList
+		SignUps.update({eventId: id}, {
+			$set: 
+				{ removed: true }
+			},
+			{ upsert: true }
+		);
 	},
 
 	toggleLikes: function(id) {
