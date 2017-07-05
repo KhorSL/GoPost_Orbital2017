@@ -670,7 +670,10 @@ Meteor.methods({
 			$set: 
 				{ removed: true }
 			},
-			{ upsert: true }
+			{
+				upsert: true,
+				multi: true
+			}
 		);
 	},
 
