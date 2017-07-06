@@ -357,3 +357,22 @@
 }
 /* END FULLCALENDAR STYLES */
 /* Credits: https://github.com/puikinsh/Bootstrap-Admin-Template/blob/master/public/assets/css/main.css; */
+
+.dash_profile {
+  text-align: left;
+  padding:10px;
+}
+
+.dash_profile_action {
+  text-align: left;
+  padding:10px;
+}
+
+.dash_header_right {
+  float: right;
+  padding: 5px;
+}
+
+.dash_profile_action_btn {
+  margin-bottom: 5px;
+}

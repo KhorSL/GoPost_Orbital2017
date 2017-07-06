@@ -707,6 +707,24 @@ Meteor.methods({
 		}
 	},
 
+	unsubscribe: function(id) {
+		// Remove the userId from FollowingList
+		Users.update({User: Meteor.userId()}, {$pull: 
+			{
+				FollowingList: id
+			}
+		});
+
+	},
+
+	subscribe: function(id) {
+		// Remove the userId from FollowingList
+		Users.update({User: Meteor.userId()}, {"$addToSet" : {
+			"FollowingList" : id
+		}});
+
+	},
+
 	addCalendarEvents: function(event) {
 		return Cal_Events.insert({
 			title: event.title,
