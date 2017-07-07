@@ -21,14 +21,13 @@ Template.chatBoard.onCreated(function() {
 
 	Session.set("sender", Meteor.userId());
 	Session.set("recever", "");
-	Session.set("trigger", true); 			//for search bar
-	Session.set("search_Tag", false); 		//for search bar
-	Session.set("query", ""); 				//for search bar
 	Session.set("recever_details", null);
 	Session.set("channel", "");
+	Session.set("trigger", true); 			//for search bar
+	Session.set("search_Tag", false);  		//for search bar
+	Session.set("query", ""); 				//for search bar
 
 	template.autorun( () => {
-		console.log("INSIDE AUTORUN");
 		var sender = Session.get("sender");
 		var recever = Session.get("recever");
 		var trig = Session.get("trigger");
@@ -42,6 +41,11 @@ Template.chatBoard.onCreated(function() {
 
     	template.subscribe('userDetails_All', trig);
   	});
+
+  	Meteor.setTimeout((function() {
+		var dA = document.getElementById('chatArea');
+		dA.scrollTop = dA.scrollHeight;
+  	}), 2000);
 });
 
 Template.chatBoard.helpers({
@@ -61,7 +65,7 @@ Template.chatBoard.helpers({
 		var event_list2 = Events.find({
 			$and: [
 			 	{"owner": sender},
-				{ "channel" : {$ne: false}}
+				{"channel" : {$ne: false}}
 			]}).fetch().map(function (obj) {return obj.title;});
 
 		//check if channel is created.
@@ -101,11 +105,10 @@ Template.chatBoard.helpers({
 					{ $and: [ {"owner" : sender}, {"to" : recever} ] },
 					{ $and: [ {"owner" : recever}, {"to" : sender} ] }
 				] 
-			});
+			}, {sort: {createdAt: 1}});
 		} else {
 			//Display Channel Messages
-			var msg = Messages.find({"channel" : channel});
-			return msg;
+			return Messages.find({"channel" : channel}, {sort: {createdAt: 1}});
 		}
 	},
 	friend: function() {
@@ -225,6 +228,7 @@ Template.chatBoard.events({
 						console.log(error.reason);
 					} else {
 						$("#type_msg").val("");
+						updateScroll();
 					}
 				});
 			} else {
@@ -253,3 +257,9 @@ Template.chatBoard.events({
 		/*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
 	},
 });
+
+let updateScroll = () => {
+  	/*https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up*/
+	var dA = document.getElementById('chatArea');
+	dA.scrollTop = dA.scrollHeight;
+};

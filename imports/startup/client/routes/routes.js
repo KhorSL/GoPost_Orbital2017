@@ -36,13 +36,21 @@ Router.route('/chatBoard', {
 Router.route('/dashBoard/:owner', {
 	name: 'dashBoard',
   template: 'dashBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  data: function() {
+    var selection = this.params.owner;
+    return Users.findOne({User: selection});
+  }
 });
 
-Router.route('/dashBoard/:_id', { //Normal Dashboard routing
+Router.route('/dashBoard/', { //Normal Dashboard routing
 	name: 'normalDashBoard',
   template: 'dashBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  data: function() {
+    var selection = Meteor.userId();
+    return Users.findOne({User: selection});
+  }
 });
 
 Router.route('/myEvents', {
