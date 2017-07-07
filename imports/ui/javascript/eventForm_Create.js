@@ -45,7 +45,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.onCreated(function() {
-	  var output; // Output for image input
+		var output = ""; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
 	  geo = []; //Global var.. for location geometry
 
@@ -115,7 +115,7 @@ if(Meteor.isClient) {
 
 	Template.eventForm_Create.onRendered(function() {
 		//Limiting the number of question user can add
-		maxFields = 5;
+		maxFields = 25;
 		currFields = 0;
 
 		//Adding the first field to the custom form
@@ -129,7 +129,7 @@ if(Meteor.isClient) {
 
 		var qnsHeader = $("<div class=\"qnsheader row form-group\" id=\"qHeader" + intId + "\"/>");
 		var qnsName = $("<div class=\"col-sm-8\"><label>Field Title</label><input type=\"text\" class=\"qnsname form-control\"></div>");
-		var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+		var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Check Boxes</option><option value=\"mcq\">Multiple Choices</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
 
 		var qnsBody = $("<div class=\"qnsbody row form-group\" id=\"qBody" + intId + "\"/>");
 		var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
@@ -170,14 +170,14 @@ if(Meteor.isClient) {
 			var qnsDp = "fDisplay" + qHeaderId; //The id of the div to display the various type of question options
 
 			//option fields
-			var optWrapper = $("<div class=\"optWrapper row form-group\" id=\"opt" + qHeaderId + "\"/>");
+			var optWrapper = $("<div class=\"optWrapper row form-group\" id=\"optWrapper" + qHeaderId + "\"/>");
 			var optAddButton = $("<div class=\"col-sm-3\" id=\"add" + optId + "\"><input type=\"button\" class=\"optAdd btn btn-default\" value=\"Add Options\"></div>");
 			//initial option field ID
 			var optId = 1;
 			//Option fields as a wrapper; include a remove button and an add button
 			var optUserFields = $("<div class=\"col-sm-9\"/>");
-			var optEachUF = $("<div class=\"row\"/>");
-			var optFields = $("<div class=\"col-sm-10\" id=\"opt" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
+			var optEachUF = $("<div class=\"row eachUF\"/>");
+			var optFields = $("<div class=\"col-sm-10\" id=\"optionField" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
 			var optRemoveButton = $("<div class=\"col-sm-2\" id=\"remove" + optId + "\"><input type=\"button\" class=\"optRemove btn btn-default\" value=\"-\"></div>");
 			
 			optEachUF.append(optFields);
@@ -190,8 +190,8 @@ if(Meteor.isClient) {
 				}
 
 				optId++;
-				var optEachUF = $("<div class=\"row\"/>");
-				var optFields = $("<div class=\"col-sm-10\" id=\"opt" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
+				var optEachUF = $("<div class=\"eachUF row\"/>");
+				var optFields = $("<div class=\"col-sm-10\" id=\"optionField" + optId + "\"><input type=\"text\" class=\"optname form-control\" value=\"Option " + optId + "\"/>");
 				var optRemoveButton = $("<div class=\"col-sm-2\" id=\"remove" + optId + "\"><input type=\"button\" class=\"optRemove btn btn-default\" value=\"-\"></div>");
 			
 				optRemoveButton.click(function() {
@@ -223,10 +223,14 @@ if(Meteor.isClient) {
 			optWrapper.append(optUserFields);
 
 
-			if(ft === 'checkbox') {
+			if(ft === 'mcq') {
+				$("#" + "optWrapper" + qHeaderId).remove();
+				$("#"+qnsDp).append(optWrapper);
+			} else if(ft === 'checkbox') {
+				$("#" + "optWrapper" + qHeaderId).remove();
 				$("#"+qnsDp).append(optWrapper);
 			} else {
-				$("#" + "opt" + qHeaderId).remove();
+				$("#" + "optWrapper" + qHeaderId).remove();
 			}
 		};
 		//Google Map API
@@ -271,6 +275,7 @@ if(Meteor.isClient) {
 	Template.eventForm_Create.events({
 		'submit .new-event': function(event) {
 			event.preventDefault();
+			var rfChoice = event.target.custom_default.checked; //choice if the user picked custom or default form, true: custom
 
 			var title = event.target.title.value;
 			var description = event.target.description.value;
@@ -289,41 +294,78 @@ if(Meteor.isClient) {
 			start = new Date(start);
 			end = new Date(end);
 
-			var rf_description = event.target.rf_description.checked;
-			var rf_name = event.target.rf_name.checked;
-			var rf_contact_mobile = event.target.rf_contact_mobile.checked;
-			var rf_contact_email = event.target.rf_contact_email.checked;
-			var rf_address_full = event.target.rf_address_full.checked;
-			var rf_address_region = event.target.rf_address_region.checked;
-			var rf_shirtSize_sml = event.target.rf_shirtSize_sml.checked;
-			var rf_shirtSize_123 = event.target.rf_shirtSize_123.checked;
-			var rf_shirtSize_chart = event.target.rf_shirtSize_chart.checked;
-			var rf_nationality = event.target.rf_nationality.checked;
-			var rf_gender = event.target.rf_gender.checked;
-			var rf_dietaryPref = event.target.rf_dietaryPref.checked;
-			var rf_allergies = event.target.rf_allergies.checked;
-			var rf_bloodType = event.target.rf_bloodType.checked;
-			var rf_faculty = event.target.rf_faculty.checked;
-			var rf_major = event.target.rf_major.checked;
-			var rf_nokInfo = event.target.rf_nokInfo.checked;
-			var rf_additional = event.target.rf_additional.checked;
-			var rf_matric = event.target.rf_matric.checked;
-			var rf_nric = event.target.rf_nric.checked;
+			//if rfChoice == false it is default reg form
+			if(!rfChoice) {
+				var rf_description = event.target.rf_description.checked;
+				var rf_name = event.target.rf_name.checked;
+				var rf_contact_mobile = event.target.rf_contact_mobile.checked;
+				var rf_contact_email = event.target.rf_contact_email.checked;
+				var rf_address_full = event.target.rf_address_full.checked;
+				var rf_address_region = event.target.rf_address_region.checked;
+				var rf_shirtSize_sml = event.target.rf_shirtSize_sml.checked;
+				var rf_shirtSize_123 = event.target.rf_shirtSize_123.checked;
+				var rf_shirtSize_chart = event.target.rf_shirtSize_chart.checked;
+				var rf_nationality = event.target.rf_nationality.checked;
+				var rf_gender = event.target.rf_gender.checked;
+				var rf_dietaryPref = event.target.rf_dietaryPref.checked;
+				var rf_allergies = event.target.rf_allergies.checked;
+				var rf_bloodType = event.target.rf_bloodType.checked;
+				var rf_faculty = event.target.rf_faculty.checked;
+				var rf_major = event.target.rf_major.checked;
+				var rf_nokInfo = event.target.rf_nokInfo.checked;
+				var rf_additional = event.target.rf_additional.checked;
+				var rf_matric = event.target.rf_matric.checked;
+				var rf_nric = event.target.rf_nric.checked;
 			
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, privacy, contact, img, function(error, result) {
-				if(error) {
-					console.log(error.reason);
-				} else {
-					Meteor.call("addEventTag", type);
-					Meteor.call("addRegistrationForm", result, title, rf_description, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_shirtSize_chart, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
-					Meteor.call("addEvent_User", result, function(error2, result2) {
-						if(error2) {
-							console.log(error2.reason);
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, privacy, contact, img, function(error, result) {
+					if(error) {
+						console.log(error.reason);
+					} else {
+						Meteor.call("addEventTag", type);
+						Meteor.call("addRegistrationForm", result, title, rf_description, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_shirtSize_chart, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
+						Meteor.call("addEvent_User", result, function(error2, result2) {
+							if(error2) {
+								console.log(error2.reason);
+							}
+						});
+						Router.go('event_View', { _id: result});
+					}
+				});
+			} else {
+				var customQns = [];
+				$('.qnswrapper').each(function() {
+						var qnsObj = {name: "", type: "", options: []}; //create a new object that stores name, type and options(if required)
+						qnsObj.type = $('.qnstype', this).val();
+						qnsObj.name = $('.qnsname', this).val();
+						// if the type is multiple choice, get all the options
+						if(qnsObj.type == "mcq" || qnsObj.type == "checkbox") {
+							$('.eachUF', this).each(function() {
+								qnsObj.options.push($('.optname', this).val()); // insert each option into this.options array
+							});
 						}
-					});
-					Router.go('event_View', { _id: result});
-				}
-			});
+						customQns.push(qnsObj);
+					}
+				);
+
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, privacy, contact, img, function(error, result) {
+					if(error) {
+						console.log(error.reason);
+					} else {
+						Meteor.call("addEvent_User", result, function(error3, result3) {
+							if(error3) {
+								console.log(error3.reason);
+							}
+						});
+						Meteor.call("addCustomRF", result, title, customQns, function(error2, result2) {
+							if(error2) {
+								alert(error2.reason);
+							} else {
+								Router.go('event_View', { _id: result});
+							}
+						});	
+					}
+				});
+			}
 		},
 
 		'change .img-input': function(event) {
@@ -448,7 +490,7 @@ if(Meteor.isClient) {
 
 			var qnsHeader = $("<div class=\"qnsheader row form-group\" id=\"qHeader" + intId + "\"/>");
 			var qnsName = $("<div class=\"col-sm-8\"><label>Field Title</label><input type=\"text\" class=\"qnsname form-control\"></div>");
-			var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Checked</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
+			var qnsType = $("<div class=\"col-sm-4\"><label>Field Type</label><select class=\"qnstype form-control\" onchange=\"fieldTypeChange(this);\"><option value=\"checkbox\">Check Boxes</option><option value=\"mcq\">Multiple Choices</option><option value=\"textbox\" selected=\"selected\">Text</option><option value=\"textarea\">Paragraph</option></select></div>");
 
 			var qnsBody = $("<div class=\"qnsbody row form-group\" id=\"qBody" + intId + "\"/>");
 			var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
@@ -479,6 +521,18 @@ if(Meteor.isClient) {
 
 			$("#buildyourform").append(qnsWrapper);
 			currFields++;
+		},
+
+		'change #custom-default': function(event) {
+			event.preventDefault();
+
+			if(event.target.checked) {
+				$('#defaultRF').hide('slow');
+				$('#customRF').fadeIn('slow');
+			} else {
+				$('#customRF').hide('slow');
+				$('#defaultRF').fadeIn('slow');
+			}
 		}
 	});
 }

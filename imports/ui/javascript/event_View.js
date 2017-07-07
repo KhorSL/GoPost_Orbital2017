@@ -30,6 +30,11 @@ Template.event_View.events({
 	},
 
   'click .delete' :function(e) {
+    // confirmation to delete event
+    if(!confirm("You are about to delete this event. Are you sure?")) {
+      return false;
+    }
+
     var title = $("#view_head h2").html();
     
     Meteor.call("removeEvent", this._id, function(error, result) {

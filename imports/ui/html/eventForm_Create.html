@@ -1,32 +1,32 @@
 <template name="eventForm_Create">
-	<!-- progressbar -->
+	<!-- Start of Progress Bar -->
 	<ul id="progressbar">
 		<li class="active">Create Event </li>
 		<li> Create Registration Form </li>
 		<li> Confirm Submit </li>
-	</ul>
+	</ul> <!-- End of Progress Bar -->
 
 	<div class="panel panel-default form-panel" id="new-event-panel">
 		<!-- <div class="panel-heading"> Create event </div> -->
 		<div class="panel-body">
 				
 			<form role="form" method="post" class="new-event" id="new-event">
-				
+				<!-- Start of Field Set 1, Event Details -->
 				<fieldset>
 				<div class="form-group">
-					<label for="title">Event Title:</label>
+					<label for="title">Event Title*</label>
 					<input type="text" class="form-control" name="title" placeholder="A new event" required>
 				</div>
 
 				<div class="form-group">
-					<label for="img">Event Poster:</label>
+					<label for="img">Event Poster</label>
 					<input class="img-input" type="file" accept="image/*" name="img">
 					<img id='output'>
 					<!-- {{#each images}} {{> image}} {{/each}} -->
 				</div>
 
 				<div class="form-group">
-					<label> Location: </label>
+					<label> Location* </label>
 					<input id="pac-input" class="form-control" type="text" name="location" placeholder="Enter a location">
 					<body>
 						<div class="map-container" name="eventMap">
@@ -38,7 +38,7 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label> Event Date and Time (Start): </label>
+							<label> Event Date and Time (Start)* </label>
 							<div class="input-group datetimepicker">
     							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     							<input class="set-due-date form-control" type="text" name="start" onkeydown="return false"/>
@@ -48,7 +48,7 @@
 
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label> Event Date and Time (End): </label>
+							<label> Event Date and Time (End)* </label>
 							<div class="input-group datetimepicker">
     							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     							<input class="set-due-date form-control" type="text" name="end" onkeydown="return false"/>
@@ -58,7 +58,7 @@
 				</div>
 
 				<div class="form-group">
-					<label> Event Categories: </label>
+					<label> Event Categories* </label>
 					<select class="form-control" id="event_cat">
 				      <option name= "myOption" value= "Camp">Camp</option>
 				      <option name= "myOption" value= "CCA">CCA</option>
@@ -71,39 +71,47 @@
 				</div>
 				
 				<div class="form-group">
-					<label> Event Hashtags: </label>
+					<label> Event Hashtags </label>
 					<input type="text" class="form-control" id="tokenfield" value="Camp,Community,Competition,Event,Internship,Workshop"/>
 					<small>*Create your own Tags and press 	&lt; ENTER &gt;</small>
 				</div>
 
 				<div class="form-group">
-					<label> Event Description: </label>
+					<label> Event Description* </label>
 					<textarea class="form-control" name="description" form="new-event"></textarea>
 				</div>
 
 				<div class="form-group">
-					<label> Contact: </label>
+					<label> Contact* </label>
 					<input class="form-control" name="contact" type="tel"> <br>
 				</div>
 
 				<div class="form-group" name="pub-option">
-					<label> Privacy options: </label>
+					<label> Privacy options </label>
 					<input type="checkbox" name="privacy"> Private event
 				</div>
 				{{#if currentUser}}
 				<button type="button" class="btn next-s1">Next</button>
 				{{/if}}
-				</fieldset>
-
+				</fieldset> <!-- End of Field Set 1 -->
+				
+				<!-- Start of Field Set 2, Create Registration Form-->
 				<fieldset>
-					<div class="form-top">
-						<div class="form-top-left">
+					<div class="row">
+						<div class="col-sm-10">
 							<h2>Create your Registration Form</h2>
-							<p> Check the fields that you want to include. </p>
+							<p> Toggle switch to choose between customised form or default fields. </p>		
+						</div>
+						<div class="col-sm-2">
+							<label class="switch">
+								<input type="checkbox" id="custom-default" name="custom_default"/>
+								<div class="slider round"></div>
+							</label>
 						</div>
 					</div>
-					
-					<div class="panel-group">
+
+					<!-- Start of Default Registration Form -->
+					<div class="panel-group" id="defaultRF">
 		                <div class="panel panel-default">
 		                	<div class="panel-heading" data-toggle="collapse" href="#rf-default">
 		                		<h4 class="panel-title">Default Options</h4>
@@ -115,9 +123,10 @@
 		                		</div>
 		                	</div>
 						</div>
-					</div>
-
-					<div class="panel-group">
+					</div> <!-- End of Deault Registration Form -->
+					
+					<!-- Start of Custom Registration Form -->
+					<div class="panel-group" id="customRF" style="display:none">
 		                <div class="panel panel-default">
 		                	<div class="panel-heading" data-toggle="collapse" href="#rf-custom">
 		                		<h4 class="panel-title">Build Your Form</h4>
@@ -137,12 +146,13 @@
 		                		</div>
 		                	</div>
 						</div>
-					</div>
+					</div> <!-- End of Custom Registration Form -->
 
 					<button type="button" class="btn previous">Previous</button>
 					<button type="button" class="btn next-s2">Next</button>
-				</fieldset>
+				</fieldset> <!-- End of Field Set 2 -->
 
+				<!-- Start of Field Set 3, Confirmation Page -->
 				<fieldset>
 					<div class="form-top">
 						<h2>Confirm the details of your event</h2>
@@ -184,7 +194,7 @@
 					
 					<button type="button" class="btn previous">Previous</button>
 					<input class="btn btn-warning" type="submit" value="Submit">
-				</fieldset>
+				</fieldset> <!-- End of Field Set 3-->
 
 			</form>
 		</div> <!-- End of panel body -->

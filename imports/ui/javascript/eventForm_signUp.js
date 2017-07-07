@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/eventForm_signUp.html';
+import '/imports/ui/html/components/eventForm_signUpDefault.html';
+import '/imports/ui/html/components/eventForm_signUpCustom.html';
 
 if(Meteor.isClient) {
 	Meteor.subscribe("signUps");
@@ -10,8 +12,44 @@ if(Meteor.isClient) {
 		Meteor.subscribe("rfTemplates");
 	});
 
+	Template.eventForm_signUpCustom.helpers({
+		eq: function (v1, v2) {
+        	return v1 === v2;
+    	},
+    	ne: function (v1, v2) {
+    	    return v1 !== v2;
+    	},
+    	lt: function (v1, v2) {
+    	    return v1 < v2;
+    	},
+    	gt: function (v1, v2) {
+    	    return v1 > v2;
+    	},
+    	lte: function (v1, v2) {
+    	    return v1 <= v2;
+    	},
+    	gte: function (v1, v2) {
+    	    return v1 >= v2;
+    	},
+    	and: function (v1, v2) {
+    	    return v1 && v2;
+    	},
+    	or: function (v1, v2) {
+    	    return v1 || v2;
+    	}
+	});
+
 	Template.eventForm_signUp.helpers({
-		// This function coheck if the curren user had submitted the form
+		// This function checks the reg form template for its type and return true for default and false for custom
+		checkRegFormType: function(RegFormType) {
+			if(RegFormType == "default") {
+				return true;
+			} else {
+				return false;
+			}
+		},
+
+		// This function coheck if the current user had submitted the form
 		checkPriorSignup: function(eventId) {
 			var submission = SignUps.findOne({ $and: [
 				{eventId: eventId},
@@ -83,7 +121,42 @@ if(Meteor.isClient) {
 			});
 		},
 
-		'submit #new-signUp': function(event) {
+		'submit #new-signUpCustom': function(event) {
+			event.preventDefault();
+			var userResponseList = [];
+			$('.userInput').each(function() {
+				var type = $(this).attr('name');
+				var userResponse = {qnsName: "", response: ""};
+
+				if(type != "checkbox") {	
+					userResponse.response = $(this).val();
+					userResponse.qnsName = $(this).prev('label').text();
+					userResponseList.push(userResponse);
+				} else {
+					var cbResponseList = [];
+					userResponse.qnsName = $(this).prev('label').text();
+					$('.optionBox:checkbox:checked', this).each(function() {
+						var opt = $(this).val();
+						cbResponseList.push(opt);
+					});
+					
+					userResponse.response = cbResponseList;
+					userResponseList.push(userResponse);
+				}
+			});
+
+			var eventId = this.eventId;
+
+			Meteor.call("addSignUpCustom", eventId, userResponseList, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				} else {
+					Router.go('event_View', { _id: eventId});
+				}
+			});
+		},
+
+		'submit #new-signUpDefault': function(event) {
 			event.preventDefault();
 
 			var firstName = "", lastName = "";

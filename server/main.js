@@ -329,6 +329,19 @@ RegistrationFormsSchema = new SimpleSchema({
 		type: Boolean,
 		label: "Additional Information",
 		optional: true
+	},
+	customQns: {
+		type: Array,
+		label: "Custom RF Question List",
+		optional: true,
+		blackbox: true
+	},
+	"customQns.$": {
+		type: Object
+	},
+	RegFormType: {
+		type: String,
+		label: "Registration Form Type"
 	}
 });
 
@@ -506,8 +519,20 @@ Meteor.methods({
 		/*Credits http://tgrall.github.io/blog/2015/04/21/mongodb-playing-with-arrays/*/
 	},
 
+	addCustomRF: function(eventId, title, customQns) {
+		return RegistrationForms.insert({
+			RegFormType: "custom",
+			owner: Meteor.userId(),
+			createdAt: new Date(),
+			eventId: eventId,
+			eventTitle: title,
+			customQns: customQns
+		});
+	},
+
 	addRegistrationForm: function(eventId, title, description, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, shirtSize_Chart, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
 		return RegistrationForms.insert({
+			RegFormType: "default",
 			owner: Meteor.userId(),
 			createdAt: new Date(),
 			eventId: eventId,
@@ -532,6 +557,32 @@ Meteor.methods({
 			additional: additional,
 			matric: matric,
 			nric: nric
+		});
+	},
+
+	addSignUpCustom: function(eventId, userResponseList) {
+		Users.update({User: Meteor.userId()}, {$addToSet: {
+			SignUpEventList: eventId
+		}});
+
+		// One point of check if current user sign up before
+		var priorSubmission = SignUps.findOne({ $and: [
+			{eventId: eventId},
+			{participantId: Meteor.userId()}
+			]
+		});
+		//console.log(priorSubmission);
+		if(priorSubmission != null) {
+			console.log("Signed up before");
+			return false;
+		}
+
+		return SignUps.insert({
+			participantId: Meteor.userId(),
+			createdAt: new Date(),
+			eventId: eventId,
+			confirmation: false,
+			userResponseList: userResponseList
 		});
 	},
 
@@ -634,6 +685,10 @@ Meteor.methods({
 			throw new Meteor.Error('not authorized');
 		}
 
+		RegistrationForms.update({eventId: id}, {$set: {
+			eventTitle: title
+		}});
+
 		Events.update(id, {$set: {
 			title: title,
 			description: description,
@@ -665,16 +720,8 @@ Meteor.methods({
 		//Removes the registration forms template
 		RegistrationForms.remove({ eventId: id });
 
-		//Indicate that event is removed to user that sign up for this event, and allow them to remove from their SignUpEventList
-		SignUps.update({eventId: id}, {
-			$set: 
-				{ removed: true }
-			},
-			{
-				upsert: true,
-				multi: true
-			}
-		);
+		//Remove from user SignUpEventList
+		SignUps.remove({eventId: id});
 	},
 
 	toggleLikes: function(id) {

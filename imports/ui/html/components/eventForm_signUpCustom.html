@@ -1,0 +1,37 @@
+<template name="eventForm_signUpCustom">
+	<div class="row well"><h1>Registration Form: {{eventTitle}}</h1></div>
+	<div class="row well">
+		<form class="new-signUp" id="new-signUpCustom">		
+			<div class="col-sm-12">	
+				{{#each customQns}}
+				<div class="row">
+					<div class="col-sm-12 form-group">
+						{{#if eq type "textbox"}}
+							<label>{{name}}</label>
+							<input type="text" class="form-control userInput" name="textbox"/>
+						{{else if eq type "textarea"}}
+							<label>{{name}}</label>
+							<textarea class="form-control userInput" name="textarea"></textarea>
+						{{else if eq type "mcq"}}
+							<label>{{name}}</label>
+							<select class="form-control userInput" name="mcq">
+								{{#each options}} 
+									<option value="{{this}}">{{this}}</option>
+								{{/each}}
+							</select>
+						{{else}}
+							<label>{{name}}</label>
+							<div class="userInput" name="checkbox">
+								{{#each options}} 
+									<input class="optionBox" type="checkbox" value="{{this}}">{{this}}
+								{{/each}}
+							</div>
+						{{/if}}
+					</div>
+				</div>
+				{{/each}}
+			</div>
+			<input class="btn btn-warning" type="submit" value="Submit">
+		</form>
+	</div>
+</template>
