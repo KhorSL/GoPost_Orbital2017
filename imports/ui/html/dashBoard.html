@@ -75,12 +75,18 @@
             </li>
             <li>
               <a class="quick-btn" href="#menu3" data-toggle="tab">
-                <span>Subscriptions</span>
+                <span>Subscribing</span>
+                <span class="label label-default">3</span>
+              </a>
+            </li>
+             <li>
+              <a class="quick-btn" href="#menu4" data-toggle="tab">
+                <span>Subscribers</span>
                 <span class="label label-default">3</span>
               </a>
             </li>
             <li>
-              <a class="quick-btn" href="#menu4" data-toggle="tab">
+              <a class="quick-btn" href="#menu5" data-toggle="tab">
                 <span>Likes</span>
                 <span class="label label-default">4</span>
               </a>
@@ -106,6 +112,11 @@
             </div>
 
             <div class="box tab-pane fade" id="menu4">
+              <header><h5>Subscribers</h5></header>
+              <p>Some content.</p>
+            </div>
+
+            <div class="box tab-pane fade" id="menu5">
               <header><h5>My Likes</h5></header>
               <p>Some content.</p>
             </div>
@@ -113,10 +124,10 @@
 
         </div> <!-- end of Tab Content -->
 
+        {{#if owner}}
         <hr>
-
-        {{> calendar_full}}
-
+          {{> calendar_full}}
+        {{/if}}
       </div><!-- /.inner -->
     </div><!-- /.outer -->
   </div><!-- /#content -->

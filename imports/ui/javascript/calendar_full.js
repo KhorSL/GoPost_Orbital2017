@@ -26,22 +26,33 @@ Template.calendar_full.onRendered(function() {
     //Event method to get EventObject from database
     events: function(start, end, timezone, callback) {
       
+      //Event Created By User
       var event_ids = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.CreatedEventList});
       event_ids = _.flatten(event_ids);
-
       let data1 = Events.find({"_id" : {$in : event_ids}}).fetch().map((event) => {
         event.editable = false;
         event.className = "label_cal label-default";
         return event;
       });
 
-      let data2 = Cal_Events.find({"owner" : Meteor.userId()}).fetch().map((event) => {
+      //Event User Sign up for
+      var event_ids = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.SignUpEventList});
+      event_ids = _.flatten(event_ids);
+      let data2 = Events.find({"_id" : {$in : event_ids}}).fetch().map((event) => {
+        event.editable = false;
+        event.className = "label_cal label-success";
+        return event;
+      });
+
+      //Events User added to the calendar
+      let data3 = Cal_Events.find({"owner" : Meteor.userId()}).fetch().map((event) => {
         event.editable = !isPast(moment(event.start).format());
         event.className = event.className;
         return event;
       });
 
       let data = data1.concat(data2);
+      data = data.concat(data3);
 
       if(data) {
         callback(data);

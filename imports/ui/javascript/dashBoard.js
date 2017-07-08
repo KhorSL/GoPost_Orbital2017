@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
+import './calendar_full.js';
 
 Template.dashBoard.onCreated(() => {
   if (Router.current().params.owner === Meteor.userId() || Router.current().params.owner === undefined){ //User visiting his own profile
@@ -39,12 +40,21 @@ Template.dashBoard.helpers({
 
   username: function() {
     return Meteor.user().username; //How to get the username if  the user is not the same user? Put username in userDetails?
+  },
+
+  owner: function() {
+    if(this.User === Meteor.userId()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 });
 
 Template.dashBoard.events({
-  'click #subscribe':function(){
+  'click #subscribe':function(e){
+    e.preventDefault();
     var id = Router.current().params.owner;
     Meteor.call("subscribe",id, function(error) {
       if(error) {
@@ -53,7 +63,8 @@ Template.dashBoard.events({
     });
   },
 
-  'click #unsubscribe':function(){
+  'click #unsubscribe':function(e){
+    e.preventDefault();
     var id = Router.current().params.owner;
     Meteor.call("unsubscribe",id, function(error) {
       if(error) {
@@ -62,7 +73,9 @@ Template.dashBoard.events({
     });
   },
 
-  'click #chatbox' : function(){
+  'click #chatbox' : function(e){
+    e.preventDefault();
+    Session.set("chat_Target", this);
     Router.go('chatBoard');
   }
 });

@@ -472,6 +472,12 @@ if(Meteor.isServer) {
   		return Users.find();
   	});
 
+  	Meteor.publish("user_subscriptions", function() {
+  		var sub_list = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
+		sub_list = _.flatten(sub_list);
+		return Users.find({"User": {"$in" : sub_list}});
+  	});
+
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
 	});

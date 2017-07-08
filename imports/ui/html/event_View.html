@@ -1,47 +1,48 @@
 <template name="event_View">
 	<div class="event_Frame corner_event">
-	<div class="row">
-		
-			<div class="col-md-12 col-xs-12">
-				<div class="view_Right">
-				{{#if isOwner}}
-	                <button id="{{this._id}}" class="update btn">Edit</button>
-	                <button class="delete btn">Remove</button>
-	            {{/if}}
-	                <button id="{{this._id}}" class="signUp btn">Sign Up</button>
-	            </div>
-			</div>
-		
-	</div>
-	<div class="row">
-		<div class="col-md-12 col-xs-12" id="view_head">
-			<h2 class="view_h2"> {{title}} </h2>
-			<p><small>Created On {{formatDate createdAt}} by <a href="{{pathFor route='dashBoard'}}">{{poster}}</a></small></p>
-			<div class="view_Img"><img src={{img}} class="img-responsive"></div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12 col-xs-12">
-			<div>
-				<p>
-					<span class="glyphicon glyphicon-map-marker"> {{location}} <br/> &nbsp;&nbsp;{{locationAddr}}</span><br/>
-					<span class="glyphicon glyphicon-time"> {{formatDate start}}</span><br/>
-					<span class="glyphicon glyphicon-info-sign"> {{type}}</span><br/>
-					{{#if currentUser}}
-						{{#if hasLiked}}
-							<span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart"> {{likes}}</span>
-
-						{{else}}
-							<span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty"> {{likes}}</span>
+		<div class="row">
+			
+				<div class="col-md-12 col-xs-12">
+					<div class="view_Right">
+					{{#if isOwner}}
+		                <button id="{{this._id}}" class="update btn">Edit</button>
+		                <button class="delete btn">Remove</button>
+		            {{else}}
+		            	{{#if currentUser}}
+							{{#if hasLiked}}
+								<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart"></span>
+							{{else}}
+								<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart-empty"></span>
+							{{/if}}
 						{{/if}}
-					{{/if}}
-				</p>
-			</div>
-
-			<hr class="solidBlackLine"/>
-			<p class="view_para">{{description}}</p>
+		            	<button id="{{owner}}" class="poster btn">Organizer Details</button>
+		            	<button id="{{this._id}}" class="signUp btn">Sign Up</button>
+		            {{/if}}
+		            </div>
+				</div>
+			
 		</div>
-	</div>
+		<div class="row">
+			<div class="col-md-12 col-xs-12" id="view_head">
+				<h2 class="view_h2"> {{title}} </h2>
+				<p><small>Created On {{formatDate createdAt}} by <a href="{{pathFor route='dashBoard'}}">{{poster}}</a></small></p>
+				<div class="view_Img"><img src={{img}} class="img-responsive"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<div>
+					<p>
+						<span class="glyphicon glyphicon-map-marker"> {{location}} <br/> &nbsp;&nbsp;{{locationAddr}}</span><br/>
+						<span class="glyphicon glyphicon-time"> {{formatDate start}}</span><br/>
+						<span class="glyphicon glyphicon-info-sign"> {{type}}</span><br/>
+					</p>
+				</div>
+
+				<hr class="solidBlackLine"/>
+				<p class="view_para">{{description}}</p>
+			</div>
+		</div>
 	</div>
 </template>

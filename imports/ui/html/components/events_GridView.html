@@ -1,0 +1,42 @@
+<template name='events_GridView'>
+  <div class="col-sm-4">
+    <div class="gridContent">
+      <a href="{{pathFor route='event_View'}}">
+        <div class="noteImgBorder"><img src={{img}} class="img-responsive"></div>
+        <div class="gridDetails">
+          <div class="ellipsis">
+            <h2 class="noteH2">{{title}}</h2>
+          </div>
+          <div class="ellipsis">
+            <span class="glyphicon glyphicon-map-marker"></span>
+              {{location}}
+          </div>
+          <div class="ellipsis">
+            <span class="glyphicon glyphicon-time"></span>
+              {{formatDate start}}
+          </div>
+          <div class="ellipsis"> 
+            <span class="glyphicon glyphicon-bookmark"></span>
+              {{category}} 
+          </div>
+          <div class="ellipsis"> 
+            <span class="glyphicon glyphicon-tags"></span>
+              {{type}} 
+          </div>
+          <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
+          {{#if isOwner}}
+            <br/>
+            <span> Display Number of people visited event page, number of people sign up </span>
+          {{/if}}
+        </div> <!--end of noteDetails-->
+      </a> <!--end of a href event_view -->
+              
+      <div class="gridFoot">
+        <span class="btn glyphicon glyphicon-pencil" role="button" id="editEvent" aria-hidden="true" style="cursor:help;" title="Edit Event Details"></span>
+        <span class="btn glyphicon glyphicon-list-alt" role="button" id="registeredList" aria-hidden="true" style="cursor:help;" title="Registration list"></span>
+        <span class="btn glyphicon glyphicon-download-alt" role="button" id="download" aria-hidden="true" style="cursor:help;" title="Download Registration Summary"></span>
+        <span class="btn glyphicon glyphicon-trash" role="button" id="deleteEvent" aria-hidden="true" style="cursor:help;" title="Delete Event"></span>
+      </div> <!--end of noteFoot -->
+    </div> <!-- end of GridContent -->
+  </div> <!-- end of col-lg-4 -->
+</template>

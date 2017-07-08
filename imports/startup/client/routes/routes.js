@@ -66,7 +66,10 @@ Router.route('/event_View/:_id', {
   layoutTemplate: "layout",
   data: function() {
     var selection = this.params._id;
-    return Events.findOne({_id: selection});
+    var result = Events.findOne({_id: selection});
+    console.log("SELECTION: " + selection);
+    console.log(result);
+    return result;
   }
 });
 

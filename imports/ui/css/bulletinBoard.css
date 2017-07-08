@@ -129,9 +129,19 @@ div.sticky:nth-child(5n) a{
   text-align: center;
 }
 
-.noteImgBorder { 
-  height:100px;
-  width: 100px;
+.noteImgBorder {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 100%;
+  /*Credits: http://www.minimit.com/articles/tips-resources/css-aspect-ratio-to-have-images-of-same-height;*/
+}
+
+.noteImgBorder img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   margin: auto;
 }
 

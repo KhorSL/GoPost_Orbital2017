@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/components/events_StickyView.html';
+import '../css/bulletinBoard.css';
 
 /*
 https://stackoverflow.com/questions/33065699/meteor-reactivevar-access-parent-tempate-from-child-template

@@ -7,6 +7,7 @@ import '../css/bulletinBoard.css';
 import './events_StickyView.js';
 import './events_ListView.js';
 import './events_Tag.js';
+import './advertisement.js';
 
 Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();
@@ -302,6 +303,11 @@ Template.bulletinBoard.events({
 		Session.set("selected_cat", "Others");
 		Session.set("limit", Session.get("Initial_Limit"));
 		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+	},
+	'keyup #type_search': function(e) {
+		if(e.keyCode === 13) {
+			$("#searchBut").click();
+		}
 	},
 	'click #searchBut': function(e) {
 		e.preventDefault();
