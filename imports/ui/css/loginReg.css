@@ -1,6 +1,10 @@
 .modal-header {
-	background-color: #fec503;
+	background-color: #FF8400;
 	color: white;
+}
+
+.brand_pos {
+  margin-right: -50px;
 }
 
 .leftContent {

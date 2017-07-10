@@ -30,5 +30,10 @@ Template.events_GridView.events({
         		console.log(error.reason);
       		}
     	});
-	}
+	},
+	'click #eventChannel' : function(e) {
+    e.preventDefault();
+    Session.set("chat_Channel", true);
+    Router.go('chatBoard');
+  }
 });

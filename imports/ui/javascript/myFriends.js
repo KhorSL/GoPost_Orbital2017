@@ -6,7 +6,7 @@ import '../css/dashBoard.css';
 import './users_GridView.js';
 
 Template.myFriends.onCreated(function() {
-  Meteor.subscribe("user_subscriptions");
+  Meteor.subscribe("user_subscriptions", Meteor.userId());
 });
 
 Template.myFriends.helpers({

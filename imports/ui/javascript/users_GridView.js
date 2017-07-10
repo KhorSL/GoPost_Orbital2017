@@ -14,10 +14,8 @@ Template.users_GridView.helpers({
   	},
   	hasSubscribed: function() {
   		var currFollowers = Users.find({"User":Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
-  		console.log(currFollowers.length);
   		if(currFollowers.length > 0) {
       		currFollowers = _.flatten(currFollowers);
-      		console.log(currFollowers);
       		var q = _.find(currFollowers, function(id){return id===this.User});
       		if(q === this.User) {
        			 return true;

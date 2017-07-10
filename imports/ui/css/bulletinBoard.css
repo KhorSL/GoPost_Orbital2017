@@ -1,6 +1,6 @@
 svg path,
  svg rect {
-  fill: #FF6700;
+  fill: #FF8400;
 }
 
 .toggleViewBtn {
@@ -11,14 +11,14 @@ svg path,
 
 .search_tab {
   margin-bottom: 10px;
-  border-bottom: 1px solid #fec503;
+  border-bottom: 1px solid #FF8400;
 }
 
 .search_tab > li.active > a, 
 .search_tab > li.active > a:hover, 
 .search_tab > li.active > a:focus {
   background-color: #f3f3f3;
-  border: 1px solid #fec503;
+  border: 1px solid #FF8400;
 }
 
 .search_container {

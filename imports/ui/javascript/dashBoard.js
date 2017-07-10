@@ -4,6 +4,7 @@ import { Template } from 'meteor/templating';
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
 import './calendar_full.js';
+import './dash_profilePic_modal.js';
 
 Template.dashBoard.onCreated(() => {
   if (Router.current().params.owner === Meteor.userId() || Router.current().params.owner === undefined){ //User visiting his own profile
@@ -77,5 +78,11 @@ Template.dashBoard.events({
     e.preventDefault();
     Session.set("chat_Target", this);
     Router.go('chatBoard');
-  }
+  },
+
+  'click #changePic': function(e) {
+    e.preventDefault();
+    $('#upload-profile-pic-modal').modal('show');
+    /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
+  },
 });

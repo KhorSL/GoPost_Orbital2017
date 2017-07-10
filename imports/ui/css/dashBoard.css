@@ -376,3 +376,17 @@
 .dash_profile_action_btn {
   margin-bottom: 5px;
 }
+
+.upload-msg {
+  text-align: center;
+  padding: 50px;
+  font-size: 22px;
+  color: #aaa;
+  width: 260px;
+  margin: 50px auto;
+  border: 1px solid #aaa;
+}
+
+.upload-box {
+  text-align: center;
+}

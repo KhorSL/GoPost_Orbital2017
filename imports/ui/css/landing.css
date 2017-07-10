@@ -89,8 +89,8 @@
 
  .btn-xl {
   color: white;
-  background-color: #fed136;
-  border-color: #fed136;
+  background-color: #AAABBC;
+  border-color: #AAABBC;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-weight: 700;
@@ -107,8 +107,8 @@
 .btn-xl.active,
 .open .dropdown-toggle.btn-xl {
   color: white;
-  background-color: #fec503;
-  border-color: #f6bf01;
+  background-color: #FF8400;
+  border-color: #FF8400;
 }
 .btn-xl:active,
 .btn-xl.active,
@@ -130,11 +130,11 @@ fieldset[disabled] .btn-xl:active,
 .btn-xl.disabled.active,
 .btn-xl[disabled].active,
 fieldset[disabled] .btn-xl.active {
-  background-color: #fed136;
-  border-color: #fed136;
+  background-color: #FF8400;
+  border-color: #FF8400;
 }
 .btn-xl .badge {
-  color: #fed136;
+  color: #FF8400;
   background-color: white;
 }
 

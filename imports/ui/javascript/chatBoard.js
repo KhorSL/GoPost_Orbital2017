@@ -109,9 +109,6 @@ Template.chatBoard.helpers({
 			if(typeof(chatTgt) !== 'undefined' && chatTgt !== "") {
 				Session.set("recever", chatTgt.User);
 				Session.set("recever_details", chatTgt);
-			} else {
-				Session.set("recever", convo_with.fetch()[0].User);
-				Session.set("recever_details", convo_with.fetch()[0]);
 			}
 		}
 
