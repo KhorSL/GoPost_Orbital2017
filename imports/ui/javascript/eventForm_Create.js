@@ -135,8 +135,9 @@ if(Meteor.isClient) {
 		var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
 
 		var qnsFooter = $("<div class=\"qnsfooter row form-group\" id=\"qFooter" + intId + "\"/>");
-		var qnsRemoveButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove Question\"></div>");
-		
+		var qnsRemoveButton = $("<div class=\"col-sm-1 pull-right\"><span role=\"button\" class=\"remove glyphicon glyphicon-trash\"></span></div>");
+		var qnsAddButton = $("<div class=\"col-sm-1 pull-left\"><span role=\"button\" class=\"remove glyphicon glyphicon-plus\" id=\"add\"></span></div>");
+
 		currFields++;
 
 		qnsRemoveButton.click(function() {
@@ -155,6 +156,7 @@ if(Meteor.isClient) {
 		qnsBody.append(qnsDisplay);
 
 		qnsFooter.append(qnsRemoveButton);
+		qnsFooter.append(qnsAddButton);
 
 		qnsWrapper.append(qnsHeader);
 		qnsWrapper.append(qnsBody);
@@ -397,10 +399,10 @@ if(Meteor.isClient) {
 			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 			
 			//show the previous fieldset
-			previous_fs.show();
+			previous_fs.show('slow');
 			$("html, body").animate({ scrollTop: 0 }, "slow");
 			//hide current fieldset
-			current_fs.hide();
+			current_fs.hide('slow');
 			animating = false;
 		},
 
@@ -448,12 +450,11 @@ if(Meteor.isClient) {
 			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass('active');
 
 			//show the next fieldset
-			next_fs.show();
+			next_fs.show('slow');
 			$("html, body").animate({ scrollTop: 0 }, "slow");
 			//hide the current fieldset with style
-			current_fs.hide();
+			current_fs.hide('slow');
 			animating = false;
-			
 		},
 
 		'click .next-s2': function(event){
@@ -472,10 +473,10 @@ if(Meteor.isClient) {
 			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass('active');
 
 			//show the next fieldset
-			next_fs.show();
+			next_fs.show('slow');
 			$("html, body").animate({ scrollTop: 0 }, "slow");
 			//hide the current fieldset with style
-			current_fs.hide();
+			current_fs.hide('slow');
 			animating = false;
 		},
 
@@ -496,8 +497,9 @@ if(Meteor.isClient) {
 			var qnsDisplay = $("<div class=\"col-sm-12\" id=\"fDisplay" + intId + "\"> </div>");
 
 			var qnsFooter = $("<div class=\"qnsfooter row form-group\" id=\"qFooter" + intId + "\"/>");
-			var qnsRemoveButton = $("<div class=\"col-sm-6\"><input type=\"button\" class=\"remove btn btn-default\" value=\"Remove Question\"></div>");
-			
+			var qnsRemoveButton = $("<div class=\"col-sm-1 pull-right\"><span role=\"button\" class=\"remove glyphicon glyphicon-trash\"></span></div>");
+			var qnsAddButton = $("<div class=\"col-sm-1\"><span role=\"button\" class=\"remove glyphicon glyphicon-plus\" id=\"add\"></span></div>");
+
 			qnsRemoveButton.click(function() {
 				if(currFields <= 1) {
 					alert("You need to include at least 1 question in your Registration Form. Thank you.");
@@ -514,6 +516,7 @@ if(Meteor.isClient) {
 			qnsBody.append(qnsDisplay);
 
 			qnsFooter.append(qnsRemoveButton);
+			qnsFooter.append(qnsAddButton);
 
 			qnsWrapper.append(qnsHeader);
 			qnsWrapper.append(qnsBody);
