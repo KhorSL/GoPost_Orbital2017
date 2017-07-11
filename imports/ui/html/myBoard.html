@@ -16,7 +16,14 @@
     <div class="tab-content ">
       <div class="tab-pane active" id="1"> <!--Subscriptions -->
         <div class="board_subscribers">
-          <p>Display of subsribed Users Profile Picture in Round shape. Display User's Name below the round image if possible or do an hover display for user name. ++ Button to link to myFriend Page for full list of user.</p>
+          {{#each events_sub_User}}
+            {{#if profilePic}}
+              <a href="#" id="{{User}}" class="profileClick"><img src="{{profilePic}}" alt="User Avatar" class="img-circle" height="40" width="40"></a>
+            {{else}}
+              <a href="#" id="{{User}}" class="profileClick"><img src="/images/avatar.jpg" alt="User Avatar" class="img-circle" height="40" width="40"></a>
+            {{/if}}
+          {{/each}}
+            <a href="{{pathFor route='myFriends'}}">More Subscription...</a>
         </div>
       </div> <!-- End of Tab 1 -->
 

@@ -1,8 +1,14 @@
 <template name='users_GridView'>
   <div class="col-sm-4">
     <div class="gridContent">
-      <a href="#">
-        <!--<div class="noteImgBorder"><img src={{img}} class="img-responsive"></div>-->
+      <a href="#" id="{{User}}" class="profileClick">
+        <div class="noteImgBorder">
+          {{#if profilePic}}
+            <img src="{{profilePic}}" alt="User Avatar" class="img-circle">
+          {{else}}
+            <img src="/images/avatar.jpg" alt="User Avatar" class="img-circle">
+          {{/if}}
+        </div>
         <div class="gridDetails">
           <div class="ellipsis">
             <h4 class="noteH2">{{Username}}</h4>

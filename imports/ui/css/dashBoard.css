@@ -364,7 +364,7 @@
 }
 
 .dash_profile_action {
-  text-align: left;
+  text-align: center;
   padding:10px;
 }
 
@@ -377,16 +377,21 @@
   margin-bottom: 5px;
 }
 
-.upload-msg {
+.dash_Profile_box {
   text-align: center;
-  padding: 50px;
-  font-size: 22px;
-  color: #aaa;
-  width: 260px;
-  margin: 50px auto;
-  border: 1px solid #aaa;
+  padding: 5px;
 }
 
-.upload-box {
-  text-align: center;
+.image-editor {
+   text-align: center;
+}
+
+.img-upload {
+  display: inline !important;
+  padding: 5px;
+}
+
+.crop_button {
+  float: right;
+  margin: 0 2px;
 }

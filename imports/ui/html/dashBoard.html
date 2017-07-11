@@ -8,8 +8,37 @@
         <div class="row"> <!-- row for profile pic, details, actions -->
           <div class="col-lg-4">
             <div class="box">
-              <header><h5>Profile Pic</h5></header>
-              <p>This is his image profile</p>
+              <header><h5>Profile Details</h5></header>
+              <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                  <div class="dash_Profile_box">
+                    {{#if profilePic}}
+                      <img id="profilePic" src="{{profilePic}}">
+                    {{else}}
+                      <img id="profilePic" src="/images/avatar.jpg">
+                    {{/if}}
+                  </div> <!-- end of dash_Profile_box -->
+                </div> <!-- end of col-lg-12 -->
+                <div class="col-lg-12 col-sm-12">
+                  <div class="dash_profile">
+                    <p>Username: {{Username}}</p>
+                    <p>Gender: {{Gender}}</p>
+                    <p>Age: {{Age}}</p>
+                  </div>  <!-- end of dash profile -->
+                </div> <!-- end of col-lg-12 -->
+                <div class="col-lg-12 col-sm-12">
+                  <div class="dash_profile_action">
+                    {{#if isUser}} <!-- curr User is the owner of the dashboard !-->
+                    <!-- Visiting your own profile !-->
+                    <span class="btn glyphicon glyphicon-picture dash_profile_action_btn" role="button" id="changePic" aria-hidden="true" style="cursor:help;" title="Change Profile Picture"></span>
+                    <span class="btn glyphicon glyphicon-pencil dash_profile_action_btn" role="button" id="editProfile" aria-hidden="true" style="cursor:help;" title="Edit Profile"></span>
+                    <span class="btn glyphicon glyphicon-usd dash_profile_action_btn" role="button" id="upgradeAcc" aria-hidden="true" style="cursor:help;" title="Upgrade"></span>
+                    <span class="btn glyphicon glyphicon-cog dash_profile_action_btn" role="button" id="settings" aria-hidden="true" style="cursor:help;" title="Settings"></span>
+                    <span class="btn glyphicon glyphicon-trash dash_profile_action_btn" role="button" id="deleteAcc" aria-hidden="true" style="cursor:help;" title="Delete Account"></span>
+                    {{/if}} <!-- End of if isUser !-->
+                  </div> <!-- end of dash-profile-action-->
+                </div> <!-- end of col-lg-4-->
+              </div> <!-- end of row -->
             </div> <!-- end of box -->  
           </div> <!-- end of col-lg-4 for Profile Pic -->
           
@@ -18,7 +47,7 @@
               <div class="row">
                 <div class="col-lg-12">
                   <header>
-                    <h5>Profile Details</h5>
+                    <h5>User's Activities</h5>
                     <div class="dash_header_right">
                       {{#unless isUser}}
                         {{#if hasSubscribed}} <!-- Toggle Subscription !-->
@@ -31,27 +60,7 @@
                     </div> <!--end of dash_subscribe_wrapper -->
                   </header>
                   <div class="row">
-                    <div class="col-lg-9 col-sm-12">
-                      <div class="dash_profile">
-                        <p>Username: {{Username}}</p>
-                        <p>Gender: {{Gender}}</p>
-                        <p>Age: {{Age}}</p>
-                      </div>  <!-- end of dash profile -->
-                    </div> <!-- end of col-lg-8 -->
-
-                    <div class="col-lg-3 col-sm-12">
-                      <div class="dash_profile_action">
-                        {{#if isUser}} <!-- curr User is the owner of the dashboard !-->
-                        <!-- Visiting your own profile !-->
-                          <span class="btn glyphicon glyphicon-picture dash_profile_action_btn" role="button" id="changePic" aria-hidden="true" style="cursor:help;" title="Change Profile Picture"></span>
-                          <span class="btn glyphicon glyphicon-pencil dash_profile_action_btn" role="button" id="editProfile" aria-hidden="true" style="cursor:help;" title="Edit Profile"></span>
-                          <span class="btn glyphicon glyphicon-usd dash_profile_action_btn" role="button" id="upgradeAcc" aria-hidden="true" style="cursor:help;" title="Upgrade"></span>
-                          <span class="btn glyphicon glyphicon-cog dash_profile_action_btn" role="button" id="settings" aria-hidden="true" style="cursor:help;" title="Settings"></span>
-                          <span class="btn glyphicon glyphicon-envelope dash_profile_action_btn" role="button" id="chatbox" aria-hidden="true" style="cursor:help;" title="Inbox"></span>
-                          <span class="btn glyphicon glyphicon-trash dash_profile_action_btn" role="button" id="deleteAcc" aria-hidden="true" style="cursor:help;" title="Delete Account"></span>
-                        {{/if}} <!-- End of if isUser !-->
-                      </div> <!-- end of dash-profile-action-->
-                    </div> <!-- end of col-lg-4-->
+                    <!--put the statistics table etc here -->
                   </div>  <!-- end of row -->
                 </div> <!-- end of col-lg-12-->
               </div> <!-- end of row -->

@@ -20,6 +20,11 @@ UserSchema = new SimpleSchema({
     	type: Number,
     	label: "Age"
   	},
+  	profilePic: {
+		type: String,
+		label: "Profile Picture",
+		optional: true
+	},
   	LikedList: {
     	type: Array,
 		label:"LikedList",
@@ -685,6 +690,14 @@ Meteor.methods({
       		Username: username,
       		Gender: gender,
       		Age: age
+    	});
+  	},
+
+  	uploadProfilePicture: function(userid, source){
+    	Users.update({User: userid}, {
+    		$set: {
+				profilePic: source
+			}
     	});
   	},
 

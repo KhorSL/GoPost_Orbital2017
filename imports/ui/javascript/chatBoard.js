@@ -161,6 +161,15 @@ Template.chatBoard.helpers({
 	        }
 		}
 	},
+	emptyMsg: function() {
+		var channel = Session.get("channel");
+		var rcv = Session.get('recever');
+		if(channel === "" && rcv ==="") {
+			return true;
+		} else {
+			return false;
+		}
+	},
 	search_Tag: function() {
 		return Session.get("search_Tag");
 	},
@@ -189,7 +198,10 @@ Template.chatBoard.helpers({
 		} else {
 			return "";
 		}
-	}
+	},
+	formatTime: function(date) {
+  		return moment(date).format('h.mm a');
+  	}
 });
 
 Template.chatBoard.events({

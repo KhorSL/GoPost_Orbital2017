@@ -50,6 +50,9 @@ Template.landing.helpers({
   events: function() {
     return Events.find({}, {sort: {createdAt: -1}, limit: 20});
   },
+  events_top3: function() {
+    return Events.find({}, {sort: {createdAt: -1}, limit: 3});
+  },
   formatDate: function(date) {
     return moment(date).format('Do MMM YYYY');
   }
