@@ -9,32 +9,32 @@
 							{{#if this.name}}
 							<div class="col-sm-6 form-group">
 								<label>First Name</label>
-								<input type="text" placeholder="Enter First Name Here.." class="form-control" name="firstName">
+								<input type="text" placeholder="Enter First Name Here.." class="form-control" name="firstName" required>
 							</div>
 							<div class="col-sm-6 form-group">
 								<label>Last Name</label>
-								<input type="text" placeholder="Enter Last Name Here.." class="form-control" name="lastName">
+								<input type="text" placeholder="Enter Last Name Here.." class="form-control" name="lastName" required>
 							</div>
 							{{/if}}
 
 							{{#if this.nric}}
 							<div class="col-sm-6 form-group">
 								<label>NRIC</label>
-								<input type="text" placeholder="Enter NRIC Here.." class="form-control" name="nric">
+								<input type="text" placeholder="Enter NRIC Here.." class="form-control" name="nric" required>
 							</div>
 							{{/if}}
 
 							{{#if this.matric}}
 							<div class="col-sm-6 form-group">
 								<label>Matriculation Number</label>
-								<input type="text" placeholder="Enter Matriculation Number Here.." class="form-control" name="matric">
+								<input type="text" placeholder="Enter Matriculation Number Here.." class="form-control" name="matric" required>
 							</div>
 							{{/if}}
 
 							{{#if this.gender}}
 							<div class="col-sm-6 form-group">
 								<label>Gender</label>
-								<select class="form-control" name="gender">
+								<select class="form-control" name="gender" required>
 								    <option value="male">Male</option>
 								    <option value="female">Female</option>
 								    <option value="non-binary">Non-binary</option>
@@ -45,7 +45,7 @@
 							{{#if this.nationality}}
 							<div class="col-sm-6 form-group">
 								<label>Nationality</label>
-								<input type="text" placeholder="Enter Nationality Here.." class="form-control" name="nationality">
+								<input type="text" placeholder="Enter Nationality Here.." class="form-control" name="nationality" required>
 							</div>
 							{{/if}}
 
@@ -54,19 +54,19 @@
 						{{#if this.address_full}}			
 						<div class="form-group">
 							<label>Address</label>
-							<textarea placeholder="Enter Address Here.." rows="3" class="form-control" name="address"></textarea>
+							<textarea placeholder="Enter Address Here.." rows="3" class="form-control" name="address" required></textarea>
 						</div>
 
 						<div class="row">
 							<div class="col-sm-4 form-group">
 								<label>City</label>
-								<input type="text" placeholder="Enter City Name Here.." class="form-control" name="city">
+								<input type="text" placeholder="Enter City Name Here.." class="form-control" name="city" required>
 							</div>
 
 							{{#if this.address_region}}
 							<div class="col-sm-4 form-group">
 								<label>Region</label>
-								<input type="text" placeholder="Enter Region Here.." class="form-control" name="region">
+								<input type="text" placeholder="Enter Region Here.." class="form-control" name="region" required>
 							</div>
 							{{/if}}
 
@@ -74,7 +74,7 @@
 								<label>Postal Code</label>
 								<div class="input-group">
 									<div class="input-group-addon">S</div>
-									<input type="text" placeholder="Enter Postal Code Here.." class="form-control" name="postal">
+									<input type="text" placeholder="Enter Postal Code Here.." class="form-control" name="postal" required>
 								</div>
 							</div>		
 						</div>
@@ -85,14 +85,14 @@
 							{{#if this.faculty}}
 							<div class="col-sm-6 form-group">
 								<label>Faculty</label>
-								<input type="text" placeholder="Enter Faculty Here.." class="form-control" name="faculty">
+								<input type="text" placeholder="Enter Faculty Here.." class="form-control" name="faculty" required>
 							</div>
 							{{/if}}
 							
 							{{#if this.major}}
 							<div class="col-sm-6 form-group">
 								<label>Major</label>
-								<input type="text" placeholder="Enter Major Name Here.." class="form-control" name="major">
+								<input type="text" placeholder="Enter Major Name Here.." class="form-control" name="major" required>
 							</div>
 							{{/if}}
 
@@ -101,14 +101,14 @@
 					{{#if this.contact_mobile}}			
 					<div class="form-group">
 						<label>Phone Number</label>
-						<input type="text" placeholder="Enter Phone Number Here.." class="form-control" name="mobile">
+						<input type="text" placeholder="Enter Phone Number Here.." class="form-control" name="mobile" required>
 					</div>
 					{{/if}}	
 
 					{{#if this.contact_email}}
 					<div class="form-group">
 						<label>Email Address</label>
-						<input type="text" placeholder="Enter Email Address Here.." class="form-control" name="email">
+						<input type="text" placeholder="Enter Email Address Here.." class="form-control" name="email" required>
 					</div>
 					{{/if}}
 					
@@ -128,14 +128,14 @@
 						{{#if this.bloodType}}
 						<div class="col-sm-4 form-group">
 							<label>Blood Type</label>
-							<input type="text" placeholder="Enter Blood Type Here.." class="form-control" name="bloodType">
+							<input type="text" placeholder="Enter Blood Type Here.." class="form-control" name="bloodType" required>
 						</div>
 						{{/if}}
 
 						{{#if this.allergies}}
 						<div class="col-sm-4 form-group">
 							<label>Allergies</label>
-							<input type="text" placeholder="Indicate Your Allergies Here.." class="form-control" name="allergies">
+							<input type="text" placeholder="Indicate Your Allergies Here.." class="form-control" name="allergies" required>
 						</div>
 						{{/if}}
 					</div>
@@ -144,7 +144,7 @@
 						{{#if this.shirtSize_SML}}
 						<div class="col-sm-6 form-group">
 							<label>Shirt Size</label>
-							<select class="form-control" name="shirtSize_SML">
+							<select class="form-control" name="shirtSize_SML" required>
 								<option value="XS">XS</option>
 								<option value="S">S</option>
 								<option value="M">M</option>
@@ -157,7 +157,7 @@
 						{{#if this.shirtSize_123}}
 						<div class="col-sm-6 form-group">
 							<label>Shirt Size</label>
-							<select class="form-control" name="shirtSize_123">
+							<select class="form-control" name="shirtSize_123" required>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -180,23 +180,23 @@
 						<h3 class="col-sm-12"> Next-of-kin Information</h3>
 						<div class="col-sm-4 form-group">
 							<label>First Name</label>
-							<input type="text" placeholder="Enter First Name Here.." class="form-control" name="nok_firstName">
+							<input type="text" placeholder="Enter First Name Here.." class="form-control" name="nok_firstName" required>
 						</div>
 						<div class="col-sm-4 form-group">
 							<label>Last Name</label>
-							<input type="text" placeholder="Enter Last Name Here.." class="form-control" name="nok_lastName">
+							<input type="text" placeholder="Enter Last Name Here.." class="form-control" name="nok_lastName" required>
 						</div>
 						<div class="col-sm-4 form-group">
 							<label>Relationship with NOK</label>
-							<input type="text" placeholder="Enter Relationship with NOK Here.." class="form-control" name="nok_rs">
+							<input type="text" placeholder="Enter Relationship with NOK Here.." class="form-control" name="nok_rs" required>
 						</div>
 						<div class="col-sm-12 form-group">
 							<label>Address</label>
-							<textarea placeholder="Enter Address Here.." rows="3" class="form-control" name="nok_address"></textarea>
+							<textarea placeholder="Enter Address Here.." rows="3" class="form-control" name="nok_address" required></textarea>
 						</div>
 						<div class="col-sm-12 form-group">
 							<label>Phone Number</label>
-							<input type="text" placeholder="Enter Phone Number Here.." class="form-control" name="nok_mobile">
+							<input type="text" placeholder="Enter Phone Number Here.." class="form-control" name="nok_mobile" required>
 						</div>
 					</div>
 					{{/if}}

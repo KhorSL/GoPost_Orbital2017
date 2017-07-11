@@ -123,6 +123,7 @@ if(Meteor.isClient) {
 
 		'submit #new-signUpCustom': function(event) {
 			event.preventDefault();
+
 			var userResponseList = [];
 			$('.userInput').each(function() {
 				var type = $(this).attr('name');

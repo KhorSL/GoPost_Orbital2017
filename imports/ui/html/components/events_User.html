@@ -1,12 +1,9 @@
 <template name="events_User">
     <div class="{{#if checked}}checked{{/if}}">
-        {{#if isOwner}}
-        <input type="checkbox" checked="{{checked}}" class="toggle-checked">
-        {{/if}}
         <div class="row">
             <div class="col-md-5">
             {{#if isOwner}}
-                <img src="{{img}}">
+                <img src="{{img}}" width="50%">
             {{/if}}
             </div>
 

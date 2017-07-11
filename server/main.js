@@ -380,7 +380,6 @@ if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
 		return Events.find({
 			$or: [
-				{ privacy: {$ne: true} },
 				{ owner: this.userId}
 			]
 		});
@@ -645,6 +644,10 @@ Meteor.methods({
 		//console.log(Users.findOne({User: Meteor.userId()}));
 		//Remove the entire sign up form the user submitted previous
 		return SignUps.remove(submissionId);
+	},
+
+	acceptSignUp: function(submissionId) {
+		SignUps.update({_id: submissionId}, {$set: {confirmation: true}});
 	},
 
 	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, privacy, contact, img){

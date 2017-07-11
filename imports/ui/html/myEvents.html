@@ -15,19 +15,42 @@
 	<p>3. Download of Excel File</p>
 	<p>4. Management for all events </p>
 
-	<h1> <center> Events display </center> </h1>
-		<label class="hide-finished">
-			<input type="checkbox" checked="{{hideFinished}}">
-              Hide Finished Events
-		</label>
+	<div id="content">
+		<div class="outer">
+			<div class="inner">
+				
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="box">
+							<header><h5>Created Events</h5></header>
+							<div class="scrollable" style="overflow:scroll;height:250px;width:100%;overflow:auto">
+								<ul class="list-group">
+									{{#each userEvents}}
+										<li class="list-group-item"> <a href="/event_View/{{this._id}}"> {{title}} </a>
+											<span role="button" class="btn btn-xs delete pull-right glyphicon glyphicon-trash"></span>
+											<span role="button" id="{{this._id}}" class="btn btn-xs update pull-right glyphicon glyphicon-pencil"></span>
+											<span role="button" id="{{this._id}}" class="btn btn-xs signUp pull-right glyphicon glyphicon-file"></span>
+										</li>
+									{{/each}}
+								</ul>
+							</div>
+						</div>
+					</div>
 
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					{{#each userEvents}}
-						{{> events_User}}
-					{{/each}}
+					<div class="col-sm-4">
+						<div class="box">
+							<header><h5>Sign-up Submissions</h5></header>
+							<div class="submit-info" style="overflow:scroll;height:250px;width:100%;overflow:auto">
+								
+							</div>
+							<div class="submit-info_footer">
+									<center> <button class="accept btn">Accept</button> </center>
+							</div>
+						</div>
+					</div>
 				</div>
+
 			</div>
 		</div>
+	</div>
 </template>

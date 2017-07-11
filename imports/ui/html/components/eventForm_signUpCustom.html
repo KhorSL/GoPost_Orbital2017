@@ -8,13 +8,13 @@
 					<div class="col-sm-12 form-group">
 						{{#if eq type "textbox"}}
 							<label>{{name}}</label>
-							<input type="text" class="form-control userInput" name="textbox"/>
+							<input type="text" class="form-control userInput" name="textbox" required />
 						{{else if eq type "textarea"}}
 							<label>{{name}}</label>
-							<textarea class="form-control userInput" name="textarea"></textarea>
+							<textarea class="form-control userInput" name="textarea" required></textarea>
 						{{else if eq type "mcq"}}
 							<label>{{name}}</label>
-							<select class="form-control userInput" name="mcq">
+							<select class="form-control userInput" name="mcq" required>
 								{{#each options}} 
 									<option value="{{this}}">{{this}}</option>
 								{{/each}}
