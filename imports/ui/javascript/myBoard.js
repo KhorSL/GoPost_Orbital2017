@@ -72,6 +72,12 @@ Template.myBoard.helpers({
 			return posterEvents;
 		}
 		return false;
+  	},
+  	events_sub_User: function() {
+  		var posterIDs = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.FollowingList;});
+		posterIDs = _.flatten(posterIDs);
+		var subUsers = Users.find({"User": {"$in" : posterIDs}}, {limit: 10});
+		return subUsers;
   	}
 });
 
@@ -97,5 +103,9 @@ Template.myBoard.events({
 		e.preventDefault();
 		Session.set("searching", true);
 		Session.set("likeSub", true);
-	}
+	},
+	'click .profileClick' :function(e) {
+    	e.preventDefault();
+    	Router.go("/dashBoard/" + e.currentTarget.id);
+  	}
 });

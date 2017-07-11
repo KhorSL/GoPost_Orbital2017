@@ -45,7 +45,25 @@ Template.chatBoard.onCreated(function() {
   	Meteor.setTimeout((function() {
 		var dA = document.getElementById('chatArea');
 		dA.scrollTop = dA.scrollHeight;
-  	}), 2000);
+  	}), 500);
+});
+
+Template.chatBoard.onRendered(function() {
+	var chatTgt = Session.get("chat_Target");
+	if(typeof(chatTgt) != 'undefined' && chatTgt !== "") {
+		$('[name=search_query]').val(chatTgt.Username);
+		$("#searchBut").click();
+	}
+
+	var chatChan = Session.get("chat_Channel");
+	if(typeof(chatChan) != 'undefined' && chatChan) {
+		$('.nav-pills a:last').tab('show');
+	}
+});
+
+Template.chatBoard.onDestroyed(function() {
+	Session.set("chat_Target", "");
+	Session.set("chat_Channel", false);
 });
 
 Template.chatBoard.helpers({
@@ -87,8 +105,11 @@ Template.chatBoard.helpers({
 
 		//Setting Active li for first Message
 		if(convo_with.count() > 0) {
-			Session.set("recever", convo_with.fetch()[0].User);
-			Session.set("recever_details", convo_with.fetch()[0]);
+			var chatTgt = Session.get("chat_Target"); //When redirected from user Dashboard
+			if(typeof(chatTgt) !== 'undefined' && chatTgt !== "") {
+				Session.set("recever", chatTgt.User);
+				Session.set("recever_details", chatTgt);
+			}
 		}
 
 		return convo_with;
@@ -140,6 +161,15 @@ Template.chatBoard.helpers({
 	        }
 		}
 	},
+	emptyMsg: function() {
+		var channel = Session.get("channel");
+		var rcv = Session.get('recever');
+		if(channel === "" && rcv ==="") {
+			return true;
+		} else {
+			return false;
+		}
+	},
 	search_Tag: function() {
 		return Session.get("search_Tag");
 	},
@@ -168,7 +198,10 @@ Template.chatBoard.helpers({
 		} else {
 			return "";
 		}
-	}
+	},
+	formatTime: function(date) {
+  		return moment(date).format('h.mm a');
+  	}
 });
 
 Template.chatBoard.events({
@@ -256,6 +289,14 @@ Template.chatBoard.events({
 		Session.set("channel", this.valueOf().trim());
 		/*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
 	},
+	'click #myTabs' : function(e) {
+		e.preventDefault();
+		if(e.target.text !== 'Channel') {
+			Session.set("channel", "");
+			Session.set("chat_Channel", false);
+		}
+		$('#myTabs a[href="' + e.target.hash + '"]').tab('show');
+	}
 });
 
 let updateScroll = () => {

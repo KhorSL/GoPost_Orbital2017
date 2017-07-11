@@ -19,7 +19,8 @@ Template.event_View.helpers({
   	}
   },
   isOwner: function() {
-	 return this.owner === Meteor.userId();
+    console.log(this.owner);
+	  return this.owner === Meteor.userId();
   }
  });
 
@@ -55,5 +56,10 @@ Template.event_View.events({
   'click .signUp' :function(e) {
     var id = e.target.id;
     Router.go("sign-up", {_id: id});
-  }
+  },
+
+  'click .poster' :function(e) {
+    e.preventDefault();
+    Router.go("/dashBoard/" + e.target.id);
+  },
 });

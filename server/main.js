@@ -20,6 +20,11 @@ UserSchema = new SimpleSchema({
     	type: Number,
     	label: "Age"
   	},
+  	profilePic: {
+		type: String,
+		label: "Profile Picture",
+		optional: true
+	},
   	LikedList: {
     	type: Array,
 		label:"LikedList",
@@ -394,6 +399,10 @@ if(Meteor.isServer) {
     	return Events.find();
 	});
 
+	Meteor.publish("events_ONE", function(eventid) {
+    	return Events.find({_id: eventid});
+	});
+
 	Meteor.publish("events_limit", function(limit) {
     	return Events.find({}, {sort: {createdAt: -1}, limit: limit});
 	});
@@ -474,6 +483,12 @@ if(Meteor.isServer) {
 
   	Meteor.publish("userDetails", function() {
   		return Users.find();
+  	});
+
+  	Meteor.publish("user_subscriptions", function(curUser) {
+  		var sub_list = Users.find({"User": curUser}).fetch().map(function (obj) {return obj.FollowingList;});
+		sub_list = _.flatten(sub_list);
+		return Users.find({"User": {"$in" : sub_list}});
   	});
 
 	Meteor.publish("event_Tags", function () {
@@ -683,6 +698,14 @@ Meteor.methods({
       		Username: username,
       		Gender: gender,
       		Age: age
+    	});
+  	},
+
+  	uploadProfilePicture: function(userid, source){
+    	Users.update({User: userid}, {
+    		$set: {
+				profilePic: source
+			}
     	});
   	},
 

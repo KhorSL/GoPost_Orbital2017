@@ -3,7 +3,6 @@
 }
 
 .board_subscribers {
-	border: 1px solid blue;
 	height: 50px;
 	width: 100%;
 	padding: 5px;
@@ -11,12 +10,12 @@
 
 .sub_tab {
   margin-bottom: 10px;
-  border-bottom: 1px solid #fec503;
+  border-bottom: 1px solid #FF8400;
 }
 
 .sub_tab > li.active > a, 
 .sub_tab > li.active > a:hover, 
 .sub_tab > li.active > a:focus {
   background-color: #f3f3f3;
-  border: 1px solid #fec503;
+  border: 1px solid #FF8400;
 }

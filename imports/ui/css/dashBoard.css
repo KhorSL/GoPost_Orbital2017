@@ -364,7 +364,7 @@
 }
 
 .dash_profile_action {
-  text-align: left;
+  text-align: center;
   padding:10px;
 }
 
@@ -375,4 +375,23 @@
 
 .dash_profile_action_btn {
   margin-bottom: 5px;
+}
+
+.dash_Profile_box {
+  text-align: center;
+  padding: 5px;
+}
+
+.image-editor {
+   text-align: center;
+}
+
+.img-upload {
+  display: inline !important;
+  padding: 5px;
+}
+
+.crop_button {
+  float: right;
+  margin: 0 2px;
 }

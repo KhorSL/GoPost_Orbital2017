@@ -17,10 +17,10 @@
             	</div> <!-- end of custom search bar -->
     	 	</div>
     	 	<div class ="row">
-	    	 	<ul class="nav nav-pills nav-justified chat-pills">
-	    			<li class="active"><a data-toggle="pill" href="#messages">Messages</a></li>
-	    			<li><a data-toggle="pill" href="#friend">Friends</a></li>
-	    			<li><a data-toggle="pill" href="#channel">Channel</a></li>
+	    	 	<ul class="nav nav-pills nav-justified chat-pills" id="myTabs">
+	    			<li class="active"><a href="#messages">Messages</a></li>
+	    			<li><a href="#friend">Friends</a></li>
+	    			<li><a href="#channel">Channel</a></li>
 	  			</ul>
             	
             	<div class="tab-content">
@@ -30,16 +30,18 @@
                   				{{#each messages}}
                   					<li class="left clearfix {{active}}" id="startChat">
 						               	<span class="chat-img pull-left">
-						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
+						                   	{{#if profilePic}}
+						                   	<img src="{{profilePic}}" alt="User Avatar" class="img-circle">
+						                   	{{else}}
+						                   	<img src="/images/avatar.jpg" alt="User Avatar" class="img-circle">
+						                   	{{/if}}
 						               	</span>
 			                     			
 			                     		<div class="chat-body clearfix">
 			                        		<div class="header_sec">
 			                           			<strong class="primary-font">{{Username}}</strong> 
-			                           			<strong class="pull-right">09:45AM</strong>
 			                        		</div>
 			                        		<div class="contact_sec">
-			                           			<strong class="primary-font">(123) 123-456</strong> 
 			                           			<span class="badge pull-right">3</span>
 			                        		</div>
 			                     		</div>
@@ -56,17 +58,16 @@
                   				{{#each friend}}
 		                  			<li class="left clearfix {{active}}" id="startChat">
 						               	<span class="chat-img pull-left">
-						                   	<img src="https://lh6.googleusercontent.com/-y-MY2satK-E/AAAAAAAAAAI/AAAAAAAAAJU/ER_hFddBheQ/photo.jpg" alt="User Avatar" class="img-circle">
+						                   	{{#if profilePic}}
+						                   	<img src="{{profilePic}}" alt="User Avatar" class="img-circle">
+						                   	{{else}}
+						                   	<img src="/images/avatar.jpg" alt="User Avatar" class="img-circle">
+						                   	{{/if}}
 						               	</span>
 			                     			
 			                     		<div class="chat-body clearfix">
 			                        		<div class="header_sec">
 			                           			<strong class="primary-font">{{Username}}</strong> 
-			                           			<strong class="pull-right">09:45AM</strong>
-			                        		</div>
-			                        		<div class="contact_sec">
-			                           			<strong class="primary-font">(123) 123-456</strong> 
-			                           			<span class="badge pull-right">3</span>
 			                        		</div>
 			                     		</div>
 		                  			</li>
@@ -91,7 +92,6 @@
 		                  			<li class="left clearfix {{active}}" id="startChannel">
 			                        	<div class="header_sec">
 			                           		<strong class="primary-font">{{this}}</strong> 
-			                           		<strong class="pull-right">09:45AM</strong>
 			                        	</div>
 		                  			</li>
                   				{{else}}
@@ -124,7 +124,11 @@
 		        					{{#each msgHistory}}
 		          						{{> chat_messageView}}
 		        					{{else}}
-		          						<p class="alert alert-warning">Empty.</p>
+		        						{{#if emptyMsg}}
+		          							<p class="alert alert-warning">Please select a chat/channel to start messaging.</p>
+		          						{{else}}
+		          							<p class="alert alert-warning">Start first by saying Hi!</p>
+		          						{{/if}}
 		        					{{/each}}
 		      					{{/if}}
 		      				{{/if}}

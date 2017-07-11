@@ -126,14 +126,14 @@
    overflow-y: auto;
 }
 .member_list li:hover {
-  background: #428bca none repeat scroll 0 0;
+  background: #FF8400 none repeat scroll 0 0;
   color: #fff;
   cursor:pointer;
 }
 
 .member_list li.active {
   color: #FFF;
-  background-color: #fed136;
+  background-color: #FF8400;
 }
 
 .chat_area {

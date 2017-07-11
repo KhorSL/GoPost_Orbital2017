@@ -1,0 +1,39 @@
+<template name='users_GridView'>
+  <div class="col-sm-4">
+    <div class="gridContent">
+      <a href="#" id="{{User}}" class="profileClick">
+        <div class="noteImgBorder">
+          {{#if profilePic}}
+            <img src="{{profilePic}}" alt="User Avatar" class="img-circle">
+          {{else}}
+            <img src="/images/avatar.jpg" alt="User Avatar" class="img-circle">
+          {{/if}}
+        </div>
+        <div class="gridDetails">
+          <div class="ellipsis">
+            <h4 class="noteH2">{{Username}}</h4>
+          </div>
+          <div class="ellipsis">
+            <span class="glyphicon glyphicon-map-marker"></span>
+              {{Gender}}
+          </div>
+          <div class="ellipsis">
+            <span class="glyphicon glyphicon-time"></span>
+              {{Age}}
+          </div>
+        </div> <!--end of noteDetails-->
+      </a> <!--end of a href event_view -->
+              
+      <div class="gridFoot">
+        {{#unless isUser}}
+          {{#if hasSubscribed}} <!-- Toggle Subscription !-->
+            <span class="btn glyphicon glyphicon-envelope dash_profile_action_btn" role="button" id="chatbox" aria-hidden="true" style="cursor:help;" title="Text Me!"></span> 
+            <button class="btn btn-primary" type ="button" id ="unsubscribe"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Unsubscribe</button>
+          {{else}}
+            <button class="btn btn-primary" type ="button" id ="subscribe"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Subscribe</button>
+          {{/if}}
+        {{/unless}}
+      </div> <!--end of noteFoot -->
+    </div> <!-- end of GridContent -->
+  </div> <!-- end of col-lg-4 -->
+</template>
