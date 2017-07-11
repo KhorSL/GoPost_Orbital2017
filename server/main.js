@@ -380,9 +380,14 @@ if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
 		return Events.find({
 			$or: [
-				{ owner: this.userId}
+				{ owner: this.userId},
+				{ privacy: false}
 			]
 		});
+	});
+
+	Meteor.publish("createdEvents", function() {
+		return Events.find({owner: this.userId});
 	});
 
 	Meteor.publish("events", function() {

@@ -11,6 +11,10 @@ Template.myEvents.onDestroyed(function (){
 	delete Session.keys['delObj'];
 });
 
+Template.myEvents.onRendered(function() {
+  Meteor.subscribe("createdEvents");
+});
+
 Template.myEvents.events({
   'click .delete': function() {
     if(!confirm("You are about to delete this event. Are you sure?")) {
@@ -68,8 +72,8 @@ Template.myEvents.helpers({
 	delObj: function() {
 		return Session.get('delObj');
 	},
-  userEvents: function() {
-      return Events.find();
+  createdEvents: function() {
+      return Events.find({owner: Meteor.userId()});
       /*
       if (Session.get('done')) {
         return UserEvents.find({checked: {$ne: true}});

@@ -23,7 +23,9 @@
 							<label>{{name}}</label>
 							<div class="userInput" name="checkbox">
 								{{#each options}} 
-									<input class="optionBox" type="checkbox" value="{{this}}">{{this}}
+									<div class="checkbox">
+										<label><input class="optionBox" type="checkbox" value="{{this}}">{{this}} </label>
+									</div>
 								{{/each}}
 							</div>
 						{{/if}}

@@ -25,7 +25,7 @@
 							<header><h5>Created Events</h5></header>
 							<div class="scrollable" style="overflow:scroll;height:250px;width:100%;overflow:auto">
 								<ul class="list-group">
-									{{#each userEvents}}
+									{{#each createdEvents}}
 										<li class="list-group-item"> <a href="/event_View/{{this._id}}"> {{title}} </a>
 											<span role="button" class="btn btn-xs delete pull-right glyphicon glyphicon-trash"></span>
 											<span role="button" id="{{this._id}}" class="btn btn-xs update pull-right glyphicon glyphicon-pencil"></span>
