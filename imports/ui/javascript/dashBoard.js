@@ -5,6 +5,7 @@ import '../html/dashBoard.html';
 import '../css/dashBoard.css';
 import './calendar_full.js';
 import './dash_profilePic_modal.js';
+import './dash_profileEdit_modal.js';
 
 Template.dashBoard.onCreated(() => {
   if (Router.current().params.owner === Meteor.userId() || Router.current().params.owner === undefined){ //User visiting his own profile
@@ -13,6 +14,8 @@ Template.dashBoard.onCreated(() => {
     Meteor.subscribe('userDetails_Cur',Router.current().params.owner);
     Meteor.subscribe('userDetails_Cur',Meteor.userId()); //Subscribe to both documents so that can do subscriptions
   }
+
+  Meteor.subscribe("events");
 });
 
 Template.dashBoard.helpers({
@@ -85,4 +88,10 @@ Template.dashBoard.events({
     $('#upload-profile-pic-modal').modal('show');
     /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
   },
+
+  'click #editProfile': function(e) {
+    e.preventDefault();
+    $('#edit-profile-modal').modal('show');
+    /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
+  }
 });

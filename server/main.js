@@ -701,6 +701,15 @@ Meteor.methods({
     	});
   	},
 
+  	updateUserData: function(userid, gender, age){
+    	Users.update({User:userid}, {
+    		$set: {
+    			Gender: gender,
+      			Age: age
+    		}
+    	});
+  	},
+
   	uploadProfilePicture: function(userid, source){
     	Users.update({User: userid}, {
     		$set: {
