@@ -59,6 +59,19 @@ Router.route('/myEvents', {
   layoutTemplate: 'layout'
 });
 
+Router.route('/regList/:_id', {
+  name: 'registration_List',
+  template: 'myEvents_registrationList',
+  layoutTemplate: 'layout',
+  data: function () {
+    // return a cursor of documents that contains the eventId
+    return SignUps.find({$and: [
+      {eventId: this.params._id},
+      {confirmation: false}
+      ]});
+  }
+});
+
 /*Credits: http://meteortips.com/second-meteor-tutorial/iron-router-part-2/*/
 Router.route('/event_View/:_id', {
   name: "event_View",

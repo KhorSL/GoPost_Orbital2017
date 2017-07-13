@@ -6,6 +6,7 @@ import '../html/myEvents.html';
 import '../css/dashBoard.css';
 import '../css/myEvents.css';
 import './events_GridView.js';
+import '/imports/ui/javascript/myEvents_registrationList.js';
 
 Template.myEvents.onCreated(function() {
   Meteor.subscribe("userEvents");

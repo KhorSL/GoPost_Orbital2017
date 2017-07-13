@@ -1,0 +1,32 @@
+/* Credits https://codepen.io/SamA74/pen/kXAJzq */
+.checkbox {
+  position: relative;
+}
+
+.checkbox figure {
+  display: none;
+  position: absolute;
+  top: 2em;
+  left: 1em;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+  
+  background: white;
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px;
+}
+
+.checkbox img {
+  display: block;
+  border-radius: 0.8em;
+  max-width: 100%;
+  height: auto;
+}
+
+.checkbox:focus figure,
+.checkbox:hover figure {
+  display: block;
+}

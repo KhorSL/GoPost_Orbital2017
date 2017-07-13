@@ -19,7 +19,7 @@ Template.event_View.helpers({
   	}
   },
   isOwner: function() {
-    console.log(this.owner);
+    //console.log(this.owner);
 	  return this.owner === Meteor.userId();
   }
  });

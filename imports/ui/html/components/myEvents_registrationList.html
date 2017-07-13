@@ -1,0 +1,44 @@
+<template name="myEvents_registrationList">
+  <div class="outer">
+    <div class="inner">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="box">
+            <header>
+              <h5>Registrations</h5>
+              <div class="dash_header_right">
+                <button class="btn btn-primary" type ="button" id ="accept"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Accept</button>
+              </div>
+            </header>
+            <form>
+              <ul class="list-group">
+                <li class="list-group-item" style="background-color: #eee">
+                  <div class="checkbox">
+                    <label for=""><input type="checkbox" id="select-all">
+                      <span id="count-checkboxes">0</span>/{{countEvents}} selected
+                    </label>
+                  </div>
+                </li>
+                {{#each this}}
+                    <li class="list-group-item">
+                      <div class="checkbox">
+                        <label class="hover-img">
+                          <input type="checkbox" class="participant" data-id="{{this._id}}"/>
+                          <span role="button" id="to_profile">  {{participantUser}}</span>
+                          <figure>
+                            <img src="{{participantDp}}"/>
+                            <br>
+                            <center><p>{{participantGender}}, {{participantAge}}</p></center>
+                          </figure>
+                        </label>
+                      </div>
+                    </li>  
+                {{/each}}
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

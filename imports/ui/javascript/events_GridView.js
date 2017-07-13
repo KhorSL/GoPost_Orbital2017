@@ -32,8 +32,13 @@ Template.events_GridView.events({
     	});
 	},
 	'click #eventChannel' : function(e) {
-    e.preventDefault();
-    Session.set("chat_Channel", true);
-    Router.go('chatBoard');
-  }
+    	e.preventDefault();
+    	Session.set("chat_Channel", true);
+    	Router.go('chatBoard');
+  	},
+  	'click #registeredList': function(e) {
+  		var id = this._id;
+  		Router.go("registration_List", {_id: id})
+  	}
+
 });
