@@ -74,7 +74,13 @@ Template.dash_profilePic_modal.events({
 		event.preventDefault();
 		Template.instance().uploading.set(true);
 		Session.set("image_uploaded", false); //disable buttons
-		uploadCrop.croppie('result', 'base64', 'viewport', 'png', '1', 'true').then(function (src) {
+		uploadCrop.croppie('result', {
+			type: 'base64',
+			size: {width:200, height:200},
+			format: 'png',
+			quality: 0.9,
+			circle: true
+		}).then(function (src) {
 			Meteor.call('uploadProfilePicture', Meteor.userId(), src, function(error) {
 				if(error) {
 					console.log(error.reason);
