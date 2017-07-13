@@ -384,15 +384,18 @@ Messages.attachSchema(MessagesSchema);
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
 		return Events.find({
-			$or: [
-				{ owner: this.userId},
-				{ privacy: false}
-			]
+			owner: this.userId
 		});
 	});
 
-	Meteor.publish("createdEvents", function() {
-		return Events.find({owner: this.userId});
+	Meteor.publish("userEvents_Page", function(skipCount) {
+		return Events.find({
+			owner: this.userId
+		}, {
+			sort: {createdAt: -1},
+			limit: 6,
+			skip: skipCount
+		});
 	});
 
 	Meteor.publish("events", function() {

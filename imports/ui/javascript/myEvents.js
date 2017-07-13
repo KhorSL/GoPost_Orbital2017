@@ -9,15 +9,19 @@ import './events_GridView.js';
 import '/imports/ui/javascript/myEvents_registrationList.js';
 
 Template.myEvents.onCreated(function() {
-  Meteor.subscribe("userEvents");
+  let template = Template.instance();
+
+  template.skipCount = new ReactiveVar(0);
+
+  template.autorun( () => {
+    var skipCount = template.skipCount.get();
+    //template.subscribe("userEvents_Page", skipCount);
+    template.subscribe("userEvents");
+  });
 });
 
 Template.myEvents.onDestroyed(function (){
-	delete Session.keys['delObj'];
-});
-
-Template.myEvents.onRendered(function() {
-  Meteor.subscribe("createdEvents");
+	delete Session.keys['delObj', 'max'];
 });
 
 Template.myEvents.events({
@@ -70,6 +74,26 @@ Template.myEvents.events({
         }
       });
     });
+  },
+
+  'click .new_event' : function(e) {
+    e.preventDefault();
+    Router.go('create-event');
+  },
+  'click .new_channel' : function(e) {
+    e.preventDefault();
+    Session.set("chat_Channel", true);
+    Router.go('chatBoard');
+  },
+  'click #prevPage': function(e) { 
+    var skipCount = Template.instance().skipCount.get();
+    if(skipCount >= 6) {
+      Template.instance().skipCount.set(skipCount-6);
+    }
+  },
+  'click #nextPage': function(e) {
+    var skipCount = Template.instance().skipCount.get();
+    Template.instance().skipCount.set(skipCount+6);
   }
 });
 
@@ -77,9 +101,24 @@ Template.myEvents.helpers({
 	delObj: function() {
 		return Session.get('delObj');
 	},
+
+  skipCount: function() {
+    return (Template.instance().skipCount.get() / 6) + 1;
+  },
+
+  max: function() {
+    var max = Events.find({"owner" : Meteor.userId()}).count();
+    Session.set("max", max);
+    return Math.ceil(max/6);
+  },
   
   userEvents: function() {
-    return Events.find({"owner" : Meteor.userId()}, {sort: {createdAt: -1}});
+    var skipCount = Template.instance().skipCount.get();
+    return Events.find({"owner" : Meteor.userId()}, {
+      sort: {createdAt: -1},
+      limit: 6,
+      skip: skipCount
+    });
   },
 
 	checkValue: function(del) {
@@ -91,17 +130,24 @@ Template.myEvents.helpers({
   		return false;
   	}
   	return false;
-  }
-});
-
-Template.myEvents.events({
-  'click .new_event' : function(e) {
-    e.preventDefault();
-    Router.go('create-event');
   },
-  'click .new_channel' : function(e) {
-    e.preventDefault();
-    Session.set("chat_Channel", true);
-    Router.go('chatBoard');
+
+  disablePrev: function() {
+    var skipCount = Template.instance().skipCount.get();
+    if(skipCount === 0) {
+      return 'disabled';
+    } else {
+      return "";
+    }
+  }, 
+
+  disableNext: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var max = Session.get("max");
+    if((skipCount+6) >= max) {
+      return 'disabled';
+    } else {
+      return "";
+    }
   }
 });

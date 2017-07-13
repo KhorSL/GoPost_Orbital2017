@@ -61,6 +61,9 @@ Template.bulletinBoard.onRendered(function() {
  	*/
  });
 
+Template.bulletinBoard.onDestroyed(function() {
+	delete Session.keys['searchQuery', 'filterType', 'searching', 'searchBut', 'Initial_Limit', 'limit','viewToggle'];
+});
 
 Template.bulletinBoard.helpers({
 	viewType: function() {
