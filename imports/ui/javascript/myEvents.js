@@ -46,7 +46,7 @@ Template.myEvents.events({
     var id = e.target.id;
     Router.go("update-event", {_id: id});
   },
-
+/*
   'click .signUp': (e)=> {
     // Removes all child element
     $('.submit-info').empty();
@@ -75,7 +75,7 @@ Template.myEvents.events({
       });
     });
   },
-
+*/
   'click .new_event' : function(e) {
     e.preventDefault();
     Router.go('create-event');

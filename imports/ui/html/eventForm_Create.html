@@ -21,7 +21,7 @@
 				<div class="form-group">
 					<label for="img">Event Poster</label>
 					<input class="img-input" type="file" accept="image/*" name="img">
-					<img id='output'>
+					<img id='output' style="max-height: 256px; max-width: 256px; width: auto; height: auto;">
 					<!-- {{#each images}} {{> image}} {{/each}} -->
 				</div>
 
@@ -86,10 +86,6 @@
 					<input class="form-control" name="contact" type="tel"> <br>
 				</div>
 
-				<div class="form-group" name="pub-option">
-					<label> Privacy options </label>
-					<input type="checkbox" name="privacy"> Private event
-				</div>
 				{{#if currentUser}}
 				<button type="button" class="btn next-s1">Next</button>
 				{{/if}}

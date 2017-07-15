@@ -3,6 +3,275 @@ Meteor.startup(() => {
   // code to run on server at startup
 });
 
+/** Server route to download registration list results **/
+Router.route('/download-data/:file', function() {
+	var eventId = this.params.file; //params that is passed in thru the anchor link
+
+	// Find the event info in the rfTemplates collection to check for type of reg form and its format
+	var currEvent = RegistrationForms.findOne({eventId: eventId});
+	var rfChoice = currEvent.RegFormType;
+
+	// Handles both type of reg form
+	if(rfChoice == "custom") {
+		// fetch the data of all sign ups (in an array) of this particular event in the signUps collection
+		var data = SignUps.find({eventId: eventId}).fetch();
+		if(data.length == 0) {
+			this.response.writeHead(404); //for fun...
+			this.response.end("No records, sorry.\n");
+		} else {
+			// Standard fields that will appear in either type of reg form
+			var fields = [
+				  {
+				  	key: 'createdAt',
+				  	title: 'Submission Time'
+				  },
+				  {
+				  	key: "confirmation",
+				  	title: 'Registration Status',
+				  	transform: function(val, doc) {
+				  		if(val) { 
+				  			return "confirmed";
+				  		} else  {
+				  			return "unconfirmed";
+				  		}
+				  	}
+				  }
+				];
+
+			// Define the fields needed in custom reg form to export the Excel
+			var responses = data[0]["userResponseList"]; 
+			var len = responses.length; // to get the number of questions in the reg form
+
+			//Create and define the fields
+			for(var i = 0; i < len; i++) {
+				var currRes = responses[i];
+				var resFields = {
+					key: 'userResponseList.' + i,
+					title: currRes.qnsName,
+					transform: function(val, doc) {
+						return JSON.stringify(val.response); //transform all responses to string for easy storing
+					}
+				};
+				fields.push(resFields); // add on to the standard fields
+			}
+		}
+
+	} else {
+		var data = SignUps.find({eventId: eventId}).fetch();
+		if(data.length == 0) {
+			this.response.writeHead(404); //for fun...
+			this.response.end("No records, sorry.\n");
+		} else {
+			// Standard fields that will appear in either type of reg form
+			var fields = [
+				  {
+				  	key: 'createdAt',
+				  	title: 'Submission Time'
+				  },
+				  {
+				  	key: "confirmation",
+				  	title: 'Registration Status',
+				  	transform: function(val, doc) {
+				  		if(val) { 
+				  			return "confirmed";
+				  		} else  {
+				  			return "unconfirmed";
+				  		}
+				  	}
+				  }
+				];
+	
+			// Default fields
+			if(currEvent.name) {
+				var defFields = {
+					key: "firstName",
+					title: "First Name"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "lastName",
+					title: "Last Name"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.contact_mobile) {
+				var defFields = {
+					key: "mobile",
+					title: "Mobile"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.contact_email) {
+				var defFields = {
+					key: "email",
+					title: "Email"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.address_full) {
+				var defFields = {
+					key: "address",
+					title: "Address"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "city",
+					title: "City"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "postal",
+					title: "Postal"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.address_region) {
+				var defFields = {
+					key: "region",
+					title: "Region"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.shirtSize_SML) {
+				var defFields = {
+					key: "shirtSize_SML",
+					title: "Shirt Size"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.shirtSize_123) {
+				var defFields = {
+					key: "shirtSize_123",
+					title: "Shirt Size"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.nationality) {
+				var defFields = {
+					key: "nationality",
+					title: "Nationality"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.gender) {
+				var defFields = {
+					key: "gender",
+					title: "Gender"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.allergies) {
+				var defFields = {
+					key: "allergies",
+					title: "Allergies"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.dietaryPref) {
+				var defFields = {
+					key: "dietaryPref",
+					title: "Dietary Preference"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.bloodType) {
+				var defFields = {
+					key: "bloodType",
+					title: "Blood Type"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.faculty) {
+				var defFields = {
+					key: "faculty",
+					title: "Faculty"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.major) {
+				var defFields = {
+					key: "major",
+					title: "Major"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.nokInfo) {
+				var defFields = {
+					key: "nok_firstName",
+					title: "NOK First Name"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "nok_lastName",
+					title: "NOK Last Name"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "nok_mobile",
+					title: "NOK Mobile"
+				};
+				fields.push(defFields);
+				defFields = {
+					key: "nok_address",
+					title: "NOK Address"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.additional) {
+				var defFields = {
+					key: "additional",
+					title: "Additional Comments"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.matric) {
+				var defFields = {
+					key: "matric",
+					title: "Matriculation Number"
+				};
+				fields.push(defFields);
+			}
+	
+			if(currEvent.nric) {
+				var defFields = {
+					key: "nric",
+					title: "NRIC"
+				};
+				fields.push(defFields);
+			}
+		}
+	}
+
+	if(data.length > 0) {
+		var title = 'Registration_result';
+		var file = Excel.export(title, fields, data);
+		var headers = {
+		  'Content-type': 'application/vnd.openxmlformats',
+		  'Content-Disposition': 'attachment; filename=' + title + '.xlsx'
+		};
+
+		this.response.writeHead(200, headers);
+		this.response.end(file, 'binary');
+	}
+}, { where: 'server' });
+/** End of server side route download **/
+
 UserSchema = new SimpleSchema({
   	User: {
     	type: String,
@@ -146,11 +415,6 @@ EventsSchema = new SimpleSchema({
 	},
 	"likers.$": {
 		type: String
-	},
-	privacy: {
-		type: Boolean,
-		label: "Privacy",
-		optional: true
 	},
 	start: {
 		type: Date,
@@ -608,7 +872,7 @@ Meteor.methods({
 		});
 	},
 
-	addSignUp: function(eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, additional) {
+	addSignUp: function(eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional) {
 		Users.update({User: Meteor.userId()}, {$addToSet: {
 			SignUpEventList: eventId
 		}});
@@ -644,6 +908,7 @@ Meteor.methods({
 			mobile: mobile,
 			email: email,
 			dietaryPref: dietaryPref,
+			bloodType: bloodType,
 			allergies: allergies,
 			shirtSize_SML: shirtSize_SML,
 			shirtSize_123: shirtSize_123,
@@ -651,6 +916,7 @@ Meteor.methods({
 			nok_firstName: nok_firstName,
 			nok_lastName: nok_lastName,
 			nok_mobile: nok_mobile,
+			nok_address: nok_address,
 			additional: additional,
 			confirmation: false
 		});
@@ -673,9 +939,8 @@ Meteor.methods({
 		SignUps.update({_id: submissionId}, {$set: {confirmation: true}});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, privacy, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, contact, img){
 		return Events.insert({
-			// Img to further test
 			title: title,
 			description: description,
 			location: location,
@@ -686,7 +951,6 @@ Meteor.methods({
 			category: cat,
 			type: type,
 			channel : channel,
-			privacy: privacy,
 			contact: contact,
 			img: img,
 			owner: Meteor.userId(),
@@ -721,7 +985,7 @@ Meteor.methods({
     	});
   	},
 
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, cat, type, privacy, contact, img){
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, cat, type, contact, img){
 		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
@@ -742,7 +1006,6 @@ Meteor.methods({
 			end: end,
 			category: cat,
 			type: type,
-			privacy: privacy,
 			contact: contact,
 			img: img
 			}

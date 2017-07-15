@@ -4,6 +4,10 @@ import { Template } from 'meteor/templating';
 import '../html/components/events_GridView.html';
 import '../css/myEvents.css';
 
+Template.events_GridView.onRendered(function() {
+  
+});
+
 Template.events_GridView.helpers({
   	formatDate: function(date) {
   		return moment(date).format('Do MMM YYYY, h.mm a');
@@ -39,6 +43,10 @@ Template.events_GridView.events({
   	'click #registeredList': function(e) {
   		var id = this._id;
   		Router.go("registration_List", {_id: id})
-  	}
+  	},
+
+    'click #download': function(e) {
+      console.log("download");
+    }
 
 });

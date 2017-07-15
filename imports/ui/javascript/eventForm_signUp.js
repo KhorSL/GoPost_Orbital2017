@@ -163,8 +163,8 @@ if(Meteor.isClient) {
 			var firstName = "", lastName = "";
 			var nric = "", matric="", gender="", nationality="";
 			var address ="", city="", region="", postal="";
-			var faculty="", major="", mobile = "", email ="", dietaryPref="", allergies="", shirtSize_123="", shirtSize_SML="", additional="";;
-			var nok_rs ="", nok_firstName="", nok_lastName="", nok_mobile="";
+			var faculty="", major="", mobile = "", email ="", dietaryPref="", bloodType="", allergies="", shirtSize_123="", shirtSize_SML="", additional="";;
+			var nok_rs ="", nok_firstName="", nok_lastName="", nok_mobile="", nok_address="";
 
 			if(this.name) {
 				var firstName = event.target.firstName.value;
@@ -185,7 +185,7 @@ if(Meteor.isClient) {
 				var postal = event.target.postal.value;
 			}
 
-			if(this.region) var region = event.target.region.value;
+			if(this.address_region) var region = event.target.region.value;
 
 			if(this.faculty) { var faculty = event.target.faculty.value; }
 			
@@ -196,22 +196,24 @@ if(Meteor.isClient) {
 			if(this.contact_email) { var email = event.target.email.value; }
 
 			if(this.dietaryPref) var dietaryPref = event.target.dietaryPref.value;
+			if(this.bloodType) var bloodType = event.target.bloodType.value;
 			if(this.allergies) var allergies = event.target.allergies.value;
 			if(this.shirtSize_SML) var shirtSize_SML = event.target.shirtSize_SML.value;
 			if(this.shirtSize_123) var shirtSize_123 = event.target.shirtSize_123.value;
 
-			if(this.nok_info) {
+			if(this.nokInfo) {
 				var nok_rs = event.target.nok_rs.value;
 				var nok_firstName = event.target.nok_firstName.value;
 				var nok_lastName = event.target.nok_lastName.value;
 				var nok_mobile = event.target.nok_mobile.value;
+				var nok_address = event.target.nok_address.value;
 			}
 			
 			if(this.additional) { var additional = event.target.additional.value; }
 			
 			var eventId = this.eventId;
 
-			Meteor.call("addSignUp", eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, additional, function(error, result) {
+			Meteor.call("addSignUp", eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {

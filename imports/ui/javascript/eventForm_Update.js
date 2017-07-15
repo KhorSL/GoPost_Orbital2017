@@ -133,12 +133,11 @@ if(Meteor.isClient) {
 			var end = event.target.end.value;
 			var category = $("#event_cat").val();
 			var type = $('#tokenfield').val().split();
-			var privacy = event.target.privacy.checked;
 			var contact = event.target.contact.value;
 			var img = output.src;
 			var eventId = this._id;
 
-			Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, start, end, category, type, privacy, contact, img, function(error, result) {
+			Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, start, end, category, type, contact, img, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
