@@ -348,7 +348,7 @@ if(Meteor.isClient) {
 					}
 				);
 
-				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, privacy, contact, img, function(error, result) {
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, contact, img, function(error, result) {
 					if(error) {
 						console.log(error.reason);
 					} else {
