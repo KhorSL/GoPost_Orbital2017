@@ -18,6 +18,21 @@ Template.event_View.helpers({
   		return false;
   	}
   },
+  hasSubscribed: function(){
+    //var currFollowers = this.FollowingList;
+    //var currFollowers = Users.find({User: Meteor.userId()}).fetch()[0].FollowingList; //Is this the right way?
+    
+    var owner = this.owner;
+    var currFollowers = Users.find({"User":Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
+    if(currFollowers.length > 0) {
+      currFollowers = _.flatten(currFollowers);
+      var q = _.find(currFollowers, function(id){return id===owner});
+      if(q == owner) {
+        return true;
+      }
+    } 
+    return false;
+  },
   isOwner: function() {
     //console.log(this.owner);
 	  return this.owner === Meteor.userId();
@@ -47,7 +62,11 @@ Template.event_View.events({
       }
     });
   },
-
+  'click .new_channel' : function(e) {
+    e.preventDefault();
+    Session.set("chat_Channel", true);
+    Router.go('chatBoard');
+  },
   'click .update' :function(e) {
     var id = e.target.id;
     Router.go("update-event", {_id: id});
@@ -57,9 +76,26 @@ Template.event_View.events({
     var id = e.target.id;
     Router.go("sign-up", {_id: id});
   },
-
   'click .poster' :function(e) {
     e.preventDefault();
     Router.go("/dashBoard/" + e.target.id);
   },
+  'click #subscribe':function(e){
+    e.preventDefault();
+    var id = this.owner;
+    Meteor.call("subscribe",id, function(error) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  },
+  'click #unsubscribe':function(e){
+    e.preventDefault();
+    var id = this.owner;
+    Meteor.call("unsubscribe",id, function(error) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  }
 });

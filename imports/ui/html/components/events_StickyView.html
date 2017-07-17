@@ -43,6 +43,14 @@
                         <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
                       {{/if}}
                     {{/if}}
+                    &nbsp;
+                    {{#unless isOwner}}
+                      {{#if hasSubscribed}} <!-- Toggle Subscription !-->
+                        <span role="button" id="unsubscribe" class="glyphicon glyphicon-thumbs-down" aria-hidden="true">Unsubscribe</span>
+                      {{else}}
+                        <span role="button" id="subscribe" class="glyphicon glyphicon-thumbs-up" aria-hidden="true">Subscribe</span>
+                      {{/if}}
+                    {{/unless}}
                   {{/with}}
                 </p>
               </div> <!--end of noteFoot -->

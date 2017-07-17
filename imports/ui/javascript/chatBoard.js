@@ -26,6 +26,8 @@ Template.chatBoard.onCreated(function() {
 	Session.set("trigger", true); 			//for search bar
 	Session.set("search_Tag", false);  		//for search bar
 	Session.set("query", ""); 				//for search bar
+	Session.set("autoScrollingIsActive", true);
+	Session.set("thereAreUnreadMessages", false);
 
 	template.autorun( () => {
 		var sender = Session.get("sender");
@@ -58,7 +60,9 @@ Template.chatBoard.onRendered(function() {
 });
 
 Template.chatBoard.onDestroyed(function() {
-	delete Session.keys['channel','sender','recever','recever_details','trigger','search_Tag','query','chat_Target','chat_Channel'];
+	delete Session.keys['channel','sender','recever','recever_details',
+	'trigger','search_Tag','query','chat_Target','chat_Channel',
+	'autoScrollingIsActive','thereAreUnreadMessages'];
 });
 
 Template.chatBoard.helpers({
@@ -200,6 +204,9 @@ Template.chatBoard.helpers({
 
 		return false;
 	},
+	thereAreUnreadMessages: function() {
+		return Session.get("thereAreUnreadMessages");
+	},
 	active: function() {
 		var channel = Session.get("channel");
 
@@ -297,6 +304,33 @@ Template.chatBoard.events({
 		Session.set("search_Tag", false);
 		Session.set("query", "");
 	},
+	'scroll #chatArea': function() {
+		//https://github.com/meteor/chat-tutorial/blob/master/chat-tutorial-part-4.md#make-a-scrolltobottom-function
+		var howClose = 80;  // # pixels leeway to be considered "at Bottom"
+	    var messageWindow = $("#chatArea");
+	    var scrollHeight = messageWindow.prop("scrollHeight");
+	    var scrollBottom = messageWindow.prop("scrollTop") + messageWindow.height();
+	    var atBottom = scrollBottom > (scrollHeight - howClose);
+
+	    if(atBottom) {
+	    	Session.set("autoScrollingIsActive", true);
+	    	Session.set("thereAreUnreadMessages", false);
+	    } else {
+	    	Session.set("autoScrollingIsActive", false);
+	    }
+
+	    var scrollTop = messageWindow.prop("scrollTop");
+	    var atTop = scrollTop < howClose;
+	    if(atTop) {
+	    	Session.set("loadHistoryMsg", true);
+	    }
+	},
+	'click .more-messages': function(e) {
+		e.preventDefault();
+		Session.set("autoScrollingIsActive", true);
+		Session.set("thereAreUnreadMessages", false);
+		updateScroll();
+	},
 	'click #sendBtn' : function(e) {
 		e.preventDefault();
 
@@ -350,6 +384,10 @@ Template.chatBoard.events({
 		Session.set("recever_details", null);
 		Session.set("channel", this.valueOf().trim());
 		/*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
+		//Bring scrollbar to the bottom.
+		Meteor.setTimeout((function() {
+			updateScroll();
+  		}), 500);
 	},
 	'click #myTabs' : function(e) {
 		e.preventDefault();
@@ -363,6 +401,10 @@ Template.chatBoard.events({
 
 let updateScroll = () => {
   	/*https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up*/
-	var dA = document.getElementById('chatArea');
-	dA.scrollTop = dA.scrollHeight;
+	if(Session.get("autoScrollingIsActive")) {
+		var dA = document.getElementById('chatArea');
+		dA.scrollTop = dA.scrollHeight;
+	} else {
+		Session.set("thereAreUnreadMessages", true);
+	}
 };

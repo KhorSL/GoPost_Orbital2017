@@ -116,7 +116,16 @@
 
 		 		<div class="new_message_head">
 		 			<div class="pull-left">
-		 				{{messaging}}
+		 				<div class="new_message_head_name">{{messaging}}</div>
+		 			</div>
+		 			<div class="pull-right">
+		 				<div class="new_message_head_new">
+			 				{{#momentum plugin="fade"}}
+				        		{{#if thereAreUnreadMessages}}
+				        			<button class="btn more-messages">New Messages &#x25BE;</button>
+				        		{{/if}}
+				        	{{/momentum}}
+			        	</div>
 		 			</div>
 		 		</div>
 		 

@@ -54,20 +54,20 @@
 .search-query:focus + button {
    z-index: 3;   
 }
-
-.new_message_head button {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-}
 .new_message_head {
   background: #e8e6e7 none repeat scroll 0 0;
   float: left;
   font-size: 13px;
   font-weight: 600;
-  padding: 17px 10px;
   height: 54px;
   width: 100%;
   border-bottom: 1px solid #dddddd; 
+}
+.new_message_head_name {
+  margin:17px;
+}
+.new_message_head_new {
+  margin:10px;
 }
 .message_section {
   border-left: 1px solid #dddddd; 
@@ -232,4 +232,9 @@
 
 .cross_mar {
   margin-right: 25px;
+}
+
+.loadMoreMsg_wrapper {
+  text-align: center;
+  margin: 5px;
 }

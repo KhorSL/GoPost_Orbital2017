@@ -6,7 +6,6 @@ import '/imports/ui/lib/bootstrap.css';
 import '/imports/ui/lib/bootstrap-tokenfield.css';
 import '/imports/ui/lib/fullcalendar.css';
 import '/imports/ui/lib/bootstrap-datetimepicker.css';
-import '/imports/ui/lib/cropper.css';
 import '/imports/ui/lib/croppie.css';
 
 //Import to load templates

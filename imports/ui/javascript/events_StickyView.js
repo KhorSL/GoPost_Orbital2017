@@ -26,10 +26,32 @@ Template.events_StickyView.helpers({
   		return false;
   	}
   },
+  hasSubscribed: function(){
+    //var currFollowers = this.FollowingList;
+    //var currFollowers = Users.find({User: Meteor.userId()}).fetch()[0].FollowingList; //Is this the right way?
+  
+    var owner = this.owner;
+    var currFollowers = Users.find({"User":Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
+    if(currFollowers.length > 0) {
+      currFollowers = _.flatten(currFollowers);
+      var q = _.find(currFollowers, function(id){return id===owner});
+      if(q == owner) {
+        return true;
+      }
+    } 
+    return false;
+  },
   event_Liked: function() {
     return Events.findOne({_id: this._id});
     /*Non Reactive Sort with Reactive Data: 
     https://stackoverflow.com/questions/27125046/how-to-access-another-collection-by-id-in-meteor-template*/
+  },
+  isOwner: function() {
+    if(this.owner === Meteor.userId()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 });
 
@@ -37,5 +59,23 @@ Template.events_StickyView.events({
   'click #toggle-like': function(event) {
     var id = $(event.currentTarget).data( 'id' );
     Meteor.call("toggleLikes", id);
-  }
+  },
+  'click #subscribe':function(e){
+    e.preventDefault();
+    var id = this.owner;
+    Meteor.call("subscribe",id, function(error) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  },
+  'click #unsubscribe':function(e){
+    e.preventDefault();
+    var id = this.owner;
+    Meteor.call("unsubscribe",id, function(error) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  },
 });

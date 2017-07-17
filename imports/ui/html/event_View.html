@@ -5,6 +5,7 @@
 				<div class="col-md-12 col-xs-12">
 					<div class="view_Right">
 					{{#if isOwner}}
+						<button type="button" class="btn new_channel">Event Channel</button>
 		                <button id="{{this._id}}" class="update btn">Edit</button>
 		                <button class="delete btn">Remove</button>
 		            {{else}}
@@ -15,6 +16,11 @@
 								<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart-empty"></span>
 							{{/if}}
 						{{/if}}
+						{{#if hasSubscribed}} <!-- Toggle Subscription !-->
+                          <button class="btn btn-primary" type ="button" id ="unsubscribe"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Unsubscribe</button>
+                        {{else}}
+                          <button class="btn btn-primary" type ="button" id ="subscribe"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Subscribe</button>
+                        {{/if}}
 		            	<button id="{{owner}}" class="poster btn">Organizer Details</button>
 		            	<button id="{{this._id}}" class="signUp btn">Sign Up</button>
 		            {{/if}}
