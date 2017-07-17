@@ -17,7 +17,7 @@ https://bootsnipp.com/snippets/EkQe7
 Template.chatBoard.onCreated(function() {
 	let template = Template.instance();
 
-	template.subscribe("userEvents");
+	template.subscribe("events");
 
 	Session.set("sender", Meteor.userId());
 	Session.set("recever", "");
@@ -40,12 +40,8 @@ Template.chatBoard.onCreated(function() {
     	});
 
     	template.subscribe('userDetails_All', trig);
+    	template.subscribe('users_msg_count');
   	});
-
-  	Meteor.setTimeout((function() {
-		var dA = document.getElementById('chatArea');
-		dA.scrollTop = dA.scrollHeight;
-  	}), 500);
 });
 
 Template.chatBoard.onRendered(function() {
@@ -62,17 +58,24 @@ Template.chatBoard.onRendered(function() {
 });
 
 Template.chatBoard.onDestroyed(function() {
-	Session.set("chat_Target", "");
-	Session.set("chat_Channel", false);
+	delete Session.keys['channel','sender','recever','recever_details','trigger','search_Tag','query','chat_Target','chat_Channel'];
 });
 
 Template.chatBoard.helpers({
 	channels: function() {
 		var sender = Session.get("sender");
 
-		//Get all events I signed up for 
+		//Get all events I signed up for & Created by Me.
 		var signedups = Users.find({"User":sender}).fetch().map(function (obj) {return obj.SignUpEventList;});
-		signedups = _.flatten(signedups);
+		signedups = _.pluck(_.flatten(signedups), 'eventID');
+		var event_list = Events.find({
+			$or: [
+				{ "_id": {"$in" : signedups}, "channel" : {$ne: false} },
+				{ "owner": sender, "channel" : {$ne: false}}
+			]
+		}).fetch().map(function (obj) {return obj.title;});
+		/*
+		//Get all events I signed up for
 		var event_list = Events.find({
 			$and: [
 			 	{ "_id": {"$in" : signedups}},
@@ -88,7 +91,7 @@ Template.chatBoard.helpers({
 
 		//check if channel is created.
 		event_list = _.uniq(event_list.concat(event_list2)); 
-
+		*/
 		return event_list;
 	},
 	messages: function() {
@@ -103,10 +106,10 @@ Template.chatBoard.helpers({
 		//get user details based on list above
 		var convo_with = Users.find({"User": {"$in" : convo_list}});
 
-		//Setting Active li for first Message
-		if(convo_with.count() > 0) {
-			var chatTgt = Session.get("chat_Target"); //When redirected from user Dashboard
-			if(typeof(chatTgt) !== 'undefined' && chatTgt !== "") {
+		//Setting Active li for first Message. only when redirected from user's Dashboard
+		var chatTgt = Session.get("chat_Target"); 
+		if(typeof(chatTgt) !== 'undefined' && chatTgt !== "") {
+			if(convo_with.count() > 0) {
 				Session.set("recever", chatTgt.User);
 				Session.set("recever_details", chatTgt);
 			}
@@ -126,10 +129,10 @@ Template.chatBoard.helpers({
 					{ $and: [ {"owner" : sender}, {"to" : recever} ] },
 					{ $and: [ {"owner" : recever}, {"to" : sender} ] }
 				] 
-			}, {sort: {createdAt: 1}});
+			}, {sort: {timestamp: 1}});
 		} else {
 			//Display Channel Messages
-			return Messages.find({"channel" : channel}, {sort: {createdAt: 1}});
+			return Messages.find({"channel" : channel}, {sort: {timestamp: 1}});
 		}
 	},
 	friend: function() {
@@ -143,6 +146,59 @@ Template.chatBoard.helpers({
 			sub_list = _.flatten(sub_list);
 			return Users.find({"User": {"$in" : sub_list}}).fetch();
 		}
+	},
+	msgCount: function() {
+		var sender = Session.get("sender");
+		var recever = Session.get('recever');
+		var chatID = this.User;
+
+		if(recever === chatID) {
+			//setting Message Count to 0 if user reads the message.
+			Meteor.call("emptyMessageCount", sender, chatID, function(error) {
+				if(error) {
+					console.log(error.reason);
+				}
+			});
+			return false;
+		} else {
+			//https://stackoverflow.com/questions/18975131/retrieving-specific-field-from-meteor-collection-document-into-js-file-and-strip
+			return MessagesCount.findOne({
+				chatID: sender, lastMsgBy_ID: chatID
+			});
+		}
+		return false;
+	},
+	msgCount_channel: function() {
+		var sender = Session.get("sender");
+		var channel = Session.get('channel');
+		var chatID = this.valueOf(); //https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor
+		var signOrCreated = true; //true = signup, false = created
+
+		//Get all events with channel created. 
+		var signup_List = _.flatten(Users.find({"User": sender}).fetch().map(function(obj) {return obj.SignUpEventList}));
+		var channel_Obj = _.findWhere(signup_List, {eventTitle: chatID});
+		if(!channel_Obj) {
+			var created_list = _.flatten(Users.find({"User": sender}).fetch().map(function(obj) {return obj.CreatedEventList}));
+			channel_Obj = _.findWhere(created_list, {eventTitle: chatID});
+			signOrCreated = false;
+		}
+		var message = MessagesCount.findOne({chatID: chatID});
+
+		if(channel === chatID) {
+			//Update timestamp and count when read.
+			Meteor.call("update_Channel_msg_Count", signOrCreated, sender, chatID, message.timestamp, message.count, function(error) {
+				if(error) {
+					console.log(error.reason);
+				}
+			});
+			return false;
+		}
+
+		if(message) {
+			return (message.count - channel_Obj.lastRead_Count);
+		} 
+
+		return false;
 	},
 	active: function() {
 		var channel = Session.get("channel");
@@ -211,6 +267,10 @@ Template.chatBoard.events({
 		Session.set("recever", this.User);
 		Session.set("recever_details", this);
 		Session.set("channel", "");
+		//Bring scrollbar to the bottom.
+		Meteor.setTimeout((function() {
+			updateScroll();
+  		}), 500);
 	},
 	'click #searchBut': function(e) {
 		e.preventDefault();
@@ -249,6 +309,7 @@ Template.chatBoard.events({
 			channel: channel,
 			to: to,
 			from: from,
+			ts: new Date(),
 			msg: msg
 		}
 
@@ -260,6 +321,7 @@ Template.chatBoard.events({
 					if(error) {
 						console.log(error.reason);
 					} else {
+						Meteor.call("addMessageCount", details);
 						$("#type_msg").val("");
 						updateScroll();
 					}

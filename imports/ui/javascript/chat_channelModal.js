@@ -7,12 +7,13 @@ import '../css/chatBoard.css';
 Template.chat_channelModal.helpers({
 	usr_events: function() {
 		var events_id = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.CreatedEventList;});
-		events_id = _.flatten(events_id);
+		events_id = _.pluck(_.flatten(events_id), 'eventID');
 		return Events.find({
 			$and: [
 			 	{"_id": {"$in" : events_id}},
 				{ "channel" : {$ne: true}}
-			]}).fetch();
+			]
+		}).fetch();
 	}
 });
 

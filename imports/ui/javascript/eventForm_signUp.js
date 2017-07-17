@@ -147,8 +147,9 @@ if(Meteor.isClient) {
 			});
 
 			var eventId = this.eventId;
+			var event_title = this.eventTitle;
 
-			Meteor.call("addSignUpCustom", eventId, userResponseList, function(error, result) {
+			Meteor.call("addSignUpCustom", eventId, event_title, userResponseList, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {
@@ -212,8 +213,9 @@ if(Meteor.isClient) {
 			if(this.additional) { var additional = event.target.additional.value; }
 			
 			var eventId = this.eventId;
+			var event_title = this.eventTitle;
 
-			Meteor.call("addSignUp", eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional, function(error, result) {
+			Meteor.call("addSignUp", eventId, event_title, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional, function(error, result) {
 				if(error) {
 					console.log(error.reason);
 				} else {

@@ -311,20 +311,50 @@ UserSchema = new SimpleSchema({
 		type: String
 	},
 	CreatedEventList: {
-		type: Array,
+		type: [Object],
 		label:"User own created Events",
 		defaultValue: []
 	},
-	"CreatedEventList.$": {
-	    type: String
+	"CreatedEventList.$.eventID": {
+	    type: String,
+	    label: "User Created Event ID"
+	},
+	"CreatedEventList.$.eventTitle": {
+	    type: String,
+	    label: "User Created Event Title"
+	},
+	"CreatedEventList.$.lastRead": {
+		type: Date,
+		label: "the last time the message in channel was read (Created).",
+		optional: true
+	},
+	"CreatedEventList.$.lastRead_Count": {
+		type: Number,
+		label: "the last count the message in channel was unread (Created).",
+		defaultValue: 0
 	},
 	SignUpEventList: {
-		type: Array,
+		type: [Object],
 		label: "User's signed up Events",
 		defaultValue: []
 	},
-	"SignUpEventList.$": {
-	    type: String
+	"SignUpEventList.$.eventID": {
+	    type: String,
+	    label: "User Signed up Event ID"
+	},
+	"SignUpEventList.$.eventTitle": {
+	    type: String,
+	    label: "User Signed up Event Title"
+	},
+	"SignUpEventList.$.lastRead": {
+	    type: Date,
+	    label: "the last time the message in channel was read (signedUp).",
+	    optional: true
+	},
+	"SignUpEventList.$.lastRead_Count": {
+		type: Number,
+		label: "the last count the message in channel was unread (signedUp).",
+		defaultValue: 0
 	}
 });
 
@@ -639,11 +669,41 @@ MessagesSchema = new SimpleSchema({
   	}
 });
 
+MsgCountSchema = new SimpleSchema({
+	chatID: {
+		type: String,
+		label: "Chat ID"
+	},
+	count: {
+		type: Number,
+		label: "Number of newly received message",
+		defaultValue: 0,
+		optional: true
+	},
+	lastMsg: {
+		type: String,
+		label: "The content of the last message sent in chat"
+	},
+	lastMsgBy: {
+		type: String,
+		label: "The username of the last message sent in chat"
+	},
+	lastMsgBy_ID: {
+		type: String,
+		label: "The userID of the last message sent in chat"
+	},
+	timestamp: {
+		type: Date,
+		label: "The date and time the last message was sent"
+	}
+});
+
 RegistrationForms.attachSchema(RegistrationFormsSchema);
 Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 Cal_Events.attachSchema(Cal_EventsSchema);
 Messages.attachSchema(MessagesSchema);
+MessagesCount.attachSchema(MsgCountSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
@@ -725,7 +785,7 @@ if(Meteor.isServer) {
 	//This is for user created events
 	Meteor.publish("events_Calendar_create", function(curUser) {
 		var event_ids = Users.find({"User": curUser}).map(function (obj) {return obj.CreatedEventList});
-		event_ids = _.flatten(event_ids);
+		event_ids = _.pluck(_.flatten(event_ids), 'eventID');
 		var posterEvents = Events.find({"_id" : {$in : event_ids}});
 
 		return posterEvents;
@@ -784,6 +844,10 @@ if(Meteor.isServer) {
 			return Messages.find({"channel" : channel});
 		}
 	});
+
+	Meteor.publish("users_msg_count", function() {
+		return MessagesCount.find();
+	})
 }
 
 Meteor.methods({
@@ -798,10 +862,17 @@ Meteor.methods({
 		}
 	},
 
-	addEvent_User: function(event_id) {
-		return Users.update({"User" : Meteor.userId()}, {"$addToSet" : {
-			"CreatedEventList" : event_id
-		}});
+	addEvent_User: function(event_id, title) {
+		return Users.update({"User" : Meteor.userId()}, {
+			"$addToSet" : {
+				"CreatedEventList" : {
+					"eventID" : event_id,
+					"eventTitle" : title,
+					"lastRead" : null,
+					"lastRead_Count" : 0
+				}
+			}
+		});
 		/*Credits http://tgrall.github.io/blog/2015/04/21/mongodb-playing-with-arrays/*/
 	},
 
@@ -846,10 +917,17 @@ Meteor.methods({
 		});
 	},
 
-	addSignUpCustom: function(eventId, userResponseList) {
-		Users.update({User: Meteor.userId()}, {$addToSet: {
-			SignUpEventList: eventId
-		}});
+	addSignUpCustom: function(eventId, eventTitle, userResponseList) {
+		Users.update({User: Meteor.userId()}, {
+			$addToSet: {
+				SignUpEventList: {
+					"eventID" : eventId,
+					"eventTitle" : eventTitle,
+					"lastRead" : null,
+					"lastRead_Count" : 0
+				}
+			}
+		});
 
 		// One point of check if current user sign up before
 		var priorSubmission = SignUps.findOne({ $and: [
@@ -867,15 +945,22 @@ Meteor.methods({
 			participantId: Meteor.userId(),
 			createdAt: new Date(),
 			eventId: eventId,
+			eventTitle: eventTitle,
 			confirmation: false,
 			userResponseList: userResponseList
 		});
 	},
 
-	addSignUp: function(eventId, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional) {
+	addSignUp: function(eventId, eventTitle, firstName, lastName, nric, matric, gender, nationality, address, city, region, postal, faculty, major, mobile, email, dietaryPref, bloodType, allergies, shirtSize_SML, shirtSize_123, nok_rs, nok_firstName, nok_lastName, nok_mobile, nok_address, additional) {
 		Users.update({User: Meteor.userId()}, {$addToSet: {
-			SignUpEventList: eventId
-		}});
+				SignUpEventList: {
+					"eventID" : eventId,
+					"eventTitle" : eventTitle,
+					"lastRead" : null,
+					"lastRead_Count" : 0
+				}
+			}
+		});
 		//console.log((Users.findOne({User: Meteor.userId()})));
 		// One point of check if current user sign up before
 		var priorSubmission = SignUps.findOne({ $and: [
@@ -893,6 +978,7 @@ Meteor.methods({
 			participantId: Meteor.userId(),
 			createdAt: new Date(),
 			eventId: eventId,
+			eventTitle: eventTitle,
 			firstName: firstName,
 			lastName: lastName,
 			nric: nric,
@@ -924,9 +1010,11 @@ Meteor.methods({
 
 	withdrawSignUp: function(submissionId, eventId) {
 		// Remove the eventId from SignUpEventList
-		Users.update({User: Meteor.userId()}, {$pull: 
-			{
-				SignUpEventList: eventId
+		Users.update({User: Meteor.userId()}, {
+			$pull: {
+				SignUpEventList: {
+					"eventID" : eventId
+				}
 			}
 		});
 
@@ -996,6 +1084,12 @@ Meteor.methods({
 			eventTitle: title
 		}});
 
+		Users.update({User: Meteor.userId(), "CreatedEventList.eventID" : id}, {
+			$set: {
+				"CreatedEventList.$.eventTitle" : title
+			}
+		})
+
 		Events.update(id, {$set: {
 			title: title,
 			description: description,
@@ -1017,9 +1111,11 @@ Meteor.methods({
 		Events.remove(id);
 
 		// Remove eventId from CreatedEventList
-		Users.update({User: Meteor.userId()}, {$pull: 
-			{
-				CreatedEventList: id
+		Users.update({User: Meteor.userId()}, {
+			$pull: {
+				CreatedEventList: {
+					"eventID" :	id
+				}
 			}
 		});
 
@@ -1127,20 +1223,82 @@ Meteor.methods({
 		});
   	},
 
+  	addMessageCount: function(details) {
+  		var chatID = details.to;
+  		if(details.channel !== "") {
+  			chatID = details.channel;
+  			return MessagesCount.update({chatID: chatID}, {
+	  			$set:{
+	  				chatID: chatID,
+	  				lastMsg: details.msg,
+					lastMsgBy: Meteor.user().username,
+					lastMsgBy_ID: details.from,
+					timestamp: details.ts 
+	  			},
+				$inc: { count: +1 }
+	  		}, {upsert: true});
+  		} else {
+	  		return MessagesCount.update({chatID: chatID, lastMsgBy_ID: details.from}, {
+	  			$set:{
+	  				chatID: chatID,
+	  				lastMsg: details.msg,
+					lastMsgBy: Meteor.user().username,
+					lastMsgBy_ID: details.from,
+					timestamp: details.ts 
+	  			},
+				$inc: { count: +1 }
+	  		}, {upsert: true});
+	  	}
+  	},
+
+  	emptyMessageCount: function(userID,fromID) {
+  		return MessagesCount.remove({chatID: userID, lastMsgBy_ID: fromID});
+  	},
+
+  	update_Channel_msg_Count: function(signOrCreated, userID, eventID, lastRead, lastRead_Count) {
+  		if(signOrCreated) {
+  			return Users.update({User: userID, "SignUpEventList.eventTitle" : eventID}, {
+				$set: {
+					"SignUpEventList.$.lastRead" : lastRead,
+					"SignUpEventList.$.lastRead_Count" : lastRead_Count
+				}
+			});
+  		} else {
+  			return Users.update({User: userID, "CreatedEventList.eventTitle" : eventID}, {
+				$set: {
+					"CreatedEventList.$.lastRead" : lastRead,
+					"CreatedEventList.$.lastRead_Count" : lastRead_Count
+				}
+			});
+  		}
+  	},
+
   	startChannel: function(curUser, event_id, event_title, channel) {
 		Events.update({"_id": event_id},{"$set" : {
 			"channel" : channel
 		}});
 
 		var msg = "New channel have been created.";
+		var ts = new Date();
 
-		return Messages.insert({
+		Messages.insert({
 			channel: event_title,
 			to: "",
 			owner: curUser,
-			timestamp: new Date(),
+			timestamp: ts,
 			message: msg
 		});
+
+		return MessagesCount.update({chatID: event_title, lastMsgBy_ID: curUser}, {
+  			$set:{
+  				chatID: event_title,
+  				lastMsg: msg,
+				lastMsgBy: Meteor.user().username,
+				lastMsgBy_ID: curUser,
+				timestamp: ts 
+  			},
+			$inc: { count: +1 }
+  		}, {upsert: true});
   	}
 
 });

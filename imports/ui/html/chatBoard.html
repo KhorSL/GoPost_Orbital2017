@@ -40,9 +40,9 @@
 			                     		<div class="chat-body clearfix">
 			                        		<div class="header_sec">
 			                           			<strong class="primary-font">{{Username}}</strong> 
-			                        		</div>
-			                        		<div class="contact_sec">
-			                           			<span class="badge pull-right">3</span>
+			                           			{{#with msgCount}}
+			                           			<span class="badge pull-right">{{count}}</span>
+			                           			{{/with}}
 			                        		</div>
 			                     		</div>
 		                  			</li>
@@ -67,7 +67,10 @@
 			                     			
 			                     		<div class="chat-body clearfix">
 			                        		<div class="header_sec">
-			                           			<strong class="primary-font">{{Username}}</strong> 
+			                           			<strong class="primary-font">{{Username}}</strong>
+			                           			{{#with msgCount}}
+			                           			<span class="badge pull-right">{{count}}</span>
+			                           			{{/with}} 
 			                        		</div>
 			                     		</div>
 		                  			</li>
@@ -91,7 +94,10 @@
 						    	{{#each channels}}
 		                  			<li class="left clearfix {{active}}" id="startChannel">
 			                        	<div class="header_sec">
-			                           		<strong class="primary-font">{{this}}</strong> 
+			                           		<strong class="primary-font">{{this}}</strong>
+			                           		{{#with msgCount_channel}}
+			                           		<span class="badge pull-right">{{this}}</span>
+			                           		{{/with}} 
 			                        	</div>
 		                  			</li>
                   				{{else}}

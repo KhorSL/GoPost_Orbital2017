@@ -28,14 +28,14 @@
                   <label for="start">Event Starts</label>
                   <div class="input-group" id="datetimepicker_start">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="set-due-date form-control" type="text" name="cal_start" id="start" value="{{event.start}}" onkeydown="return false">
+                    <input class="set-due-date form-control" type="text" name="cal_start" id="start" value="{{formatDate event.start}}" onkeydown="return false">
                   </div>
                 </div>
                 <div class="col-xs-12 col-sm-6">
                   <label for="end">Event End</label>
                   <div class="input-group" id="datetimepicker_end">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input class="set-due-date form-control" type="text" name="cal_end" id="end" value="{{event.end}}" onkeydown="return false">
+                    <input class="set-due-date form-control" type="text" name="cal_end" id="end" value="{{formatDate event.end}}" onkeydown="return false">
                   </div>
                 </div>
               </div> <!-- end of row -->
@@ -43,13 +43,13 @@
             <div class="form-group">
               <div class="row">
                 <div class="col-xs-12 col-sm-12">
-                  <label for="title">Additional Notes</label>
-                  <textarea class="form-control" name="cal_notes" form="add-edit-calendar-form" value="{{event.notes}}"></textarea>
+                  <label for="cal_notes">Additional Notes</label>
+                  <textarea class="form-control" name="cal_notes" value="{{event.notes}}"></textarea>
                 </div>
               </div> <!-- end of row -->
             </div> <!-- end of form-group -->
             <div class="form-group">
-              <label for="title">Label Colour</label>
+              <label for="priority">Label Colour</label>
                     <div class="row"> <!-- Radio Buttons -->
                       <div class="col-xs-12 col-sm-2">
                         <div class="radio">

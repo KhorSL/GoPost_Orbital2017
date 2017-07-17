@@ -103,7 +103,12 @@ Template.myEvents.helpers({
 	},
 
   skipCount: function() {
-    return (Template.instance().skipCount.get() / 6) + 1;
+    var max = Session.get("max");
+    if(max === 0) {
+      return 0;
+    } else {
+      return (Template.instance().skipCount.get() / 6) + 1;
+    }
   },
 
   max: function() {

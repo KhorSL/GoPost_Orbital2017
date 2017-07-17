@@ -9,6 +9,10 @@ Template.calendar_modal.onCreated(function() {
   Session.set('allDay', false);
 });
 
+Template.calendar_modal.onDestroyed(function (){
+  delete Session.keys['allDay'];
+});
+
 Template.calendar_modal.onRendered(function() {
   var dateToday = new Date();
 
@@ -75,7 +79,14 @@ Template.calendar_modal.helpers({
     } else {
       return "";
     }
-  }
+  },
+  formatDate: function(date) {
+    if(date) {
+      return moment(date).format('MM/DD/YYYY h:mm A');
+    } else {
+      return false;
+    }
+  },
 });
 
 Template.calendar_modal.events({
@@ -86,12 +97,12 @@ Template.calendar_modal.events({
     let calendarModal = Session.get('calendarModal') , 
       submitType = calendarModal.type === 'edit' ? 'editCalendarEvents' : 'addCalendarEvents',
         calendarItem  = {
-          title: event.target.cal_title.value,    //template.find( '[name="title"]' ).value
-          start: event.target.cal_start.value,    //template.find( '[name="start"]' ).value
-          end: event.target.cal_end.value,        //template.find( '[name="end"]' ).value
+          title: event.target.cal_title.value,              //template.find( '[name="title"]' ).value
+          start: new Date(event.target.cal_start.value),    //template.find( '[name="start"]' ).value
+          end: new Date(event.target.cal_end.value),        //template.find( '[name="end"]' ).value
           allDay: event.target.cal_allDaY.checked,
-          className: event.target.priority.value,
-          notes: event.target.cal_notes.value  //template.find( '[name="notes"]' ).value
+          notes: event.target.cal_notes.value,              //template.find( '[name="notes"]' ).value
+          className: event.target.priority.value
         };
 
     if ( submitType === 'editCalendarEvents' ) {

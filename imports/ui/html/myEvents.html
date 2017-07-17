@@ -34,6 +34,10 @@
                       <div class="row myEvent_wrapper">
                         {{#each userEvents}}
                           {{> events_GridView}}
+                        {{else}}
+                          <div class="col-sm-12">
+                            <p class="alert alert-warning">No Events Found.</p>
+                          </div>
                         {{/each}}
               				</div>
               			</div> <!-- end of box -->

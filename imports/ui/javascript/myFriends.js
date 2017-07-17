@@ -46,7 +46,12 @@ Template.myFriends.helpers({
 		});
 	},
 	skipCount: function() {
-    	return (Template.instance().skipCount.get() / 6) + 1;
+    	var max = Session.get("max");
+	    if(max === 0) {
+	      	return 0;
+	    } else {
+	      	return (Template.instance().skipCount.get() / 6) + 1;
+	    }
   	},
 	max: function() {
     	var max = Session.get("max");
@@ -55,18 +60,18 @@ Template.myFriends.helpers({
   	disablePrev: function() {
 	    var skipCount = Template.instance().skipCount.get();
 	    if(skipCount === 0) {
-	      return 'disabled';
+	      	return 'disabled';
 	    } else {
-	      return "";
+	      	return "";
 	    }
   	}, 
   	disableNext: function() {
 	    var skipCount = Template.instance().skipCount.get();
 	    var max = Session.get("max");
 	    if((skipCount+6) >= max) {
-	      return 'disabled';
+	      	return 'disabled';
 	    } else {
-	      return "";
+	      	return "";
 	    }
   	}	
 });
