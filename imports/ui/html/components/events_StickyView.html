@@ -51,6 +51,16 @@
                         <span role="button" id="subscribe" class="glyphicon glyphicon-thumbs-up" aria-hidden="true">Subscribe</span>
                       {{/if}}
                     {{/unless}}
+                    &nbsp;
+                    {{#unless isOwner}}
+                      {{#if regStatus "success"}} 
+                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="Successful Registration">Success</span>
+                      {{else if regStatus "rejected"}}
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="Unsuccessful Registration">Unsuccessful</span>
+                      {{else if regStatus "pending"}}
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Registration pending confirmation">Pending</span>
+                      {{/if}}
+                    {{/unless}}
                   {{/with}}
                 </p>
               </div> <!--end of noteFoot -->

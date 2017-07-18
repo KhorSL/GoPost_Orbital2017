@@ -52,6 +52,22 @@ Template.events_StickyView.helpers({
     } else {
       return false;
     }
+  },
+  //This function check if current user sign up status for the event
+  regStatus: function(statusCheck) {
+    var id = this._id
+    var currEvent = SignUps.findOne({$and: [
+        {participantId: Meteor.userId()},
+        {eventId: id},
+        {status: statusCheck}
+      ]
+    });
+
+    if(currEvent == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 });
 

@@ -26,13 +26,15 @@ Router.route('/download-data/:file', function() {
 				  	title: 'Submission Time'
 				  },
 				  {
-				  	key: "confirmation",
+				  	key: "status",
 				  	title: 'Registration Status',
 				  	transform: function(val, doc) {
-				  		if(val) { 
-				  			return "confirmed";
-				  		} else  {
-				  			return "unconfirmed";
+				  		if(val == "success") { 
+				  			return "success";
+				  		} else if(val == "pending") {
+				  			return "pending";
+				  		} else {
+				  			return "rejected";
 				  		}
 				  	}
 				  }
@@ -69,13 +71,15 @@ Router.route('/download-data/:file', function() {
 				  	title: 'Submission Time'
 				  },
 				  {
-				  	key: "confirmation",
+				  	key: "status",
 				  	title: 'Registration Status',
 				  	transform: function(val, doc) {
-				  		if(val) { 
-				  			return "confirmed";
-				  		} else  {
-				  			return "unconfirmed";
+				  		if(val == "success") { 
+				  			return "success";
+				  		} else if(val == "pending") {
+				  			return "pending";
+				  		} else {
+				  			return "rejected";
 				  		}
 				  	}
 				  }
@@ -946,7 +950,7 @@ Meteor.methods({
 			createdAt: new Date(),
 			eventId: eventId,
 			eventTitle: eventTitle,
-			confirmation: false,
+			status: "pending",
 			userResponseList: userResponseList
 		});
 	},
@@ -1004,7 +1008,7 @@ Meteor.methods({
 			nok_mobile: nok_mobile,
 			nok_address: nok_address,
 			additional: additional,
-			confirmation: false
+			status: "pending"
 		});
 	},
 
@@ -1024,7 +1028,11 @@ Meteor.methods({
 	},
 
 	acceptSignUp: function(submissionId) {
-		SignUps.update({_id: submissionId}, {$set: {confirmation: true}});
+		SignUps.update({_id: submissionId}, {$set: {status: "success"}});
+	},
+
+	rejectSignUp: function(submissionId) {
+		SignUps.update({_id: submissionId}, {$set: {status: "rejected"}});
 	},
 
 	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, contact, img){

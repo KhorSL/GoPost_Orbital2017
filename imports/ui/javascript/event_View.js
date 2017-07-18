@@ -36,6 +36,20 @@ Template.event_View.helpers({
   isOwner: function() {
     //console.log(this.owner);
 	  return this.owner === Meteor.userId();
+  },
+  hasSignUp: function() {
+    var id = this._id;
+    var currEvent = SignUps.findOne({$and: [
+        {participantId: Meteor.userId()},
+        {eventId: id}
+      ]
+    });
+
+    if(currEvent == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
  });
 

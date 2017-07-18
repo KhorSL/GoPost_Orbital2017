@@ -11,7 +11,7 @@
 		<!-- End of Custom Reg Form -->
 		{{/if}}
 
-	{{else if checkConfirmation this.eventId}}
+	{{else if checkConfirmation this.eventId "success"}}
 	<div class="panel panel-success">
 		<div class="panel-heading">
 			<h1>Successfully registered for {{this.eventTitle}}!</h1>
@@ -23,7 +23,7 @@
 			<button class="btn btn-warning" id="withdraw"> Withdraw </button>
 		</div>
 	</div>
-	{{else}}
+	{{else if checkConfirmation this.eventId "pending"}}
 	<div class="panel panel-info">
 		<div class="panel-heading">
 			<h1>Thank you for signing up for {{this.eventTitle}}!</h1>
@@ -33,6 +33,15 @@
 		</div>
 		<div class="panel-footer">
 			<button class="btn btn-warning" id="withdraw"> Withdraw </button>
+		</div>
+	</div>
+	{{else}}
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h1>Your registration for {{this.eventTitle}} has been declined by the event organiser.</h1>
+		</div>
+		<div class="panel-body">
+			<p> Thank you for your patience. However, we regret to inform you that your registration for the event was unsuccessful. Please contact the event organiser for the details.</p>
 		</div>
 	</div>
 	{{/if}}

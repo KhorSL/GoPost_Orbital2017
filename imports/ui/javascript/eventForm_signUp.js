@@ -49,7 +49,7 @@ if(Meteor.isClient) {
 			}
 		},
 
-		// This function coheck if the current user had submitted the form
+		// This function checks if the current user had submitted the form
 		checkPriorSignup: function(eventId) {
 			var submission = SignUps.findOne({ $and: [
 				{eventId: eventId},
@@ -66,30 +66,19 @@ if(Meteor.isClient) {
 		},
 
 		//This function checks the confirmation status of the registration
-		checkConfirmation: function(eventId) {
+		checkConfirmation: function(eventId, statusCheck) {
 			var submission = SignUps.findOne({ $and: [
 				{eventId: eventId},
 				{participantId: Meteor.userId()},
-				{confirmation: false}
+				{status: statusCheck}
 				]
 			});
 
-			// if submission is pending submission != null
-			if(submission != null) {
+			// if submission == null, it differs from statusCheck
+			if(submission == null) {
 				return false;
 			} else {
-				submission = SignUps.findOne({ $and: [
-					{eventId: eventId},
-					{participantId: Meteor.userId()},
-					{confirmation: true}
-					]
-				});
-
-				if(submission != null) {
-					return true;
-				} else {
-					console.log("error"); // submission should be true if not false.
-				}
+				return true;
 			}
 		}
 	});

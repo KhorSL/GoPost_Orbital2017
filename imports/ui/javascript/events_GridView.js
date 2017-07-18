@@ -14,7 +14,63 @@ Template.events_GridView.helpers({
   	},
   	isOwner: function() {
 		return this.owner === Meteor.userId();
-	}
+	},
+
+  regCount: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({eventId: id});
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  successfulReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "success"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  rejectedReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "rejected"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  pendingReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "pending"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  }
 });
 
 Template.events_GridView.events({

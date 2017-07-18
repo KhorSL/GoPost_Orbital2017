@@ -7,9 +7,36 @@ import '/imports/ui/css/myEvents_registrationList.css';
 
 Template.myEvents_registrationList.onRendered(function() {
 	Meteor.subscribe('events');
+	Meteor.subscribe('signUps');
 });
 
 Template.myEvents_registrationList.helpers({
+	/* data for respective sign up status */
+	signUpsPending: function(id) {
+		return SignUps.find({$and: [
+				{eventId: id},
+				{status: "pending"}
+			]
+		});
+	},
+
+	signUpsAccepted: function(id) {
+		return SignUps.find({$and: [
+				{eventId: id},
+				{status: "success"}
+			]
+		});
+	},
+
+	signUpsRejected: function(id) {
+		return SignUps.find({$and: [
+				{eventId: id},
+				{status: "rejected"}
+			]
+		});
+	},
+	/* End of sign up status data */
+
 	participantUser: function() {
 		var participantId = this.participantId;
 		var currUser = Users.findOne({User: participantId});
@@ -17,13 +44,46 @@ Template.myEvents_registrationList.helpers({
 		return currUsername;
 	},
 
-	countEvents: function() {
+	/* Counting respective status total number of events */
+	countPendingEvents: function(id) {
 		var count = 0;
-		this.forEach(function(post) {
+		var currPendings = SignUps.find({$and: [
+				{eventId: id},
+				{status: "pending"}
+			]
+		});
+		currPendings.forEach(function(post) {
 			count++;
 		});
 		return count;
 	},
+
+	countAcceptedEvents: function(id) {
+		var count = 0;
+		var currPendings = SignUps.find({$and: [
+				{eventId: id},
+				{status: "success"}
+			]
+		});
+		currPendings.forEach(function(post) {
+			count++;
+		});
+		return count;
+	},
+
+	countRejectedEvents: function(id) {
+		var count = 0;
+		var currPendings = SignUps.find({$and: [
+				{eventId: id},
+				{status: "rejected"}
+			]
+		});
+		currPendings.forEach(function(post) {
+			count++;
+		});
+		return count;
+	},
+	/* End of count total number of events */
 
 	participantDp: function() {
 		var participantId = this.participantId;
@@ -48,22 +108,58 @@ Template.myEvents_registrationList.helpers({
 });
 
 Template.myEvents_registrationList.events({
-	'change #select-all': function(e) {
+	/* Select All Events for respective status */
+	'change #select-all-success': function(e) {
 		e.preventDefault();
 		var check = e.target.checked;
 		if(check) {
-			$('.participant').prop('checked', true);
+			$('.participant-success').prop('checked', true);
 		} else {
-			$('.participant').prop('checked', false);
+			$('.participant-success').prop('checked', false);
 		}
 		//$('.participant').prop('checked', !$('.participant').prop('checked'));
 	},
 
-	'change :checkbox': function(e) {
+	'change #select-all-pending': function(e) {
 		e.preventDefault();
-		var numChecked = $('.participant').filter(':checked').length;
-		$('#count-checkboxes').text(numChecked);
+		var check = e.target.checked;
+		if(check) {
+			$('.participant-pending').prop('checked', true);
+		} else {
+			$('.participant-pending').prop('checked', false);
+		}
 	},
+
+	'change #select-all-rejected': function(e) {
+		e.preventDefault();
+		var check = e.target.checked;
+		if(check) {
+			$('.participant-rejected').prop('checked', true);
+		} else {
+			$('.participant-rejected').prop('checked', false);
+		}
+	},
+	/* End of select all events */
+
+	/* Count number of checkboxes selected */
+	'change :checkbox, change .participant-rejected, change #select-all-rejected': function(e) {
+		e.preventDefault();
+		var numChecked = $('.participant-rejected').filter(':checked').length;
+		$('#count-checkboxes-rejected').text(numChecked);
+	},
+
+	'change :checkbox, change .participant-pending, change #select-all-pending': function(e) {
+		e.preventDefault();
+		var numChecked = $('.participant-pending').filter(':checked').length;
+		$('#count-checkboxes-pending').text(numChecked);
+	},
+
+	'change :checkbox, change .participant-success, change #select-all-success': function(e) {
+		e.preventDefault();
+		var numChecked = $('.participant-success').filter(':checked').length;
+		$('#count-checkboxes-success').text(numChecked);
+	},
+	/* End of count number of checkboxes selected */
 
 	'click #to_profile': function(e) {
 		e.preventDefault();
@@ -71,14 +167,10 @@ Template.myEvents_registrationList.events({
 		window.open(Router.url("dashBoard", {owner: participantId}));
 	},
 
-	'mouseover #to_profile': function(e) {
+	/* Buttons to change the status */
+	'click #accept-pending': function(e) {
 		e.preventDefault();
-		//console.log("enter: " + this.participantId);
-	},
-
-	'click #accept': function(e) {
-		e.preventDefault();
-		$('input:checked.participant').each(function() {
+		$('input:checked.participant-pending').each(function() {
 			var submissionId = $(this).data('id');
 			Meteor.call("acceptSignUp", submissionId, function(error, result) {
 				if(error) {
@@ -86,5 +178,48 @@ Template.myEvents_registrationList.events({
 				}
 			});
 		});
+	},
+
+	'click #reject-pending': function(e) {
+		e.preventDefault();
+		$('input:checked.participant-pending').each(function() {
+			var submissionId = $(this).data('id');
+			if(!confirm("You are about to decline the selected registrations. Are you sure?")) {
+				return false;
+			}
+			Meteor.call("rejectSignUp", submissionId, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				}
+			});
+		});
+	},
+
+	'click #accept-rejected': function(e) {
+		e.preventDefault();
+		$('input:checked.participant-rejected').each(function() {
+			var submissionId = $(this).data('id');
+			Meteor.call("acceptSignUp", submissionId, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				}
+			});
+		});
+	},
+
+	'click #reject-success': function(e) {
+		e.preventDefault();
+		$('input:checked.participant-success').each(function() {
+			var submissionId = $(this).data('id');
+			if(!confirm("You are about to decline the selected registrations. Are you sure?")) {
+				return false;
+			}
+			Meteor.call("rejectSignUp", submissionId, function(error, result) {
+				if(error) {
+					console.log(error.reason);
+				}
+			});
+		});
 	}
+	/* End of buttons to change the statuses*/
 });

@@ -64,11 +64,8 @@ Router.route('/regList/:_id', {
   template: 'myEvents_registrationList',
   layoutTemplate: 'layout',
   data: function () {
-    // return a cursor of documents that contains the eventId
-    return SignUps.find({$and: [
-      {eventId: this.params._id},
-      {confirmation: false}
-      ]});
+    // return event id for easy access
+    return this.params._id;
   }
 });
 

@@ -22,7 +22,11 @@
                           <button class="btn btn-primary" type ="button" id ="subscribe"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Subscribe</button>
                         {{/if}}
 		            	<button id="{{owner}}" class="poster btn">Organizer Details</button>
-		            	<button id="{{this._id}}" class="signUp btn">Sign Up</button>
+		            	{{#if hasSignUp}}
+		            		<button id="{{this._id}}" class="signUp btn">Check Status</button>
+		            	{{else}}
+		            		<button id="{{this._id}}" class="signUp btn">Sign Up</button>
+		            	{{/if}}
 		            {{/if}}
 		            </div>
 				</div>
