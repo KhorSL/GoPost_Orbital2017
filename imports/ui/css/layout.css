@@ -22,3 +22,13 @@
 .lay_brand {
   padding: 0px 0px 0px 15px;
 }
+
+/*CSS for verify Account Page*/
+.navbar_verify {
+  background-color: #FF8400; 
+  border-color: #e7e7e7;
+}
+
+.bottom_border {
+  padding:10px;
+}

@@ -25,6 +25,7 @@ import '/imports/ui/javascript/layout.js';
 import '/imports/ui/javascript/settings.js';
 import '/imports/ui/javascript/eventForm_RegistrationForm.js';
 import '/imports/ui/javascript/eventForm_signUp.js';
+import '/imports/ui/javascript/verify_AccPage.js';
 
 //Import to load routes
 import './routes/routes.js';

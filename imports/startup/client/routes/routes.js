@@ -90,16 +90,6 @@ Router.route('/create-event', {
   layoutTemplate: "layout"
 });
 
-// Prevent unauthorised access
-Router.onBeforeAction(function () {
-    if  (!Meteor.userId() && !Meteor.loggingIn()) {
-        this.redirect('landing');
-        this.stop();
-    } else {
-        this.next();
-    }
-},{except: ['landing'] });
-
 Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
@@ -116,6 +106,15 @@ Router.route('/update-event/:_id', {
   }
 });
 
+Router.route('/signUp/:_id', {
+  name: 'sign-up',
+  template: 'eventForm_signUp',
+  layoutTemplate: 'layout',
+  data: function () {
+    return RegistrationForms.findOne({eventId: this.params._id});
+  },
+});
+
 Router.route('/myFriends', {
   name: 'myFriends',
   template: 'myFriends',
@@ -128,11 +127,28 @@ Router.route('/settings', {
   layoutTemplate: 'layout'
 });
 
-Router.route('/signUp/:_id', {
-  name: 'sign-up',
-  template: 'eventForm_signUp',
-  layoutTemplate: 'layout',
-  data: function () {
-    return RegistrationForms.findOne({eventId: this.params._id});
-  },
+Router.route('/verify_AccPage', {
+  name: 'verify_AccPage',
+  template: 'verify_AccPage',
+  onBeforeAction: function() {
+    if(Meteor.user()) {
+      if(Meteor.user().emails[0].verified) {
+        this.redirect("bulletinBoard");
+      } else {
+        this.next();
+      }
+    } else {
+      this.next();
+    }
+  }
 });
+
+//Prevent unauthorised access
+Router.onBeforeAction(function () {
+  if (!Meteor.userId() && !Meteor.loggingIn()) {
+    this.redirect('landing');
+    this.stop();
+  } else {
+    this.next();
+  }
+},{except: ['landing','verify_AccPage'] });

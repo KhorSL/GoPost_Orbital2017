@@ -5,6 +5,7 @@ import '../html/landing.html';
 import '../css/landing.css';
 import './loginPage.js';
 import './registerPage.js';
+import './forgetPasswordPage.js';
 
 Template.landing.onCreated(function() {
   var template = Template.instance();
@@ -36,13 +37,22 @@ Template.landing.events({
   'click #memberNo': function(e) {
     e.preventDefault();
     $('#loginModal').modal('hide');
+    $('#forgetPasswordModal').modal('hide');
     $('#registerModal').modal('show');
   },
 
   'click #memberYes': function(e) {
     e.preventDefault();
     $('#registerModal').modal('hide');
+    $('#forgetPasswordModal').modal('hide');
     $('#loginModal').modal('show');
+  },
+
+  'click #forgetPassword': function(e) {
+    e.preventDefault();
+    $('#loginModal').modal('hide');
+    $('#registerModal').modal('hide');
+    $('#forgetPasswordModal').modal('show');
   }
 });
 

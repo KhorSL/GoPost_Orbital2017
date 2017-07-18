@@ -1,0 +1,99 @@
+<template name="verify_AccPage">
+	<div class="wrapper">
+		<!-- Navigation Bar Header -->
+		<nav class="navbar navbar_verify">
+			<div class='container-fluid'>
+				<div class="navbar-header">
+			      	<img alt='Brand' src='/images/Logo.png' height='50' width='50'/>
+			      	GoPost!
+			    </div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div id="content">
+				{{#if verifyCode}}
+			    <div class="outer">
+			      	<div class="inner">
+				      	<div class="row"> 
+	          				<div class="col-lg-12">
+	            				<div class="box">
+	              					<header><h5>Please Verify Your Account</h5></header>
+	              					<div class="row">
+                						<div class="col-lg-12 col-sm-12">
+                							<div class="dash_profile">
+                								<p>A verification code have been sent to your email. Please check your email for a message with your code. Your code is 10 characters long.</p>
+                								<label for="verification_Code">Enter Verification Code</label>
+                								<input type="text" class="form-control" name="verification_Code" placeholder="Enter code" maxlength="10" required>
+                								<br/>
+                								{{#if errorMessage}}
+                									<p class="alert-danger">{{errorMessage}}</p>
+                								{{/if}}
+                							</div>
+                						</div>
+                					</div>
+                					<hr>
+                					<div class="row">
+                						<div class="col-lg-12 col-sm-12">
+                							<div class="bottom_border">
+                								<button id="resend_btn" class="btn" type="button">Resend Code</button>
+                								<div class="pull-right">
+	                								<button id="continue_btn" class="btn" type="button">Continue</button>
+	                								<button id="cancel_btn" class="btn" type="button">Cancel</button>
+                								</div>
+                							</div>
+                						</div>
+                					</div>
+	              				</div>
+	              			</div>
+	              		</div>
+			      	</div> <!-- end of inner -->
+			    </div> <!-- end of outer -->
+			    {{/if}}
+
+			    {{#if resetPassword}}
+			    <div class="outer">
+			      	<div class="inner">
+			    		<div class="row"> 
+	          				<div class="col-lg-12">
+	            				<div class="box">
+	              					<header><h5>Reset Password</h5></header>
+	              					<div class="row">
+                						<div class="col-lg-12 col-sm-12">
+                							<div class="dash_profile">
+                								<p>Your new password have been sent to your email. Please enter the new password.</p>
+	                							<label for="verify_password">Current Password:</label>
+	                							<input type="text" class="form-control" name="verify_password" placeholder="Enter password sent in email." required>
+	                							<label for="new_password">Change New Password:</label>
+	                							<input type="text" class="form-control" name="new_password" placeholder="Enter new password" required>
+	                							<label for="new_password2">Confirm Change New Password:</label>
+	                							<input type="text" class="form-control" name="new_password2" placeholder="Enter confirm new password" required>
+	                							<br/>
+                								{{#if errorMessage}}
+                									<p class="alert-danger">{{errorMessage}}</p>
+                								{{/if}}
+                							</div>
+                						</div>
+                					</div>
+                					<hr>
+                					<div class="row">
+                						<div class="col-lg-12 col-sm-12">
+                							<div class="bottom_border">
+                								<button id="resend_pass_btn" class="btn" type="button">Resend Password</button>
+                								<div class="pull-right">
+	                								<button id="continue_pass_btn" class="btn" type="button">Continue</button>
+	                								<button id="cancel_btn" class="btn" type="button">Cancel</button>
+                								</div>
+                							</div>
+                						</div>
+                					</div>
+	              				</div>
+	              			</div>
+	              		</div>
+	              	</div> <!-- end of inner-->
+	            </div> <!-- end of outer-->
+	            {{/if}}
+			</div>
+		</div>
+	</div>
+</template>

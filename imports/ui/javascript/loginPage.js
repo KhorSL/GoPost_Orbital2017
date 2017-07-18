@@ -32,9 +32,8 @@ Template.loginPage.onRendered(function() {
           }
         } else {
           //Log in Successfully
-          $('#loginModal').modal('hide');
-          Session.set("viewToggle", false);
-          Router.go('bulletinBoard');
+          $('#loginModal').modal('hide'); 
+          Router.go('verify_AccPage');
         }
       });
     } //end of submitHandler

@@ -8,6 +8,7 @@ Template.layout.events({
   	'click .logout': function(e){
         e.preventDefault();
         Meteor.logout();
+        Session.clear();
         Router.go('/');
     },
    	'submit form' :function(e) {
