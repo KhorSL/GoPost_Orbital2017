@@ -109,6 +109,7 @@
   color: white;
   background-color: #FF8400;
   border-color: #FF8400;
+  margin-bottom:1px;
 }
 .btn-xl:active,
 .btn-xl.active,

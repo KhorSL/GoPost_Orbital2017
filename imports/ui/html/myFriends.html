@@ -7,22 +7,41 @@
               		<div class="col-lg-12">
               			<div class="box">	
               				<header>
-                        <h5>Subscribing</h5>
+                        <div class="dash_header_left">
+                          <label class="switch">
+                            <input type="checkbox" id="custom-default" name="custom_default"/>
+                            <div class="slider round"></div>
+                          </label>
+                        </div>
+                          {{#if toggleHeader}}
+                            <h5> Subscriptions (List of Users You Subscribed to).</h5>
+                          {{else}} 
+                            <h5> Subscribers (List of Users subscribing to You). </h5>
+                          {{/if}}
                           <div class="dash_header_right">
                           <button type="button" class="btn" id="prevPage" {{disablePrev}}>&larr; Older</button>
                           {{skipCount}} / {{max}} 
                           <button type="button" class="btn" id="nextPage" {{disableNext}}>Newer &rarr;</button>
                         </div>
                       </header>
-		                    <div class="row myEvent_wrapper">
-		                        {{#each subscribers}}
-		                          {{> users_GridView}}
-                            {{else}}
-                              <div class="col-sm-12">
-                                <p class="alert alert-warning">No Subscriptions Found.</p>
-                              </div>
-		                        {{/each}}
+		                  <div class="row myEvent_wrapper" id="defaultRF">
+		                    {{#each subscriptions}}
+		                      {{> users_GridView}}
+                        {{else}}
+                          <div class="col-sm-12">
+                            <p class="alert alert-warning">No Subscriptions Found.</p>
+                          </div>
+		                    {{/each}}
               				</div>
+                      <div class="row myEvent_wrapper" id="customRF" style="display:none">
+                        {{#each subscribers}}
+                          {{> users_GridView}}
+                        {{else}}
+                          <div class="col-sm-12">
+                            <p class="alert alert-warning">No Subscriptions Found.</p>
+                          </div>
+                        {{/each}}
+                      </div>
               			</div> <!-- end of box -->
               		</div> <!-- end of col-lg-12-->
               	</div> <!-- end of row -->

@@ -9,9 +9,11 @@ Template.myFriends.onCreated(function() {
 	let template = Template.instance();
 
   	template.skipCount = new ReactiveVar(0);
+  	template.toggle = new ReactiveVar(true); //toggle header
 
   	template.autorun( () => {
 	    var skipCount = template.skipCount.get();
+	    var toggle = template.toggle.get();
 	    //template.subscribe("userEvents_Page", skipCount);
 	    template.subscribe("user_subscriptions", Meteor.userId());
   	});
@@ -31,11 +33,26 @@ Template.myFriends.events({
   	'click #nextPage': function(e) {
 	    var skipCount = Template.instance().skipCount.get();
 	    Template.instance().skipCount.set(skipCount+6);
-  	}
+  	},
+  	'change #custom-default': function(event) {
+		event.preventDefault();
+
+		if(event.target.checked) {
+			Template.instance().skipCount.set(0);
+			Template.instance().toggle.set(false);
+			$('#defaultRF').hide('slow');
+			$('#customRF').fadeIn('slow');
+		} else {
+			Template.instance().skipCount.set(0);
+			Template.instance().toggle.set(true);
+			$('#customRF').hide('slow');
+			$('#defaultRF').fadeIn('slow');
+		}
+	}
 });
 
 Template.myFriends.helpers({
-	subscribers: function() {
+	subscriptions: function() {
 		var skipCount = Template.instance().skipCount.get();
 		var sub_list = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
 		sub_list = _.flatten(sub_list);
@@ -45,6 +62,19 @@ Template.myFriends.helpers({
       		skip: skipCount
 		});
 	},
+	subscribers: function() {
+	    var skipCount = Template.instance().skipCount.get();
+
+	    var subscribers = Users.find({"FollowingList": Meteor.userId()}, {
+	      limit: 6,
+	      skip: skipCount
+	    });
+	    Session.set("max",subscribers.count());
+	    return subscribers;
+  	},
+  	toggleHeader: function() {
+  		return Template.instance().toggle.get();
+  	},
 	skipCount: function() {
     	var max = Session.get("max");
 	    if(max === 0) {

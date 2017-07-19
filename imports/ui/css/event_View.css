@@ -26,6 +26,12 @@
 	background-color: white;
 }
 
+.participants_Frame {
+    border: 1px solid black;
+    padding: 20px;
+    background-color: white;
+}
+
 .corner_event { 
     position: relative;
     margin-bottom: 25px;
@@ -60,4 +66,23 @@
         -ms-transform: rotate(45deg);
          -o-transform: rotate(45deg);
             transform: rotate(45deg);
+}
+
+.panel-participants {
+  border-color: #FF8400;
+}
+.panel-participants > .panel-heading {
+  color: #fff;
+  background-color: #FF8400;
+  border-color: #FF8400;
+}
+.panel-participants > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: #FF8400;
+}
+.panel-participants > .panel-heading .badge {
+  color: #FF8400;
+  background-color: #fff;
+}
+.panel-participants > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: #FF8400;
 }

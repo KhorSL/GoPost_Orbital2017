@@ -8,14 +8,42 @@ import './dash_profilePic_modal.js';
 import './dash_profileEdit_modal.js';
 
 Template.dashBoard.onCreated(() => {
+  /*
   if (Router.current().params.owner === Meteor.userId() || Router.current().params.owner === undefined){ //User visiting his own profile
     Meteor.subscribe('userDetails_Cur', Meteor.userId());
   } else {
     Meteor.subscribe('userDetails_Cur',Router.current().params.owner);
     Meteor.subscribe('userDetails_Cur',Meteor.userId()); //Subscribe to both documents so that can do subscriptions
+  }*/
+
+  let template = Template.instance();
+
+  template.skipCount = new ReactiveVar(0);
+  template.max = new ReactiveVar(0);
+  template.currentTab = new ReactiveVar(0);
+  template.viewingThisOwner = new ReactiveVar(Router.current().params.owner);
+
+  template.ownerID = new ReactiveVar(Router.current().params.owner);
+  if(!Router.current().params.owner) {
+    template.ownerID.set(Meteor.userId());
   }
 
-  Meteor.subscribe("events");
+
+  template.autorun( () => {
+    var skipCount = template.skipCount.get();
+    var ownerID = template.ownerID.get();
+    var viewingThisOwner =  template.viewingThisOwner.get();
+
+    //refreshing the page on change route manually....
+    /*https://stackoverflow.com/questions/29449698/make-iron-router-reload-page-when-clicking-on-the-same-link*/
+    if(Router.current().params.owner !== viewingThisOwner) {
+      template.viewingThisOwner.set(Router.current().params.owner);
+      document.location.reload(true);
+    }
+
+    template.subscribe("events");
+    template.subscribe("userDetails_All");
+  });
 });
 
 Template.dashBoard.helpers({
@@ -51,6 +79,108 @@ Template.dashBoard.helpers({
       return true;
     } else {
       return false;
+    }
+  },
+
+  skipCount: function() {
+    var max = Template.instance().max.get();
+    if(max === 0) {
+      return 0;
+    } else {
+      return (Template.instance().skipCount.get() / 3) + 1;
+    }
+  },
+
+  max: function() {
+    var max = Template.instance().max.get();
+    return Math.ceil(max/3);
+  },
+  
+  userEvents: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var owner = Template.instance().ownerID.get();
+
+    var events_List = Events.find({"owner" : owner}, {
+      sort: {createdAt: -1},
+      limit: 3,
+      skip: skipCount
+    });
+    Template.instance().max.set(events_List.count());
+    return events_List;
+  },
+
+  userEvents_Going: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var owner = Template.instance().ownerID.get();
+
+    var signedups = Users.find({"User":owner}).fetch().map(function (obj) {return obj.SignUpEventList;});
+    signedups = _.pluck(_.flatten(signedups), 'eventID');
+    Template.instance().max.set(signedups.length);
+
+    return Events.find({ "_id": {"$in" : signedups}}, {
+      sort: {createdAt: -1},
+      limit: 3,
+      skip: skipCount
+    });
+  },
+
+  userEvents_Likes: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var owner = Template.instance().ownerID.get();
+
+    var posterIDs = Users.find({"User": owner}).map(function (obj) {return obj.LikedList;});
+    posterIDs = _.flatten(posterIDs);
+    Template.instance().max.set(posterIDs.length);
+
+    return Events.find({"_id": {"$in" : posterIDs}}, {
+      sort: {createdAt: -1},
+      limit: 3,
+      skip: skipCount
+    });
+  },
+
+  userSubscriptions: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var owner = Template.instance().ownerID.get();
+
+    var sub_list = Users.find({"User": owner}).fetch().map(function (obj) {return obj.FollowingList;});
+    sub_list = _.flatten(sub_list);
+    Template.instance().max.set(sub_list.length);
+
+    return Users.find({"User": {"$in" : sub_list}}, {
+      limit: 3,
+      skip: skipCount
+    });
+  },
+
+  userSubscribers: function() {
+    var skipCount = Template.instance().skipCount.get();
+    var owner = Template.instance().ownerID.get();
+
+    var subscribers = Users.find({"FollowingList": owner}, {
+      limit: 3,
+      skip: skipCount
+    });
+    Template.instance().max.set(subscribers.count());
+    return subscribers;
+  },
+
+  disablePrev: function() {
+    var skipCount = Template.instance().skipCount.get();
+    if(skipCount === 0) {
+      return 'disabled';
+    } else {
+      return "";
+    }
+  }, 
+
+  disableNext: function() {
+    var skipCount = Template.instance().skipCount.get();;
+    var max = Template.instance().max.get();;
+    if((skipCount+3) >= max) {
+      return 'disabled';
+    } else {
+      return "";
     }
   }
 
@@ -93,5 +223,22 @@ Template.dashBoard.events({
     e.preventDefault();
     $('#edit-profile-modal').modal('show');
     /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
+  },
+
+  'click #prevPage': function(e) { 
+    var skipCount = Template.instance().skipCount.get();
+    if(skipCount >= 3) {
+      Template.instance().skipCount.set(skipCount-3);
+    }
+  },
+  'click #nextPage': function(e) {
+    var skipCount = Template.instance().skipCount.get();
+    Template.instance().skipCount.set(skipCount+3);
+  },
+  'click #myTabs' : function(e) {
+    e.preventDefault();
+    Template.instance().currentTab.set(e.target.hash);
+    Template.instance().skipCount.set(0);
+    //$('#myTabs a[href="' + e.target.hash + '"]').tab('show');
   }
 });

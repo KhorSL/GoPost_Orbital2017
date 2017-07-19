@@ -32,3 +32,15 @@
 .bottom_border {
   padding:10px;
 }
+
+.notification_label {
+  padding: 0.1em 0.3em;
+  margin-left: 1px;
+  background-color: #FF8400;
+  border-radius: .25em;
+  font-size: 75%;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  border-radius: .25em;
+}
