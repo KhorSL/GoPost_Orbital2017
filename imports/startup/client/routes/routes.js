@@ -116,6 +116,22 @@ Router.route('/update-event/:_id', {
   }
 });
 
+Router.route('/update-regForm/:_id', {
+  name: "update-regForm",
+  template: "eventForm_RegistrationForm_Update",
+  layoutTemplate: "layout",
+  waitOn: function () {
+        return Meteor.subscribe('rfTemplates');
+    },
+  action: function () {
+        // render all templates and regions for this route
+        this.render();
+    },
+  data: function () {
+    return RegistrationForms.findOne({eventId: this.params._id});
+  }
+});
+
 Router.route('/myFriends', {
   name: 'myFriends',
   template: 'myFriends',

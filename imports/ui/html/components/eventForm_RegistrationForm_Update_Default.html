@@ -1,0 +1,53 @@
+<template name="eventForm_RegistrationForm_Update_Default">
+	<div class="outer">	
+		<div class="inner">
+			<div class="box">
+				<header>
+					<h5>Edit Registration Form</h5>
+					<div class="dash_header_right">
+						<input class="btn btn-default" type="submit" value="Update" form="update-regForm"/>
+					</div>
+				</header>
+				<form id="update-regForm">	
+							<div class="well form-group">
+								<h3> Particulars of Paticipants</h3>
+								<input type="checkbox" name="rf_name" class="rf" checked="{{this.name}}"> Name of participant <br>
+								<input type="checkbox" name="rf_nationality" class="rf" checked="{{this.nationality}}"> Nationality <br>
+								<input type="checkbox" name="rf_gender" class="rf" checked="{{this.gender}}"> Gender <br>
+								<input type="checkbox" name="rf_nric" class="rf" checked="{{this.nric}}"> NRIC <br>
+								<input type="checkbox" name="rf_matric" class="rf" checked="{{this.matric}}"> Matriculation Number <br>
+								<input type="checkbox" name="rf_faculty" class="rf" checked="{{this.faculty}}"> Faculty <br>
+								<input type="checkbox" name="rf_major" class="rf" checked="{{this.major}}"> Major <br>
+							</div>
+
+							<div class="well form-group">
+								<h3> Contact Information </h3>
+								<input type="checkbox" name="rf_contact_mobile" class="rf" checked="{{this.contact_mobile}}"> Contact: Mobile <br>
+								<input type="checkbox" name="rf_contact_email" class="rf" checked="{{this.contact_email}}"> Contact: Email <br>
+							</div>
+
+							<div class="well form-group">
+								<h3> Address Information</h3>
+								<input type="checkbox" name="rf_address_full" class="rf" checked="{{this.address_full}}"> Full Address <br>
+								<input type="checkbox" name="rf_address_region" class="rf" checked="{{this.address_region}}"> Address: Region <br>
+							</div>
+			
+							<div class="well form-group">
+								<h3> Shirt Sizing Information</h3>
+								<input type="checkbox" name="rf_shirtSize_sml" class="rf" checked="{{this.shirtSize_SML}}"> Shirt Size (SML) <br>
+								<input type="checkbox" name="rf_shirtSize_123" class="rf" checked="{{this.shirtSize_123}}"> Shirt Size (123) <br>
+							</div>
+
+							<div class="well form-group">
+								<h3> Misc. </h3>
+								<input type="checkbox" name="rf_nokInfo" class="rf" checked="{{this.nokInfo}}"> Next-of-kin Infomation <br>
+								<input type="checkbox" name="rf_allergies" class="rf" checked="{{this.allergies}}"> Allergies <br>
+								<input type="checkbox" name="rf_dietaryPref" class="rf" checked="{{this.dietaryPref}}"> Dietary Preferences <br>
+								<input type="checkbox" name="rf_bloodType" class="rf" checked="{{this.bloodType}}"> Blood Type <br>
+								<input type="checkbox" name="rf_additional" class="rf" checked="{{this.additional}}"> Additional Information <br>
+							</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</template>

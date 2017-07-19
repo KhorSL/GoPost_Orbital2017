@@ -41,7 +41,8 @@ Router.route('/download-data/:file', function() {
 				];
 
 			// Define the fields needed in custom reg form to export the Excel
-			var responses = data[0]["userResponseList"]; 
+			var last = data.length - 1; // assuming last result have the correct length
+			var responses = data[last]["userResponseList"]; 
 			var len = responses.length; // to get the number of questions in the reg form
 
 			//Create and define the fields
@@ -51,7 +52,11 @@ Router.route('/download-data/:file', function() {
 					key: 'userResponseList.' + i,
 					title: currRes.qnsName,
 					transform: function(val, doc) {
-						return JSON.stringify(val.response); //transform all responses to string for easy storing
+						if(val == null) {
+							return ""; //to take care of empty responses due to form edits
+						} else {
+							return JSON.stringify(val.response); //transform all responses to string for easy storing
+						}
 					}
 				};
 				fields.push(resFields); // add on to the standard fields
@@ -891,14 +896,21 @@ Meteor.methods({
 		});
 	},
 
-	addRegistrationForm: function(eventId, title, description, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, shirtSize_Chart, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
+	updateCustomRF: function(eventId, customQns) {
+		return RegistrationForms.update({eventId: eventId}, {
+			$set: {
+				customQns: customQns
+			}
+		});
+	},
+
+	addRegistrationForm: function(eventId, title, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
 		return RegistrationForms.insert({
 			RegFormType: "default",
 			owner: Meteor.userId(),
 			createdAt: new Date(),
 			eventId: eventId,
 			eventTitle: title,
-			description: description,
 			name: name,
 			contact_mobile: contact_mobile,
 			contact_email: contact_email,
@@ -906,7 +918,6 @@ Meteor.methods({
 			address_region: address_region,
 			shirtSize_SML: shirtSize_SML,
 			shirtSize_123: shirtSize_123,
-			shirtSize_Chart: shirtSize_Chart,
 			nationality: nationality,
 			gender: gender,
 			allergies: allergies,
@@ -918,6 +929,31 @@ Meteor.methods({
 			additional: additional,
 			matric: matric,
 			nric: nric
+		});
+	},
+
+	updateDefaultRF: function(eventId, name, contact_mobile, contact_email, address_full, address_region, shirtSize_SML, shirtSize_123, nationality, gender, dietaryPref, allergies, bloodType, faculty, major, nokInfo, additional, matric, nric) {
+		return RegistrationForms.update({eventId: eventId}, {
+			$set: {
+				name: name,
+				contact_mobile: contact_mobile,
+				contact_email: contact_email,
+				address_full: address_full,
+				address_region: address_region,
+				shirtSize_SML: shirtSize_SML,
+				shirtSize_123: shirtSize_123,
+				nationality: nationality,
+				gender: gender,
+				allergies: allergies,
+				dietaryPref: dietaryPref,
+				bloodType: bloodType,
+				faculty: faculty,
+				major: major,
+				nokInfo: nokInfo,
+				additional: additional,
+				matric: matric,
+				nric: nric
+			}
 		});
 	},
 

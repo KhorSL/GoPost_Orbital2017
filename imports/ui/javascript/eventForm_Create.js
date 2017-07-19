@@ -297,7 +297,6 @@ if(Meteor.isClient) {
 
 			//if rfChoice == false it is default reg form
 			if(!rfChoice) {
-				var rf_description = event.target.rf_description.checked;
 				var rf_name = event.target.rf_name.checked;
 				var rf_contact_mobile = event.target.rf_contact_mobile.checked;
 				var rf_contact_email = event.target.rf_contact_email.checked;
@@ -305,7 +304,6 @@ if(Meteor.isClient) {
 				var rf_address_region = event.target.rf_address_region.checked;
 				var rf_shirtSize_sml = event.target.rf_shirtSize_sml.checked;
 				var rf_shirtSize_123 = event.target.rf_shirtSize_123.checked;
-				var rf_shirtSize_chart = event.target.rf_shirtSize_chart.checked;
 				var rf_nationality = event.target.rf_nationality.checked;
 				var rf_gender = event.target.rf_gender.checked;
 				var rf_dietaryPref = event.target.rf_dietaryPref.checked;
@@ -323,7 +321,7 @@ if(Meteor.isClient) {
 						console.log(error.reason);
 					} else {
 						Meteor.call("addEventTag", type);
-						Meteor.call("addRegistrationForm", result, title, rf_description, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_shirtSize_chart, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
+						Meteor.call("addRegistrationForm", result, title, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
 						Meteor.call("addEvent_User", result, title, function(error2, result2) {
 							if(error2) {
 								console.log(error2.reason);

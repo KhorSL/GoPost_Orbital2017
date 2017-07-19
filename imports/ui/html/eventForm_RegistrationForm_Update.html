@@ -1,0 +1,7 @@
+<template name="eventForm_RegistrationForm_Update">
+	{{#if eq this.RegFormType "custom"}}
+		{{> eventForm_RegistrationForm_Update_Custom}}
+	{{else}}
+		{{> eventForm_RegistrationForm_Update_Default}}
+	{{/if}}
+</template>

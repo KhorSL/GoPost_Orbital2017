@@ -1,0 +1,69 @@
+<template name="eventForm_RegistrationForm_Update_Custom">
+	<div class="outer">	
+		<div class="inner">
+			<div class="box">
+				<header>
+					<h5>Edit Registration Form</h5>
+					<div class="dash_header_right">
+						<input class="btn btn-default" type="submit" value="Update" form="update-regForm"/>
+					</div>
+				</header>
+				<div id="buildyourform">
+					<form id="update-regForm">
+						{{#each customQns}}
+							<div class="qnswrapper">
+								<div class="qnsheader row form-group">
+									<div class="col-sm-8">
+										<label>Field Title</label>
+										<input type="text" class="qnsname form-control" value="{{name}}">
+									</div>
+									<div class="col-sm-4">
+										<label>Field Type</label>
+										<select type="text" class="qnstype form-control">
+											{{#if checkFieldType "checkbox"}}
+												<option value="checkbox" selected> Checkboxes</option>
+												<option value="mcq"> Multiple Choices</option>
+												<option value="textbox"> Text</option>
+												<option value="textarea"> Paragraph</option>
+											{{else if checkFieldType "mcq"}}
+												<option value="checkbox"> Checkboxes</option>
+												<option value="mcq" selected> Multiple Choices</option>
+												<option value="textbox"> Text</option>
+												<option value="textarea"> Paragraph</option>
+											{{else if checkFieldType "textbox"}}
+												<option value="checkbox"> Checkboxes</option>
+												<option value="mcq"> Multiple Choices</option>
+												<option value="textbox" selected> Text</option>
+												<option value="textarea"> Paragraph</option>
+											{{else}}
+												<option value="checkbox"> Checkboxes</option>
+												<option value="mcq"> Multiple Choices</option>
+												<option value="textbox"> Text</option>
+												<option value="textarea" selected> Paragraph</option>
+											{{/if}}								
+										</select>
+									</div>
+								</div>
+								<div class="qnsbody row form-group">
+									<div class="col-sm-12">
+										<label>Options</label>
+										<input type="text" class="optname form-control" value="{{showOptions}}"/>
+										<p>*use commas (,) to separate your options. e.g. [Option1,Option2,Option3,...]</p>
+									</div>
+								</div>
+								<div class="qnsfooter row form-group">
+									<div class="col-sm-1">
+										<span role="button" class="add glyphicon glyphicon-plus" id="add"></span>
+									</div>
+									<div class="col-sm-1 pull-right">
+										<span role="button" class="remove glyphicon glyphicon-trash" id="remove"></span>
+									</div>
+								</div>
+							</div>
+						{{/each}}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

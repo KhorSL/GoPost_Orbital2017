@@ -78,6 +78,10 @@ Template.events_GridView.events({
 		var id = this._id;
 		Router.go("update-event", {_id: id});
 	},
+  'click #editRegForm': function(e) {
+    var id = this._id;
+    Router.go("update-regForm", {_id: id});
+  },
 	'click #deleteEvent': function(e) {
 		if(!confirm("You are about to delete this event. Are you sure?")) {
 		    return false;
