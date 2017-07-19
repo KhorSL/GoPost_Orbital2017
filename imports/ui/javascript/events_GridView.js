@@ -9,7 +9,7 @@ Template.events_GridView.onRendered(function() {
 });
 
 Template.events_GridView.helpers({
-  	formatDate: function(date) {
+  formatDate: function(date) {
   		return moment(date).format('Do MMM YYYY, h.mm a');
   	},
   	isOwner: function() {
