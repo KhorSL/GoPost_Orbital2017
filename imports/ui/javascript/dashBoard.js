@@ -82,6 +82,14 @@ Template.dashBoard.helpers({
     }
   },
 
+  sizeDependsUser: function() {
+     if(this.User === Meteor.userId()) {
+      return "col-lg-4";
+    } else {
+      return "col-lg-12";
+    }
+  },
+
   skipCount: function() {
     var max = Template.instance().max.get();
     if(max === 0) {
