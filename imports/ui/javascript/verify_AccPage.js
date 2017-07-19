@@ -22,7 +22,7 @@ Template.verify_AccPage.onCreated(function() {
 			resend = true;
 			template.email.set(Meteor.user().emails[0].address);
 		} else {
-			console.log(user[0].Token);
+			//console.log(user[0].Token);
 			template.password_token.set(user[0].Token);
 		}
 	} else {
@@ -37,7 +37,7 @@ Template.verify_AccPage.onCreated(function() {
 			if(error) {
 				console.log(error.reason);
 			} else {
-				console.log(result);
+				//console.log(result);
 				template.password_token.set(result);
 				resend = false;
 			}
@@ -111,7 +111,7 @@ Template.verify_AccPage.events({
 			if(error) {
 				console.log(error.reason);
 			} else {
-				console.log(result);
+				//console.log(result);
 				tmp.password_token.set(result);
 			}
 		});
@@ -123,7 +123,7 @@ Template.verify_AccPage.events({
 			if(error) {
 				console.log(error.reason);
 			} else {
-				console.log(result);
+				//console.log(result);
 				tmp.password_token.set(result);
 			}
 		});
