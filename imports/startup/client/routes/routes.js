@@ -66,6 +66,16 @@ Router.route('/regList/:_id', {
   data: function () {
     // return event id for easy access
     return this.params._id;
+  },
+  onBeforeAction: function () {
+    var currEvent = Events.findOne({_id: this.params._id});
+    if(currEvent.owner != Meteor.userId()) {
+      this.stop();
+      this.redirect('bulletinBoard');
+      return alert("Screw off");
+    } else {
+      this.next();
+    }
   }
 });
 
@@ -97,6 +107,16 @@ Router.route('/update-event/:_id', {
   waitOn: function () {
         return Meteor.subscribe('events');
     },
+  onBeforeAction: function () {
+    var currEvent = Events.findOne({_id: this.params._id});
+    if(currEvent.owner != Meteor.userId()) {
+      this.stop();
+      this.redirect('bulletinBoard');
+      return alert("Screw off");
+    } else {
+      this.next();
+    }
+  },
   action: function () {
         // render all templates and regions for this route
         this.render();
@@ -113,6 +133,16 @@ Router.route('/update-regForm/:_id', {
   waitOn: function () {
         return Meteor.subscribe('rfTemplates');
     },
+  onBeforeAction: function () {
+    var currEvent = RegistrationForms.findOne({eventId: this.params._id});
+    if(currEvent.owner != Meteor.userId()) {
+      this.stop();
+      this.redirect('bulletinBoard');
+      return alert("Screw off");
+    } else {
+      this.next();
+    }
+  },  
   action: function () {
         // render all templates and regions for this route
         this.render();

@@ -5,6 +5,10 @@ import '../html/eventForm_RegistrationForm_Update.html';
 import '/imports/ui/html/components/eventForm_RegistrationForm_Update_Custom.html';
 import '/imports/ui/html/components/eventForm_RegistrationForm_Update_Default.html';
 
+Template.eventForm_RegistrationForm_Update.onRendered(function() {
+	console.log(this);
+});
+
 Template.eventForm_RegistrationForm_Update.helpers({
 	eq: function (v1, v2) {
         return v1 === v2;

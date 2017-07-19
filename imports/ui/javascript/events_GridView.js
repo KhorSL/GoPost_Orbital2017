@@ -70,6 +70,10 @@ Template.events_GridView.helpers({
     });
 
     return count;
+  },
+
+  secret: function() {
+   
   }
 });
 
@@ -106,7 +110,24 @@ Template.events_GridView.events({
   	},
 
     'click #download': function(e) {
-      console.log("download");
+      var key, validator;
+      var eventId = this._id;
+      var searchEvent = Events.findOne({_id: eventId});
+      
+      if(searchEvent.owner == Meteor.userId()) {
+        validator = "passed";
+      } else {
+        validator = "failed";
+      }
+
+       Meteor.call("getSecretKey", validator, function(error, result) {
+        if(error){
+          console.log(error.reason);
+        } else {
+          key = result;
+          Router.go("/download-data/" + eventId + "/" + key);
+        }
+      });
     }
 
 });

@@ -3,15 +3,27 @@ import { Email } from 'meteor/email';
 import '/imports/startup/server';
 
 Meteor.startup(() => {
-  // code to run on server at startup
+	// code to run on server at startup
 });
 
-/** Server route to download registration list results **/
-Router.route('/download-data/:file', function() {
-	var eventId = this.params.file; //params that is passed in thru the anchor link
+var Secrets = new Meteor.Collection("secrets"); // only on server!!!
 
+/** Server route to download registration list results **/
+Router.route('/download-data/:file/:key', function() {
+	var eventId = this.params.file; //params that is passed in thru the anchor link
+	var key = this.params.key; 
 	// Find the event info in the rfTemplates collection to check for type of reg form and its format
 	var currEvent = RegistrationForms.findOne({eventId: eventId});
+	var currKey = Secrets.findOne({_id: key});
+
+	if(currKey == null || currKey == undefined) {
+		this.response.writeHead(302, {
+    		'Location': "/bulletinBoard"
+ 		});
+
+  		this.response.end();
+	}
+
 	var rfChoice = currEvent.RegFormType;
 
 	// Handles both type of reg form
@@ -895,6 +907,13 @@ if(Meteor.isServer) {
 }
 
 Meteor.methods({
+	getSecretKey: function (val) {
+	  if (val == "failed")
+	    // check if the user has privileges
+	    throw Meteor.Error(403);
+	  return Secrets.insert({_id: Random.id(), user: this.userId});
+	}, /*Credits: https://stackoverflow.com/questions/20219572/meteor-user-on-iron-router-server-side */
+
 	insertUser: function(newUserData) {
 		return Accounts.createUser(newUserData);
 	},
