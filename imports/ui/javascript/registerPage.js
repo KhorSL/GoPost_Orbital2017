@@ -55,11 +55,25 @@ Template.registerPage.onRendered(function() {
             });
           }
         } else {
-          Meteor.loginWithPassword(newUserData.email, newUserData.password);
-          Meteor.call('insertUserData',result,additionalData.username,additionalData.gender,additionalData.age); //Result is the _id of the account
-          $('#registerModal').modal('hide');
-          Session.set("viewToggle", false);
-          Router.go('bulletinBoard');
+          var token = "";
+          Meteor.call("sendVerificationToken", newUserData.email, function(error, result) {
+              token = result;
+          });
+          Meteor.loginWithPassword(newUserData.email, newUserData.password, function(error) {
+            if(error) {
+              console.log(error.reason);
+            } else {
+              //Result is the _id of the account
+              Meteor.call('insertUserData',result,additionalData.username,additionalData.gender,additionalData.age, token, function(error) {
+                if(error) {
+                  console.log(error.reason);
+                } else {
+                  $('#registerModal').modal('hide');
+                  Router.go('verify_AccPage');
+                }
+              });
+            }
+          });
         }
       }); //end of Method.call(insertUser)
     } //end of submitHandler

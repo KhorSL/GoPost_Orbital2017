@@ -34,8 +34,12 @@ Template.event_View.helpers({
     return false;
   },
   isOwner: function() {
-    //console.log(this.owner);
 	  return this.owner === Meteor.userId();
+  },
+  isOwner2: function() {
+    /*https://stackoverflow.com/questions/29900541/how-do-i-properly-scope-nested-each-spacebars-iterators-when-using-meteor*/
+    var owner = Template.parentData(1).owner;
+    return owner === Meteor.userId();
   },
   hasSignUp: function() {
     var id = this._id;
@@ -46,6 +50,42 @@ Template.event_View.helpers({
     });
 
     if(currEvent == null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  participants: function() {
+    /*https://bootsnipp.com/snippets/featured/panel-tables-with-filter
+      https://stackoverflow.com/questions/28626410/creating-a-numbered-list-for-meteor-data*/
+    var eventid = this._id;
+    var owner = this.owner;
+    var participants_list = Users.find({"SignUpEventList.eventID": eventid}).fetch();
+    participants_list = _.map(participants_list, function(user, index) {
+      return {
+        number: index+1,
+        name: user.Username,
+        age: user.Age,
+        userid: user.User,
+        eventid: eventid,
+        owner: owner
+      };
+    });
+    return participants_list;
+  },
+  status: function() {
+    //This function checks the confirmation status of the registration
+    return SignUps.findOne({eventId: this.eventid, participantId: this.userid});
+  },
+  statusTypeR: function() {
+    if(this.status === "rejected") {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  statusTypeS: function() {
+    if(this.status === "success") {
       return false;
     } else {
       return true;
@@ -107,6 +147,28 @@ Template.event_View.events({
     e.preventDefault();
     var id = this.owner;
     Meteor.call("unsubscribe",id, function(error) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  },
+  'click #profileClick': function(e) {
+    e.preventDefault();
+    Router.go("/dashBoard/" + this.participantId);
+  },
+  'click #acceptUser': function(e) {
+    e.preventDefault();
+    var submissionId = this._id;
+    Meteor.call("acceptSignUp", submissionId, function(error, result) {
+      if(error) {
+        console.log(error.reason);
+      }
+    });
+  },
+  'click #rejectUser': function(e) {
+    e.preventDefault();
+    var submissionId = this._id;
+    Meteor.call("rejectSignUp", submissionId, function(error, result) {
       if(error) {
         console.log(error.reason);
       }

@@ -373,6 +373,11 @@
   padding: 5px;
 }
 
+.dash_header_left {
+  float: left;
+  padding: 5px;
+}
+
 .dash_profile_action_btn {
   margin-bottom: 5px;
 }
@@ -394,4 +399,8 @@
 .crop_button {
   float: right;
   margin: 0 2px;
+}
+
+.viewMore {
+  height: 100%;
 }

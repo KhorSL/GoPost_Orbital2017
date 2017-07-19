@@ -55,4 +55,62 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="participants_Frame corner_event">
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<div class="panel panel-participants">
+					<div class="panel-heading">
+						<h3 class="panel-title">Participant List</h3>
+					</div>
+					<table class="table table-hover" id="dev-table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Username</th>
+								<th>Age</th>
+								<th>Status</th>
+								<th>Profile</th>
+								{{#if isOwner}}
+									<th>Actions</th>
+								{{/if}}
+							</tr>
+						</thead>
+						<tbody>
+							{{#each participants}}
+							<tr>
+								<td>{{number}}</td>
+								<td>{{name}}</td>
+								<td>{{age}}</td>
+								{{#with status}}
+									<td>{{this.status}}</td>
+									<td><span class="glyphicon glyphicon-user" role="button" aria-hidden="true" id="profileClick"></span></td>
+									{{#if isOwner2}}
+										<td>
+											{{#if statusTypeS}}
+												<span class="glyphicon glyphicon-ok" role="button" aria-hidden="true" id="acceptUser"></span>
+											{{/if}}
+											{{#if statusTypeR}}
+												<span class="glyphicon glyphicon-remove" role="button" aria-hidden="true" id="rejectUser"></span>
+											{{/if}}
+										</td>
+									{{/if}}
+								{{/with}}
+							</tr>
+							{{else}}
+								<tr>
+									<td class="alert alert-warning"></td>
+									<td class="alert alert-warning">No Participants</td>
+									<td class="alert alert-warning"></td>
+									<td class="alert alert-warning"></td>
+									<td class="alert alert-warning"></td>
+									<td class="alert alert-warning"></td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>

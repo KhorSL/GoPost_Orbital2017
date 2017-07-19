@@ -68,7 +68,11 @@ Template.bulletinBoard.onDestroyed(function() {
 Template.bulletinBoard.helpers({
 	viewType: function() {
 		//return Template.instance().viewToggle.get();
-		return Session.get("viewToggle");
+		if(Session.get("viewToggle")) {
+			return true;
+		} else {
+			return false;
+		}
 	},
 	searching: function() {
     	//return Template.instance().searching.get();

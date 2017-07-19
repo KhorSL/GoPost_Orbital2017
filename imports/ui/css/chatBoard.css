@@ -88,6 +88,10 @@
   margin-top: 13px;
   width: 100%;
 }
+.send_btn_space {
+  margin: 15px auto;
+}
+
 .upload_btn {
   color: #777777;
 }

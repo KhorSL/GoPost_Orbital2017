@@ -1,4 +1,7 @@
 import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
+import '/imports/startup/server';
+
 Meteor.startup(() => {
   // code to run on server at startup
 });
@@ -298,6 +301,14 @@ UserSchema = new SimpleSchema({
     	type: Number,
     	label: "Age"
   	},
+  	Token: {
+  		type: String,
+  		label: "Verification Token"
+  	},
+	TokenExpired: {
+		type: Date,
+		label: "Verification Expired Date",
+	},
   	profilePic: {
 		type: String,
 		label: "Profile Picture",
@@ -856,12 +867,98 @@ if(Meteor.isServer) {
 
 	Meteor.publish("users_msg_count", function() {
 		return MessagesCount.find();
-	})
+	});
+
+	/*
+	Accounts.onCreateUser(function(options,user) {
+		/*http://www.javacms.tech/questions/4386957/generating-a-verification-token-in-meteor-without-sending-an-email
+		  https://themeteorchef.com/tutorials/sign-up-with-email-verification
+		  https://themeteorchef.com/tutorials/using-the-email-package#tmc-configuration
+		  https://github.com/wekan/wekan/wiki/Troubleshooting-Mail
+		  https://stackoverflow.com/questions/10888610/ignore-invalid-self-signed-ssl-certificate-in-node-js-with-https-request
+		  https://stackoverflow.com/questions/20433287/node-js-request-cert-has-expired#answer-29397100
+
+		//send email with random token
+		user.accVerficationCode = Random.hexString(10).toLowerCase();
+		Meteor.call("sendVerificationToken",options.email, user.accVerficationCode);
+		return user;
+	});*/
+	
+	/*https://stackoverflow.com/questions/19391308/custom-fields-on-meteor-users-not-being-published
+	Meteor.publish('userData', function() {
+  		if(!this.userId) 
+  			return null;
+  		return Meteor.users.find(this.userId, {fields: {
+    		accVerficationCode: 1, accVerficationCodeDate: 1
+  		}});
+	});*/
 }
 
 Meteor.methods({
 	insertUser: function(newUserData) {
 		return Accounts.createUser(newUserData);
+	},
+
+	sendVerificationToken: function(email) {
+		var token = Random.hexString(10).toLowerCase();
+
+		this.unblock();
+
+		if(email) {
+			Email.send({
+	  			to: email,
+	  			from: "GoPost! <gopostnow@gmail.com>",
+	  			subject: "Please verify your GoPost! account.",
+	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Please verify your email account with the token provided below. We'll communicate with you from time to time via email so it's important that we have an up-to-date email address on file.</p><p>" + token + "</p><p>If you did not sign up for a GoPost! account, please ignore this message.</p>"
+			});
+
+			return token;
+		}
+
+		return false;
+	},
+
+	checkIfUserEmailExists: function(email) {
+		return Accounts.findUserByEmail(email);
+	},
+
+	verifyUserAccount: function() {
+		//Fake the verificationToken by creating our own token
+		var token = Random.secret();
+		var tokenRecord = {
+    		token: token,
+    		address: Meteor.user().emails[0].address,
+    		when: new Date(),
+		};
+
+		//Save the user
+		return Meteor.users.update({_id: Meteor.userId()}, {
+			$push: {"services.email.verificationTokens": tokenRecord},
+			$set: {"emails.0.verified" : true}
+		});
+	},
+
+	sendResetPasswordEmail: function(email) {
+		var pass = Random.id(15);
+
+		this.unblock();
+
+		if(email) {
+			Email.send({
+	  			to: email,
+	  			from: "GoPost! <gopostnow@gmail.com>",
+	  			subject: "Reset Password for your GoPost! account.",
+	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Your password have been reset.</p><p>New password: " + pass + "</p><p>Please change your password. Thank You.</p>"
+			});
+			return pass;
+		}
+
+		return false;
+	},
+
+	resetPasswordForUser: function(email, password) {
+		var user = Accounts.findUserByEmail(email);
+		return Accounts.setPassword(user._id, password);
 	},
 
 	addEventTag: function(tags) {
@@ -1091,12 +1188,14 @@ Meteor.methods({
 		});
 	},
 
-  	insertUserData: function(userid, username,gender,age){
+  	insertUserData: function(userid, username,gender,age, token){
     	Users.insert({
       		User: userid,
       		Username: username,
       		Gender: gender,
-      		Age: age
+      		Age: age,
+      		Token: token,
+      		TokenExpired: new Date()
     	});
   	},
 
