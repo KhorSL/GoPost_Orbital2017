@@ -28,7 +28,7 @@ Template.calendar_full.onRendered(function() {
       
       //Event Created By User
       var event_ids = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.CreatedEventList});
-      event_ids = _.flatten(event_ids);
+      event_ids = _.pluck(_.flatten(event_ids), 'eventID');
       let data1 = Events.find({"_id" : {$in : event_ids}}).fetch().map((event) => {
         event.editable = false;
         event.className = "label_cal label-default";
@@ -37,7 +37,7 @@ Template.calendar_full.onRendered(function() {
 
       //Event User Sign up for
       var event_ids = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.SignUpEventList});
-      event_ids = _.flatten(event_ids);
+      event_ids = _.pluck(_.flatten(event_ids), 'eventID');
       let data2 = Events.find({"_id" : {$in : event_ids}}).fetch().map((event) => {
         event.editable = false;
         event.className = "label_cal label-success";

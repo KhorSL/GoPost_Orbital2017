@@ -928,7 +928,7 @@ Meteor.methods({
 	  			to: email,
 	  			from: "GoPost! <gopostnow@gmail.com>",
 	  			subject: "Please verify your GoPost! account.",
-	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Please verify your email account with the token provided below. We'll communicate with you from time to time via email so it's important that we have an up-to-date email address on file.</p><p>" + token + "</p><p>If you did not sign up for a GoPost! account, please ignore this message.</p>"
+	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Please verify your email account with the token provided below. We'll communicate with you from time to time via email so it's important that we have an up-to-date email address on file.</p><p>" + token + "</p><p>*Verification Code Expires after 10 minutes it is sent. Please verify your account within 10 minutes.</p><p>If you did not sign up for a GoPost! account, please ignore this message.</p>"
 			});
 
 			return token;
