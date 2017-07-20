@@ -4,6 +4,25 @@ import { Template } from 'meteor/templating';
 import '../html/components/layout.html';
 import '../css/layout.css';
 
+Template.layout.onRendered(function() {
+  let template = Template.instance();
+  template.subscribe('users_msg_count');
+});
+
+Template.layout.helpers({
+  messageCount: function() {
+    var total = 0;
+    /*https://stackoverflow.com/questions/15813329/how-i-can-sum-all-the-values-of-a-property-in-a-meteor-collection*/
+    MessagesCount.find({chatID: Meteor.userId()}).map(function(obj) {
+      total += obj.count;
+    });
+    if(total>0) {
+      return total;
+    }
+    return false;
+  }
+});
+
 Template.layout.events({
   	'click .logout': function(e){
         e.preventDefault();

@@ -12,30 +12,30 @@ import './advertisement.js';
 Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();
 
-	Session.set("searchQuery", "");			//template.searchQuery = new ReactiveVar();
- 	Session.set("filterType", "Filter By"); //template.filterType  = new ReactiveVar( "Filter By" );
-	Session.set("searching", false); 		//template.searching   = new ReactiveVar( false );
-	Session.set("searchBut", false);		//template.searchBut	 = new ReactiveVar( false );
-	//Session.set("viewToggle", false);		//template.viewToggle	 = new ReactiveVar( false );
-	Session.set("Initial_Limit", 20);
-	Session.set("limit", Session.get("Initial_Limit"));
+	template.searchQuery = new ReactiveVar();
+	template.selected_tag = new ReactiveVar();
+	template.selected_cat = new ReactiveVar();
+ 	template.filterType  = new ReactiveVar( "Filter By" );
+	template.searching   = new ReactiveVar( false );
+	template.sButton	 = new ReactiveVar( false );
+	template.initial_Limit = new ReactiveVar(20);
+	template.limit = new ReactiveVar(20);
 
 	var global_search = Session.get("navbar_search");
 	if(global_search !== '' && (typeof global_search) !== 'undefined') {
 		if(global_search) {
-			Session.set("searchQuery", global_search);
+			template.searchQuery.set(global_search);
 		}
 	}
 
   	template.autorun( () => {
-  		var search = Session.get("searchQuery");	//var search = template.searchQuery.get();
-  		//var filter = Session.get("filterType");		//var filter = template.filterType.get();
-  		var sButton = Session.get("sButton");		//var sButton = template.searchBut.get();
-  		var tag = Session.get("selected_tag");
+  		var search = template.searchQuery.get();
+  		var sButton = template.sButton.get();
+  		var tag = template.selected_tag.get();
 
-    	template.subscribe('events_Filter', search, tag, sButton, () => {
+    	template.subscribe('events_Filter', search, tag, () => {
 	      	setTimeout( () => {
-	        	Session.set("searching", false);	//template.searching.set( false );
+	        	template.searching.set( false );
 	      	}, 300 );
     	});
   	});
@@ -49,7 +49,7 @@ Template.bulletinBoard.onRendered(function() {
       		var scrollTop = $(this).scrollTop();
 
       		if(scrollTop > lastScrollTop){ // detect scroll down
-        		Session.set("limit", Session.get("limit") + 15); // when it reaches the end, add another 9 elements
+        		Template.instance().limit.set((Template.instance().limit.get()+15)); // when it reaches the end, add another 9 elements
       		}
 
       		lastScrollTop = scrollTop;
@@ -61,10 +61,6 @@ Template.bulletinBoard.onRendered(function() {
  	*/
  });
 
-Template.bulletinBoard.onDestroyed(function() {
-	delete Session.keys['searchQuery', 'filterType', 'searching', 'searchBut', 'Initial_Limit', 'limit','viewToggle'];
-});
-
 Template.bulletinBoard.helpers({
 	viewType: function() {
 		//return Template.instance().viewToggle.get();
@@ -75,24 +71,21 @@ Template.bulletinBoard.helpers({
 		}
 	},
 	searching: function() {
-    	//return Template.instance().searching.get();
-    	return Session.get("searching");
+    	return Template.instance().searching.get();
   	},
   	query: function() {
-    	//return Template.instance().searchQuery.get();
-    	return Session.get("searchQuery");
+    	return Template.instance().searchQuery.get();
   	},
   	filter: function() {
-  		//return Template.instance().filterType.get();
-  		return Session.get("filterType");
+  		return Template.instance().filterType.get();
   	},
   	events_filtered: function() {
 
-  		var sq = Session.get("searchQuery"); 	//var sq = Template.instance().searchQuery.get();
+  		var sq = Template.instance().searchQuery.get();
   		var filter = $('[name=search_param]').val();
-  		var tag = Session.get("selected_tag");
-  		var cat = Session.get("selected_cat");
-  		var limit = Session.get("limit");
+  		var tag = Template.instance().selected_tag.get();
+  		var cat = Template.instance().selected_cat.get();
+  		var limit = Template.instance().limit.get();
   		var search = {};
   		var regex;
 
@@ -156,183 +149,175 @@ Template.bulletinBoard.events({
 	'click #toggle-list': function(e) {
 		e.preventDefault();
 		Session.set("viewToggle", true);	//Template.instance().viewToggle.set(true);
-		Session.set("searching", true);
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
 	},
 	'click #toggle-grid': function(e) {
 		e.preventDefault();
 		Session.set("viewToggle", false);	//Template.instance().viewToggle.set(false);
-		Session.set("searching", true);
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
 	},
-	'click #all': function(e) {
+	'click #all': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#all').text();
 		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", param); 	//Template.instance().filterType.set(param);
-		Session.set("searching", true);		//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");	//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "");	//Invalid cat Search to make way for Filter + Search
-		Session.set("searchQuery", "");		//For enabling full search
-		$('[name=search]').val("");			//For enabling full search
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set(param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.searchQuery.set("");		//For enabling full search
+		$('[name=search]').val("");		//For enabling full search
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #latest': function(e) {
+	'click #latest': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#latest').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("latest");
-		Session.set("filterType", param);					//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "");					//Invalid cat Search to make way for Filter + Search
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set(param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #hot': function(e) {
+	'click #hot': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#hot').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("hot");
-		Session.set("filterType", param);					//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "");					//Invalid cat Search to make way for Filter + Search
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set(param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #location': function(e) {
+	'click #location': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#location').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("location");
-		Session.set("filterType", param);					//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "");					//Invalid cat Search to make way for Filter + Search
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set(param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #soon': function(e) {
+	'click #soon': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#soon').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("soon");
-		Session.set("filterType", param);					//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "");					//Invalid cat Search to make way for Filter + Search
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set(param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Camp': function(e) {
+	'click #Camp': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Camp').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Camp");					
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Camp");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #CCA': function(e) {
+	'click #CCA': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#CCA').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "CCA");		
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("CCA");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Community': function(e) {
+	'click #Community': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Community').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Community");		
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Community");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Competition': function(e) {
+	'click #Competition': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Competition').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Competition");
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Competition");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Internship': function(e) {
+	'click #Internship': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Internship').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Internship");
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Internship");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Workshop': function(e) {
+	'click #Workshop': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Workshop').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Workshop");
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Workshop");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'click #Others': function(e) {
+	'click #Others': function(e,tmp) {
 		e.preventDefault();
 		var param = $('#Others').text();
-		/*$('.search-panel span#search_concept').text(param);*/
 		$('.input-group #search_param').val("all");
-		Session.set("filterType", "Cat: " + param);			//Template.instance().filterType.set(param);
-		Session.set("searching", true);						//Template.instance().searching.set(true);
-		Session.set("selected_tag", "");					//Invalid Tag Search to make way for Filter + Search
-		Session.set("selected_cat", "Others");
-		Session.set("limit", Session.get("Initial_Limit"));
-		Session.set("sButton", (!Session.get("sButton"))); //trigger the reactivity
+		tmp.filterType.set("Cat: " + param);
+		tmp.searching.set(true);
+		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
+		tmp.selected_cat.set("Others");		
+		tmp.limit.set(tmp.initial_Limit.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
-	'keyup #type_search': function(e) {
+	'keyup #type_search': function(e,tmp) {
 		if(e.keyCode === 13) {
 			$("#searchBut").click();
+		} else if (!e.target.value) {
+			/*https://stackoverflow.com/questions/4403444/jquery-how-to-trigger-an-event-when-the-user-clear-a-textbox*/
+			tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
+			tmp.searchQuery.set("");
+			tmp.searching.set(true);
+			tmp.selected_tag.set("");
+			tmp.limit.set(tmp.initial_Limit.get());
 		}
 	},
-	'click #searchBut': function(e) {
+	'click #searchBut': function(e,tmp) {
 		e.preventDefault();
 		var searchText = $('[name=search]').val().trim();
 
-		Session.set("sButton", (!Session.get("sButton")));	//Template.instance().searchBut.set(!Template.instance().searchBut.get());
+		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 
 		if(searchText !== '') {
-			Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
-	      	Session.set("searching", true);			//Template.instance().searching.set(true);
-	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
-	   	 	Session.set("limit", Session.get("Initial_Limit"));
+			tmp.searchQuery.set(searchText);
+	      	tmp.searching.set(true);
+	      	tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+	   	 	tmp.limit.set(tmp.initial_Limit.get());
 	    }
 
 	    if(searchText === '') {
-	      	Session.set("searchQuery", searchText);	//Template.instance().searchQuery.set(searchText);
-	      	Session.set("selected_tag", "");		//Invalid Tag Search to make way for Filter + Search
-	    	Session.set("limit", Session.get("Initial_Limit"));
+	      	tmp.searchQuery.set(searchText);
+	      	tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
+	    	tmp.limit.set(tmp.initial_Limit.get());
 	    }
 	}
 });

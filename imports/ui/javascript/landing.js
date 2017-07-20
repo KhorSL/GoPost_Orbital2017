@@ -9,6 +9,7 @@ import './forgetPasswordPage.js';
 
 Template.landing.onCreated(function() {
   var template = Template.instance();
+  template.count = new ReactiveVar(0);
 
   template.autorun(function() {
     template.subscribe("events_limit", 20);
@@ -58,10 +59,18 @@ Template.landing.events({
 
 Template.landing.helpers({
   events: function() {
-    return Events.find({}, {sort: {createdAt: -1}, limit: 20});
+    var event_list = Events.find({}, {sort: {createdAt: -1}, limit: 20});
+    Template.instance().count.set(event_list.count());
+    return event_list;
   },
   events_top3: function() {
     return Events.find({}, {sort: {createdAt: -1}, limit: 3});
+  },
+  events_count: function() {
+    if(Template.instance().count.get() > 15) {
+      return true;
+    }
+    return false;
   },
   formatDate: function(date) {
     return moment(date).format('Do MMM YYYY');

@@ -9,6 +9,7 @@ Template.verify_AccPage.onCreated(function() {
 	template.errorMessage = new ReactiveVar(""); 
 	template.email = new ReactiveVar("");
 	template.currentDate = new ReactiveVar(new Date());
+	template.disableBtn = new ReactiveVar(false);
 	Session.set("verifyCode", true); //display verifyCode field
 	Session.set("resetPassword", false); //display resetPassword field.
 
@@ -18,7 +19,7 @@ Template.verify_AccPage.onCreated(function() {
 		template.subscribe("userDetails_Cur", Meteor.userId());
 		var user = Users.find({"User": Meteor.userId()}).fetch();
 		var now = new Date();
-		if (now.getTime() - user[0].TokenExpired.getTime() >= 10*60*1000) {
+		if (now.getTime() - user[0].TokenExpired.getTime() >= 15*60*1000) {
 			/*https://stackoverflow.com/questions/7080051/checking-if-difference-between-2-date-is-more-than-20-minutes*/
 			//token is created for longer than 10 minutes
 			resend = true;
@@ -61,6 +62,14 @@ Template.verify_AccPage.helpers({
 	},
 	errorMessage: function() {
 		return Template.instance().errorMessage.get();
+	},
+	disableBtn: function() {
+		if(Template.instance().disableBtn.get()) {
+			return "disabled";
+		} else {
+			return "";
+		}
+
 	}
 });
 
@@ -81,7 +90,7 @@ Template.verify_AccPage.events({
 			//Right token was entered.
 			var now = new Date();
 			var timeSent = tmp.currentDate.get();
-			if (now.getTime() - timeSent.getTime() >= 1*60*1000) {
+			if (now.getTime() - timeSent.getTime() >= 15*60*1000) {
 				//Token Expired
 				alert("Token have expired! Please click on the resend button to receive a new Verification Token");
 			} else {
@@ -100,6 +109,7 @@ Template.verify_AccPage.events({
 					//forget password
 					Session.set("verifyCode", false);
 					Session.set("resetPassword", true);
+
 					var email = tmp.email.get();
 					Meteor.call("sendResetPasswordEmail", email, function(error, result) {
 						if(error) {
@@ -114,9 +124,11 @@ Template.verify_AccPage.events({
 		} else {
 			tmp.errorMessage.set("Invalid Token. Please enter the 10 character verification code sent to your email.");
 		}
+		tmp.disableBtn.set(false);
 	},
 	'click #resend_btn': function(e, tmp) {
 		e.preventDefault();
+		tmp.disableBtn.set(true);
 		var email = tmp.email.get();
 		Meteor.call("sendVerificationToken", email, function(error, result) {
 			if(error) {
@@ -130,6 +142,7 @@ Template.verify_AccPage.events({
 	},
 	'click #resend_pass_btn': function(e, tmp) {
 		e.preventDefault();
+		tmp.disableBtn.set(true);
 		var email = tmp.email.get();
 		Meteor.call("sendResetPasswordEmail", email, function(error, result) {
 			if(error) {
@@ -165,5 +178,6 @@ Template.verify_AccPage.events({
 		} else {
 			tmp.errorMessage.set("Invalid password. Please enter the new password sent to your email.");
 		}
+		tmp.disableBtn.set(false);
 	}
 });

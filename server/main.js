@@ -766,7 +766,7 @@ if(Meteor.isServer) {
     	return Events.find({}, {sort: {createdAt: -1}, limit: limit});
 	});
 
-	Meteor.publish('events_Filter', function(search, tag, sBut) {
+	Meteor.publish('events_Filter', function(search, tag) {
 		check(search, Match.OneOf(String, null, undefined));
 
   		var query = {};
@@ -836,10 +836,6 @@ if(Meteor.isServer) {
 		return Users.find();
 	});
 
-  	Meteor.publish("userDetail", function(){
-    	return Users.find("Age");
-  	});
-
   	Meteor.publish("userDetails", function() {
   		return Users.find();
   	});
@@ -849,6 +845,22 @@ if(Meteor.isServer) {
 		sub_list = _.flatten(sub_list);
 		return Users.find({"User": {"$in" : sub_list}});
   	});
+
+  	Meteor.publish('users_Filter', function(search) {
+		check(search, Match.OneOf(String, null, undefined));
+
+  		var query = {};
+      	var projection = {sort: {Username: 1}};
+
+  		if(search) {
+    		var regex = new RegExp(search,'i');
+    		query = { Username: regex };
+  		} 
+
+  		return Users.find(
+  			query, projection
+  		);
+	});
 
 	Meteor.publish("event_Tags", function () {
 		return Tags.find();
@@ -928,7 +940,7 @@ Meteor.methods({
 	  			to: email,
 	  			from: "GoPost! <gopostnow@gmail.com>",
 	  			subject: "Please verify your GoPost! account.",
-	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Please verify your email account with the token provided below. We'll communicate with you from time to time via email so it's important that we have an up-to-date email address on file.</p><p>" + token + "</p><p>*Verification Code Expires after 10 minutes it is sent. Please verify your account within 10 minutes.</p><p>If you did not sign up for a GoPost! account, please ignore this message.</p>"
+	  			html: "<p>Hi,</p><p>Thanks for using GoPost! Please verify your email account with the token provided below. We'll communicate with you from time to time via email so it's important that we have an up-to-date email address on file.</p><p>" + token + "</p><p>*Verification Code Expires after 15 minutes it is sent. Please verify your account within 10 minutes.</p><p>If you did not sign up for a GoPost! account, please ignore this message.</p>"
 			});
 
 			return token;

@@ -15,6 +15,12 @@ Router.route('/bulletinBoard', {
   layoutTemplate: 'layout'
 });
 
+Router.route('/friendBoard', {
+  name: 'friendBoard',
+  template: 'friendBoard',
+  layoutTemplate: 'layout'
+});
+
 Router.route('/myBoard', {
 	name: 'myBoard',
   template: 'myBoard',

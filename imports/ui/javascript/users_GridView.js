@@ -24,7 +24,7 @@ Template.users_GridView.helpers({
     	} 
 
   		return false;
-  	},
+  	}
 });
 
 Template.users_GridView.events({

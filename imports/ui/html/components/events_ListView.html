@@ -2,17 +2,54 @@
 	<a href="{{pathFor route='event_View'}}" class="list-group-item list-group-item-action flex-column align-items-start listColor">
     	<div class="d-flex w-100 justify-content-between row">
     		<div class="col-md-12 col-xs-12">
-	      		<h3 class="mb-1">{{title}}</h3>
-	      		<span class="glyphicon glyphicon-time"><small> {{dateTime}}</small></span>
+	      		<div class="leftContent">
+                    <h3 class="mb-1">{{title}}<small> organised by {{poster}}</small></h3>
+                </div>
+                <div class="rightContent">
+                    {{#if currentUser}}
+                      {{#if hasLiked}}
+                        <span role="button" class="glyphicon glyphicon-heart">{{likes}}</span>
+                      {{else}}
+                        <span role="button" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
+                      {{/if}}
+                    {{/if}}
+                    &nbsp;
+                    {{#unless isOwner}}
+                      {{#if regStatus "success"}} 
+                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="Successful Registration">Success</span>
+                      {{else if regStatus "rejected"}}
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="Unsuccessful Registration">Unsuccessful</span>
+                      {{else if regStatus "pending"}}
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Registration pending confirmation">Pending</span>
+                      {{/if}}
+                    {{/unless}}
+                </div>
     		</div>
     	</div>
     	<div class="row"> 
-    		<div class="col-md-4 col-xs-4">
+    		<div class="col-md-4 col-xs-12">
     			<div class="view_Img"><img src={{img}} class="img-responsive"></div>
     		</div>
-    		<div class="col-md-8 col-xs-8">
+    		<div class="col-md-8 col-xs-12">
+                <div class="noteDetails_sub ellipsis">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                      {{location}}
+                  </div>
+                  <div class="noteDetails_sub ellipsis">
+                    <span class="glyphicon glyphicon-time"></span>
+                      {{formatDate start}}
+                  </div>
+                   <div class="noteDetails_sub ellipsis"> 
+                    <span class="glyphicon glyphicon-bookmark"></span>
+                      {{category}} 
+                  </div>
+                  <div class="noteDetails_sub ellipsis"> 
+                    <span class="glyphicon glyphicon-tags"></span>
+                      {{type}} 
+                  </div>
+
+                <h5><strong><u>Event Details: </u></strong></h5>
     			<p class="mb-1 view_para">{{description}}</p>
-    			<small>Find Out More...</small>
     		</div>
     	</div>
   	</a>

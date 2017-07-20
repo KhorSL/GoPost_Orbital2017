@@ -4,9 +4,7 @@ import { Template } from 'meteor/templating';
 //Import default Materials.
 import '/imports/ui/lib/bootstrap.css';
 import '/imports/ui/lib/bootstrap-tokenfield.css';
-import '/imports/ui/lib/fullcalendar.css';
 import '/imports/ui/lib/bootstrap-datetimepicker.css';
-import '/imports/ui/lib/croppie.css';
 
 //Import to load templates
 import '/imports/ui/javascript/aboutUs.js';
@@ -16,6 +14,7 @@ import '/imports/ui/javascript/dashBoard.js';
 import '/imports/ui/javascript/event_View.js';
 import '/imports/ui/javascript/eventForm_Create.js';
 import '/imports/ui/javascript/eventForm_Update.js';
+import '/imports/ui/javascript/friendBoard.js';
 import '/imports/ui/javascript/messageBoard.js';
 import '/imports/ui/javascript/myBoard.js';
 import '/imports/ui/javascript/myEvents.js';

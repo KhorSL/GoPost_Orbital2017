@@ -1,0 +1,33 @@
+<template name='friendBoard'>
+  <div class="search_container">
+
+         <div class="row">    
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="input-group search_box">
+              <input type="hidden" name="search_param" value="all" id="search_param">         
+              <input type="text" class="form-control" id="type_search" name="search" placeholder="Search Users...">
+              <span class="input-group-btn">
+                <button id="searchBut" class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+
+        </div> <!-- end of row for search bar -->
+  </div> <!-- end of search container -->
+    
+    <div class ="blackboard_border">
+      <div class="blackboard">
+        <div class="row" id="frame">
+          {{#if searching}}
+            {{> loader}}
+          {{else}}
+            {{#each users_filtered}}
+              {{> user_StickyView}}
+            {{else}}
+              <p class="alert alert-warning">Nothing found for {{query}}. Sorry.</p>  
+            {{/each}}
+          {{/if}} 
+        </div><!--end of row-->
+    	</div> <!--end of black board -->
+    </div> <!-- end of black board border -->
+</template>
