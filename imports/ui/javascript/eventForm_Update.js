@@ -45,11 +45,24 @@ if(Meteor.isClient) {
   		}
 	});
 
-	Template.eventForm_Update.onCreated(function() {
-
-	});
-
 	Template.eventForm_Update.onRendered(function() {
+		//Datetimepicker verification
+		var dateToday = new Date();
+  		$('#datetimepicker_start').datetimepicker({
+			minDate: dateToday,
+			calendarWeeks: true
+  		});
+  		$('#datetimepicker_end').datetimepicker({
+			minDate: dateToday.setHours(dateToday.getHours() + 1),
+			useCurrent: false //Important! See issue #1075
+  		});
+  		$("#datetimepicker_start").on("dp.change", function (e) {
+			$('#datetimepicker_end').data("DateTimePicker").minDate(e.date.add(30,'m'));
+  		});
+  		$("#datetimepicker_end").on("dp.change", function (e) {
+			$('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
+  		});
+
 		var output; // Output for image input
 
 		// We can use the `ready` callback to interact with the map API once the map is ready.

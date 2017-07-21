@@ -73,15 +73,20 @@ Router.route('/regList/:_id', {
     // return event id for easy access
     return this.params._id;
   },
-  onBeforeAction: function () {
+  onBeforeAction: function () { 
     var currEvent = Events.findOne({_id: this.params._id});
-    if(currEvent.owner != Meteor.userId()) {
-      this.stop();
-      this.redirect('bulletinBoard');
-      return alert("Screw off");
-    } else {
-      this.next();
+    if(currEvent != null || currEvent != undefined) { 
+      if(currEvent.owner != Meteor.userId()) {
+        this.stop();
+        this.redirect('bulletinBoard');
+        return alert("Screw off");
+      }
     }
+    this.next();
+  },
+  action: function () {
+    // render all templates and regions for this route
+    this.render();
   }
 });
 
@@ -119,9 +124,8 @@ Router.route('/update-event/:_id', {
       this.stop();
       this.redirect('bulletinBoard');
       return alert("Screw off");
-    } else {
-      this.next();
     }
+    this.next();
   },
   action: function () {
         // render all templates and regions for this route
@@ -145,9 +149,8 @@ Router.route('/update-regForm/:_id', {
       this.stop();
       this.redirect('bulletinBoard');
       return alert("Screw off");
-    } else {
-      this.next();
     }
+    this.next();
   },  
   action: function () {
         // render all templates and regions for this route

@@ -1,6 +1,8 @@
 <template name="eventForm_Update">
-<div class="panel panel-primary" style="max-width:1000px;margin-left:auto; margin-right:auto;">
-		<div class="panel-heading"> Update event </div>
+<div class="panel panel-updateEvent" style="max-width:1000px;margin-left:auto; margin-right:auto;">
+		<div class="panel-heading"> 
+			<h3 class="panel-title">Update Event</h3> 
+		</div>
 			<div class="panel-body">
 				
 				<form class="update-event" id="update-event">
@@ -31,7 +33,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label> Event Date and Time (Start): </label>
-								<div class="input-group datetimepicker">
+								<div class="input-group datetimepicker" id="datetimepicker_start">
     								<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     								<input class="set-due-date form-control" type="text" name="start" onkeydown="return false" value="{{formatDate this.start}}" required/>
   								</div>
@@ -41,7 +43,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label> Event Date and Time (End): </label>
-								<div class="input-group datetimepicker">
+								<div class="input-group datetimepicker" id="datetimepicker_end">
     								<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
     								<input class="set-due-date form-control" type="text" name="end" onkeydown="return false" value="{{formatDate this.end}}" required/>
   								</div>
