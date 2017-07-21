@@ -22,277 +22,302 @@ Router.route('/download-data/:file/:key', function() {
  		});
 
   		this.response.end();
-	}
-
-	var rfChoice = currEvent.RegFormType;
-
-	// Handles both type of reg form
-	if(rfChoice == "custom") {
-		// fetch the data of all sign ups (in an array) of this particular event in the signUps collection
-		var data = SignUps.find({eventId: eventId}).fetch();
-		if(data.length == 0) {
-			this.response.writeHead(404); //for fun...
-			this.response.end("No records, sorry.\n");
-		} else {
-			// Standard fields that will appear in either type of reg form
-			var fields = [
-				  {
-				  	key: 'createdAt',
-				  	title: 'Submission Time'
-				  },
-				  {
-				  	key: "status",
-				  	title: 'Registration Status',
-				  	transform: function(val, doc) {
-				  		if(val == "success") { 
-				  			return "success";
-				  		} else if(val == "pending") {
-				  			return "pending";
-				  		} else {
-				  			return "rejected";
-				  		}
-				  	}
-				  }
-				];
-
-			// Define the fields needed in custom reg form to export the Excel
-			var last = data.length - 1; // assuming last result have the correct length
-			var responses = data[last]["userResponseList"]; 
-			var len = responses.length; // to get the number of questions in the reg form
-
-			//Create and define the fields
-			for(var i = 0; i < len; i++) {
-				var currRes = responses[i];
-				var resFields = {
-					key: 'userResponseList.' + i,
-					title: currRes.qnsName,
-					transform: function(val, doc) {
-						if(val == null) {
-							return ""; //to take care of empty responses due to form edits
-						} else {
-							return JSON.stringify(val.response); //transform all responses to string for easy storing
-						}
-					}
-				};
-				fields.push(resFields); // add on to the standard fields
-			}
-		}
-
 	} else {
-		var data = SignUps.find({eventId: eventId}).fetch();
-		if(data.length == 0) {
-			this.response.writeHead(404); //for fun...
-			this.response.end("No records, sorry.\n");
+		var rfChoice = currEvent.RegFormType;
+	
+		// Handles both type of reg form
+		if(rfChoice == "custom") {
+			// fetch the data of all sign ups (in an array) of this particular event in the signUps collection
+			var data = SignUps.find({eventId: eventId}).fetch();
+			if(data.length == 0) {
+				this.response.writeHead(404); //for fun...
+				this.response.end("No records, sorry.\n");
+			} else {
+				// Standard fields that will appear in either type of reg form
+				var fields = [
+					  {
+					  	key: 'createdAt',
+					  	title: 'Timestamp',
+					  	transform: function(val, doc) {
+					  		return moment(val).format("dddd, MM/DD/YYYY, h:mm:ss a");
+					  	}
+					  },
+					  {
+					  	key: 'participantId',
+					  	title: 'User Profile Link',
+					  	transform: function(val, doc) {
+					  		return 'www.gopostnow.com/dashBoard/' + val;
+					  	}
+					  },
+					  {
+					  	key: "status",
+					  	title: 'Registration Status',
+					  	transform: function(val, doc) {
+					  		if(val == "success") { 
+					  			return "Success";
+					  		} else if(val == "pending") {
+					  			return "Pending";
+					  		} else {
+					  			return "Rejected";
+					  		}
+					  	}
+					  }
+					];
+	
+				// Define the fields needed in custom reg form to export the Excel
+				var last = data.length - 1; // assuming last result have the correct length
+				var responses = data[last]["userResponseList"]; 
+				var len = responses.length; // to get the number of questions in the reg form
+	
+				//Create and define the fields
+				for(var i = 0; i < len; i++) {
+					var currRes = responses[i];
+					var resFields = {
+						key: 'userResponseList.' + i,
+						title: currRes.qnsName,
+						transform: function(val, doc) {
+							if(val == null) {
+								return ""; //to take care of empty responses due to form edits
+							} else {
+								var stringResult = JSON.stringify(val.response);
+								return stringResult.substring(1, stringResult.length - 1); //transform all responses to string for easy storing and removing first and last double quotes
+							}
+						}
+					};
+					fields.push(resFields); // add on to the standard fields
+				}
+			}
+	
 		} else {
-			// Standard fields that will appear in either type of reg form
-			var fields = [
-				  {
-				  	key: 'createdAt',
-				  	title: 'Submission Time'
-				  },
-				  {
-				  	key: "status",
-				  	title: 'Registration Status',
-				  	transform: function(val, doc) {
-				  		if(val == "success") { 
-				  			return "success";
-				  		} else if(val == "pending") {
-				  			return "pending";
-				  		} else {
-				  			return "rejected";
-				  		}
-				  	}
-				  }
-				];
-	
-			// Default fields
-			if(currEvent.name) {
-				var defFields = {
-					key: "firstName",
-					title: "First Name"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "lastName",
-					title: "Last Name"
-				};
-				fields.push(defFields);
+			var data = SignUps.find({eventId: eventId}).fetch();
+			if(data.length == 0) {
+				this.response.writeHead(404); //for fun...
+				this.response.end("No records, sorry.\n");
+			} else {
+				// Standard fields that will appear in either type of reg form
+				var fields = [
+					  {
+					  	key: 'createdAt',
+					  	title: 'Timestamp',
+					  	transform: function(val, doc) {
+					  		return moment(val).format("dddd, MM/DD/YYYY, h:mm:ss a");
+					  	}
+					  },
+					  {
+					  	key: 'participantId',
+					  	title: 'User Profile Link',
+					  	transform: function(val, doc) {
+					  		return 'www.gopostnow.com/dashBoard/' + val;
+					  	}
+					  },
+					  {
+					  	key: "status",
+					  	title: 'Registration Status',
+					  	transform: function(val, doc) {
+					  		if(val == "success") { 
+					  			return "Success";
+					  		} else if(val == "Pending") {
+					  			return "pending";
+					  		} else {
+					  			return "Rejected";
+					  		}
+					  	}
+					  }
+					];
+		
+				// Default fields
+				if(currEvent.name) {
+					var defFields = {
+						key: "firstName",
+						title: "First Name"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "lastName",
+						title: "Last Name"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.contact_mobile) {
+					var defFields = {
+						key: "mobile",
+						title: "Mobile"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.contact_email) {
+					var defFields = {
+						key: "email",
+						title: "Email"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.address_full) {
+					var defFields = {
+						key: "address",
+						title: "Address"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "city",
+						title: "City"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "postal",
+						title: "Postal"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.address_region) {
+					var defFields = {
+						key: "region",
+						title: "Region"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.shirtSize_SML) {
+					var defFields = {
+						key: "shirtSize_SML",
+						title: "Shirt Size"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.shirtSize_123) {
+					var defFields = {
+						key: "shirtSize_123",
+						title: "Shirt Size"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.nationality) {
+					var defFields = {
+						key: "nationality",
+						title: "Nationality"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.gender) {
+					var defFields = {
+						key: "gender",
+						title: "Gender"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.allergies) {
+					var defFields = {
+						key: "allergies",
+						title: "Allergies"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.dietaryPref) {
+					var defFields = {
+						key: "dietaryPref",
+						title: "Dietary Preference"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.bloodType) {
+					var defFields = {
+						key: "bloodType",
+						title: "Blood Type"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.faculty) {
+					var defFields = {
+						key: "faculty",
+						title: "Faculty"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.major) {
+					var defFields = {
+						key: "major",
+						title: "Major"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.nokInfo) {
+					var defFields = {
+						key: "nok_firstName",
+						title: "NOK First Name"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "nok_lastName",
+						title: "NOK Last Name"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "nok_mobile",
+						title: "NOK Mobile"
+					};
+					fields.push(defFields);
+					defFields = {
+						key: "nok_address",
+						title: "NOK Address"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.additional) {
+					var defFields = {
+						key: "additional",
+						title: "Additional Comments"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.matric) {
+					var defFields = {
+						key: "matric",
+						title: "Matriculation Number"
+					};
+					fields.push(defFields);
+				}
+		
+				if(currEvent.nric) {
+					var defFields = {
+						key: "nric",
+						title: "NRIC"
+					};
+					fields.push(defFields);
+				}
 			}
+		}
 	
-			if(currEvent.contact_mobile) {
-				var defFields = {
-					key: "mobile",
-					title: "Mobile"
-				};
-				fields.push(defFields);
-			}
+		if(data.length > 0) {
+			var title = currEvent.eventTitle + " (Registration Responses)";
+			var file = Excel.export(title, fields, data);
+			var headers = {
+			  'Content-type': 'application/vnd.openxmlformats',
+			  'Content-Disposition': 'attachment; filename=' + title + '.xlsx'
+			};
 	
-			if(currEvent.contact_email) {
-				var defFields = {
-					key: "email",
-					title: "Email"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.address_full) {
-				var defFields = {
-					key: "address",
-					title: "Address"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "city",
-					title: "City"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "postal",
-					title: "Postal"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.address_region) {
-				var defFields = {
-					key: "region",
-					title: "Region"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.shirtSize_SML) {
-				var defFields = {
-					key: "shirtSize_SML",
-					title: "Shirt Size"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.shirtSize_123) {
-				var defFields = {
-					key: "shirtSize_123",
-					title: "Shirt Size"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.nationality) {
-				var defFields = {
-					key: "nationality",
-					title: "Nationality"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.gender) {
-				var defFields = {
-					key: "gender",
-					title: "Gender"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.allergies) {
-				var defFields = {
-					key: "allergies",
-					title: "Allergies"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.dietaryPref) {
-				var defFields = {
-					key: "dietaryPref",
-					title: "Dietary Preference"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.bloodType) {
-				var defFields = {
-					key: "bloodType",
-					title: "Blood Type"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.faculty) {
-				var defFields = {
-					key: "faculty",
-					title: "Faculty"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.major) {
-				var defFields = {
-					key: "major",
-					title: "Major"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.nokInfo) {
-				var defFields = {
-					key: "nok_firstName",
-					title: "NOK First Name"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "nok_lastName",
-					title: "NOK Last Name"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "nok_mobile",
-					title: "NOK Mobile"
-				};
-				fields.push(defFields);
-				defFields = {
-					key: "nok_address",
-					title: "NOK Address"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.additional) {
-				var defFields = {
-					key: "additional",
-					title: "Additional Comments"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.matric) {
-				var defFields = {
-					key: "matric",
-					title: "Matriculation Number"
-				};
-				fields.push(defFields);
-			}
-	
-			if(currEvent.nric) {
-				var defFields = {
-					key: "nric",
-					title: "NRIC"
-				};
-				fields.push(defFields);
-			}
+			this.response.writeHead(200, headers);
+			this.response.end(file, 'binary');
+		} else {
+			this.response.end();
 		}
 	}
 
-	if(data.length > 0) {
-		var title = 'Registration_result';
-		var file = Excel.export(title, fields, data);
-		var headers = {
-		  'Content-type': 'application/vnd.openxmlformats',
-		  'Content-Disposition': 'attachment; filename=' + title + '.xlsx'
-		};
-
-		this.response.writeHead(200, headers);
-		this.response.end(file, 'binary');
-	}
+	Secrets.remove({}); // clears all data in secrets collection at the end of download process	
 }, { where: 'server' });
 /** End of server side route download **/
 

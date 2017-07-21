@@ -5,116 +5,149 @@
         <div class="col-sm-12">
         <!-- Pending Box !-->
           <div class="box">
-            <header>
-              <h5>Pending</h5>
-              <div class="dash_header_right">
-                <button class="btn btn-success" type ="button" id ="accept-pending"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Accept</button>
-                <button class="btn btn-danger" type ="button" id ="reject-pending"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject</button>
-              </div>
-            </header>
-            <form>
-              <ul class="list-group">
-                <li class="list-group-item" style="background-color: #eee">
-                  <div class="checkbox">
-                    <label for=""><input type="checkbox" id="select-all-pending">
-                      <span id="count-checkboxes-pending">0</span>/{{countPendingEvents this}} selected
-                    </label>
-                  </div>
+            <!-- Tabs Menu !-->
+            <div class="text-center">
+              <ul class="nav nav-tabs dash_tabs" id="myTabs">
+                <li class="active">
+                  <a class="quick-btn" href="#menu1" data-toggle="tab">
+                    <span>Pending</span>
+                    <span class="label label-default">{{countPendingEvents this}}</span>
+                  </a>
                 </li>
-                <div class="pendingList" style="overflow:scroll; height:300px;">
-                  {{#each signUpsPending this}}
-                      <li class="list-group-item">
+                <li>
+                  <a class="quick-btn" href="#menu2" data-toggle="tab">
+                    <span>Success</span>
+                    <span class="label label-default">{{countAcceptedEvents this}}</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="quick-btn" href="#menu3" data-toggle="tab">
+                    <span>Rejected</span>
+                    <span class="label label-default">{{countRejectedEvents this}}</span>
+                  </a>
+                </li>
+              </ul>
+            </div> <!-- End of Tabs Menu !-->
+            <!-- Panel for Tabs Menu !-->
+            <div class="row">
+              <div class="col-lg-12 tab-content">
+                <!-- Menu 1 !-->
+                <div class="box tab-pane fade in active" id="menu1">
+                  <header>
+                    <h5>Pending</h5>
+                    <div class="dash_header_right">
+                      {{#if checkOwnership this}}
+                        <button class="btn btn-success" type ="button" id ="accept-pending"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Accept</button>
+                        <button class="btn btn-danger" type ="button" id ="reject-pending"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject</button>
+                      {{/if}}
+                    </div>
+                  </header>
+                  <form>
+                    <ul class="list-group">
+                      <li class="list-group-item" style="background-color: #eee">
                         <div class="checkbox">
-                          <label class="hover-img">
-                            <input type="checkbox" class="participant-pending" data-id="{{this._id}}"/>
-                            <span role="button" id="to_profile">  {{participantUser}}</span>
-                            <figure>
-                              <img src="{{participantDp}}"/>
-                              <br>
-                              <center><p>{{participantGender}}, {{participantAge}}</p></center>
-                            </figure>
+                          <label for=""><input type="checkbox" id="select-all-pending">
+                            <span id="count-checkboxes-pending">0</span>/{{countPendingEvents this}} selected
                           </label>
                         </div>
-                      </li>  
-                  {{/each}}
-                </div>
-              </ul>
-            </form>
-          </div> <!-- End of Pending Box !-->
-          <!-- Success Box !-->
-          <div class="box">
-            <header>
-              <h5>Success</h5>
-              <div class="dash_header_right">
-                <button class="btn btn-danger" type ="button" id ="reject-success"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject</button>
-              </div>
-            </header>
-            <form>
-              <ul class="list-group">
-                <li class="list-group-item" style="background-color: #eee">
-                  <div class="checkbox">
-                    <label for=""><input type="checkbox" id="select-all-success">
-                      <span id="count-checkboxes-success">0</span>/{{countAcceptedEvents this}} selected
-                    </label>
-                  </div>
-                </li>
-                <div class="acceptedList" style="overflow:scroll; height:300px;">
-                  {{#each signUpsAccepted this}}
-                      <li class="list-group-item">
+                      </li>
+                      <div class="pendingList" style="overflow:scroll; height:400px;">
+                        {{#each signUpsPending this}}
+                            <li class="list-group-item">
+                              <div class="checkbox">
+                                <label class="hover-img">
+                                  <input type="checkbox" class="participant-pending" data-id="{{this._id}}"/>
+                                  <span role="button" id="to_profile">  {{participantUser}}</span>
+                                  <figure>
+                                    <img src="{{participantDp}}"/>
+                                    <br>
+                                    <center><p>{{participantGender}}, {{participantAge}}</p></center>
+                                  </figure>
+                          </label>
+                              </div>
+                            </li>  
+                        {{/each}}
+                      </div>
+                    </ul>
+                  </form>
+                </div> <!-- End of Pending Box, Menu 1 !-->
+                <!-- Menu 2 !--> <!-- Success Box !-->
+                <div class="box tab-pane fade" id="menu2">
+                  <header>
+                    <h5>Success</h5>
+                    <div class="dash_header_right">
+                      <button class="btn btn-danger" type ="button" id ="reject-success"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Reject</button>
+                    </div>
+                  </header>
+                  <form>
+                    <ul class="list-group">
+                      <li class="list-group-item" style="background-color: #eee">
                         <div class="checkbox">
-                          <label class="hover-img">
-                            <input type="checkbox" class="participant-success" data-id="{{this._id}}"/>
-                            <span role="button" id="to_profile">  {{participantUser}}</span>
-                            <figure>
-                              <img src="{{participantDp}}"/>
-                              <br>
-                              <center><p>{{participantGender}}, {{participantAge}}</p></center>
-                            </figure>
+                          <label for=""><input type="checkbox" id="select-all-success">
+                            <span id="count-checkboxes-success">0</span>/{{countAcceptedEvents this}} selected
                           </label>
                         </div>
-                      </li>  
-                  {{/each}}
-                </div>
-              </ul>
-            </form>
-          </div> <!-- End of Success Box !-->
-          <!-- Rejected Box !-->
-          <div class="box">
-            <header>
-              <h5>Rejected</h5>
-              <div class="dash_header_right">
-                <button class="btn btn-success" type ="button" id ="accept-rejected"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Accept</button>
-              </div>
-            </header>
-            <form>
-              <ul class="list-group">
-                <li class="list-group-item" style="background-color: #eee">
-                  <div class="checkbox">
-                    <label for=""><input type="checkbox" id="select-all-rejected">
-                      <span id="count-checkboxes-rejected">0</span>/{{countRejectedEvents this}} selected
-                    </label>
-                  </div>
-                </li>
-                <div class="rejectedList" style="overflow:scroll; height:300px;">
-                  {{#each signUpsRejected this}}
-                      <li class="list-group-item">
+                      </li>
+                      <div class="acceptedList" style="overflow:scroll; height:400px;">
+                        {{#each signUpsAccepted this}}
+                            <li class="list-group-item">
+                              <div class="checkbox">
+                                <label class="hover-img">
+                                  <input type="checkbox" class="participant-success" data-id="{{this._id}}"/>
+                                  <span role="button" id="to_profile">  {{participantUser}}</span>
+                                  <figure>
+                                    <img src="{{participantDp}}"/>
+                                    <br>
+                                    <center><p>{{participantGender}}, {{participantAge}}</p></center>
+                                  </figure>
+                                </label>
+                              </div>
+                            </li>  
+                        {{/each}}
+                      </div>
+                    </ul>
+                  </form>
+                </div> <!-- End of Success Box, Menu 2 !-->
+                <!-- Rejected Box !-->
+                <div class="box tab-pane fade" id="menu3">
+                  <header>
+                    <h5>Rejected</h5>
+                    <div class="dash_header_right">
+                      <button class="btn btn-success" type ="button" id ="accept-rejected"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Accept</button>
+                    </div>
+                  </header>
+                  <form>
+                    <ul class="list-group">
+                      <li class="list-group-item" style="background-color: #eee">
                         <div class="checkbox">
-                          <label class="hover-img">
-                            <input type="checkbox" class="participant-rejected" data-id="{{this._id}}"/>
-                            <span role="button" id="to_profile">  {{participantUser}}</span>
-                            <figure>
-                              <img src="{{participantDp}}"/>
-                              <br>
-                              <center><p>{{participantGender}}, {{participantAge}}</p></center>
-                            </figure>
+                          <label for=""><input type="checkbox" id="select-all-rejected">
+                            <span id="count-checkboxes-rejected">0</span>/{{countRejectedEvents this}} selected
                           </label>
                         </div>
-                      </li>  
-                  {{/each}}
-                </div>
-              </ul>
-            </form>
-          </div> <!-- End of Rejected Box !-->
+                      </li>
+                      <div class="rejectedList" style="overflow:scroll; height:400px;">
+                        {{#each signUpsRejected this}}
+                            <li class="list-group-item">
+                              <div class="checkbox">
+                                <label class="hover-img">
+                                  <input type="checkbox" class="participant-rejected" data-id="{{this._id}}"/>
+                                  <span role="button" id="to_profile">  {{participantUser}}</span>
+                                  <figure>
+                                    <img src="{{participantDp}}"/>
+                                    <br>
+                                    <center><p>{{participantGender}}, {{participantAge}}</p></center>
+                                  </figure>
+                                </label>
+                              </div>
+                            </li>  
+                        {{/each}}
+                      </div>
+                    </ul>
+                  </form>
+                </div> <!-- End of Rejected Box, Menu 3 !-->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

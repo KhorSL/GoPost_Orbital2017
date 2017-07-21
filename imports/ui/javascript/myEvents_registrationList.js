@@ -38,9 +38,12 @@ Template.myEvents_registrationList.helpers({
 	/* End of sign up status data */
 
 	participantUser: function() {
+		var currUsername = "";
 		var participantId = this.participantId;
 		var currUser = Users.findOne({User: participantId});
-		var currUsername = currUser.Username;
+		if(currUser != null || currUser != undefined) {
+			currUsername = currUser.Username;
+		}
 		return currUsername;
 	},
 
@@ -86,24 +89,43 @@ Template.myEvents_registrationList.helpers({
 	/* End of count total number of events */
 
 	participantDp: function() {
+		var currUserDp = "";
 		var participantId = this.participantId;
 		var currUser = Users.findOne({User: participantId});
-		var currUserDp = currUser.profilePic;
+		if(currUser != null || currUser != undefined) {
+			currUserDp = currUser.profilePic;
+		}
 		return currUserDp;
 	},
 
 	participantGender: function() {
+		var currUserGender = "";
 		var participantId = this.participantId;
 		var currUser = Users.findOne({User: participantId});
-		var currUserGender = currUser.Gender;
+		if(currUser != null || currUser != undefined) {
+			currUserGender = currUser.Gender;
+		}
 		return currUserGender;
 	},
 
 	participantAge: function() {
+		var currUserAge = "";
 		var participantId = this.participantId;
 		var currUser = Users.findOne({User: participantId});
-		var currUserAge = currUser.Age;
+		if(currUser != null || currUser != undefined) {
+			var currUserAge = currUser.Age;
+		}
 		return currUserAge;
+	},
+
+	checkOwnership: function(id) {
+		var currentUser = Meteor.userId();
+		var eventId = id;
+		var currEvent = Events.findOne({_id: eventId});
+		if(currEvent != undefined && currEvent.owner == currentUser) {
+			return true;
+		}
+		return false;
 	}
 });
 
