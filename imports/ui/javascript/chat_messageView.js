@@ -6,7 +6,7 @@ import '../css/chatBoard.css';
 
 Template.chat_messageView.helpers({
 	sending: function() {
-		if(this.owner === Session.get("sender")) {
+		if(this.owner === Meteor.userId()) {
 			return true;
 		} else {
 			return false;
