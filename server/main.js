@@ -330,6 +330,10 @@ UserSchema = new SimpleSchema({
   		type: String,
   		label: "Username"
   	},
+  	Email: {
+  		type: String,
+  		label: "Email"
+  	},
   	Gender: {
     	type: String,
     	label: "Gender"
@@ -344,7 +348,11 @@ UserSchema = new SimpleSchema({
   	},
 	TokenExpired: {
 		type: Date,
-		label: "Verification Expired Date",
+		label: "Verification Expired Date"
+	},
+	NotificationType: {
+		type: String,
+		label: "Email Notifications for Created Events"
 	},
   	profilePic: {
 		type: String,
@@ -1248,14 +1256,16 @@ Meteor.methods({
 		});
 	},
 
-  	insertUserData: function(userid, username,gender,age, token){
+  	insertUserData: function(userid, username, email, gender, age, token){
     	Users.insert({
       		User: userid,
       		Username: username,
+      		Email: email,
       		Gender: gender,
       		Age: age,
       		Token: token,
-      		TokenExpired: new Date()
+      		TokenExpired: new Date(),
+      		NotificationType: "A"
     	});
   	},
 
@@ -1273,6 +1283,14 @@ Meteor.methods({
     		$set: {
 				profilePic: source
 			}
+    	});
+  	},
+
+  	updateUserEmailNotification: function(userid, option) {
+  		Users.update({User:userid}, {
+    		$set: {
+    			NotificationType: option
+    		}
     	});
   	},
 
@@ -1327,6 +1345,40 @@ Meteor.methods({
 
 		//Remove from user SignUpEventList
 		SignUps.remove({eventId: id});
+	},
+
+	sendEventEmail: function(eventId) {
+		var event_new = Events.findOne({_id: eventId});
+
+		/*https://themeteorchef.com/tutorials/using-the-email-package*/
+		var mailing_list = Users.find({
+			$or: [
+				{NotificationType: "C", User: {$ne: Meteor.userId()}},
+				{$and: [
+					{NotificationType: "B"},
+					{FollowingList: Meteor.userId()},
+					{User: {$ne: Meteor.userId()}}
+				]}
+			]
+		}).fetch();
+
+		SSR.compileTemplate('eventEmail', Assets.getText('html-email.html'));
+		Template.eventEmail.helpers({
+  			formatDate: function(date) {
+  				return moment(date).format('Do MMM YYYY, h.mm a');
+  			}
+		});
+
+		for(var i in mailing_list) {
+			var user = mailing_list[i];
+			
+			Email.send({
+ 		 		to: user.Email,
+  				from: "GoPost! <gopostnow@gmail.com>",
+  				subject: "GoPost! New Event Update: " + event_new.title,
+  				html: SSR.render('eventEmail', event_new),
+			});
+		}
 	},
 
 	toggleLikes: function(id) {
@@ -1503,5 +1555,4 @@ Meteor.methods({
 			$inc: { count: +1 }
   		}, {upsert: true});
   	}
-
 });

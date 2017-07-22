@@ -12,10 +12,35 @@ Template.layout.onRendered(function() {
 Template.layout.helpers({
   messageCount: function() {
     var total = 0;
+    var count = 0;
+    var titles = [];
+    //Get all channel Counts
+    Users.find({"User": Meteor.userId()}).fetch().map(function(obj) {
+      if(obj.SignUpEventList.length > 0) {
+        _.map(obj.SignUpEventList, function(objA){
+          count+= objA.lastRead_Count;
+          titles.push(objA.eventTitle);
+        });
+      }
+      if(obj.CreatedEventList.length > 0) {
+        _.map(obj.CreatedEventList, function(objA){
+          count+= objA.lastRead_Count;
+          titles.push(objA.eventTitle);
+        });
+      }
+    });
+
     /*https://stackoverflow.com/questions/15813329/how-i-can-sum-all-the-values-of-a-property-in-a-meteor-collection*/
-    MessagesCount.find({chatID: Meteor.userId()}).map(function(obj) {
+    MessagesCount.find({
+      $or: [
+        {chatID: Meteor.userId()},
+        {chatID: {$in: titles}}
+      ]
+    }).map(function(obj) {
       total += obj.count;
     });
+
+    total -= count;
     if(total>0) {
       return total;
     }

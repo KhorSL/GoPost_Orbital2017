@@ -19,7 +19,7 @@ Template.bulletinBoard.onCreated( () => {
 	template.searching   = new ReactiveVar( false );
 	template.sButton	 = new ReactiveVar( false );
 	template.initial_Limit = new ReactiveVar(20);
-	template.limit = new ReactiveVar(20);
+	Session.set("limit", template.initial_Limit.get());
 
 	var global_search = Session.get("navbar_search");
 	if(global_search !== '' && (typeof global_search) !== 'undefined') {
@@ -49,7 +49,7 @@ Template.bulletinBoard.onRendered(function() {
       		var scrollTop = $(this).scrollTop();
 
       		if(scrollTop > lastScrollTop){ // detect scroll down
-        		Template.instance().limit.set((Template.instance().limit.get()+15)); // when it reaches the end, add another 9 elements
+      			Session.set("limit", (Session.get("limit")+15)); // when it reaches the end, add another 9 elements
       		}
 
       		lastScrollTop = scrollTop;
@@ -58,8 +58,14 @@ Template.bulletinBoard.onRendered(function() {
  	/*Auto Detect Scrolling Credits:
 	http://www.meteorpedia.com/read/Infinite_Scrolling
 	https://stackoverflow.com/questions/38739335/infinite-scrolling-with-meteor
+	https://stackoverflow.com/questions/4306387/jquery-add-and-remove-window-scrollfunction
  	*/
  });
+
+Template.bulletinBoard.onDestroyed(function() {
+	$(window).off("scroll");
+	delete Session.keys['limit'];
+});
 
 Template.bulletinBoard.helpers({
 	viewType: function() {
@@ -85,7 +91,7 @@ Template.bulletinBoard.helpers({
   		var filter = $('[name=search_param]').val();
   		var tag = Template.instance().selected_tag.get();
   		var cat = Template.instance().selected_cat.get();
-  		var limit = Template.instance().limit.get();
+  		var limit = Session.get("limit");
   		var search = {};
   		var regex;
 
@@ -165,7 +171,7 @@ Template.bulletinBoard.events({
 		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
 		tmp.searchQuery.set("");		//For enabling full search
 		$('[name=search]').val("");		//For enabling full search
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #latest': function(e,tmp) {
@@ -176,7 +182,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #hot': function(e,tmp) {
@@ -187,7 +193,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #location': function(e,tmp) {
@@ -198,7 +204,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #soon': function(e,tmp) {
@@ -209,7 +215,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("");		//Invalid Tag Search to make way for Filter + Search
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Camp': function(e,tmp) {
@@ -220,7 +226,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Camp");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #CCA': function(e,tmp) {
@@ -231,7 +237,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("CCA");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Community': function(e,tmp) {
@@ -242,7 +248,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Community");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Competition': function(e,tmp) {
@@ -253,7 +259,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Competition");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Internship': function(e,tmp) {
@@ -264,7 +270,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Internship");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Workshop': function(e,tmp) {
@@ -275,7 +281,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Workshop");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'click #Others': function(e,tmp) {
@@ -286,7 +292,7 @@ Template.bulletinBoard.events({
 		tmp.searching.set(true);
 		tmp.selected_tag.set("");			//Invalid Tag Search to make way for Filter + Search
 		tmp.selected_cat.set("Others");		
-		tmp.limit.set(tmp.initial_Limit.get());
+		Session.set("limit", tmp.initial_Limit.get());
 		tmp.sButton.set((!tmp.sButton.get())); //trigger reactivity
 	},
 	'keyup #type_search': function(e,tmp) {
@@ -298,7 +304,7 @@ Template.bulletinBoard.events({
 			tmp.searchQuery.set("");
 			tmp.searching.set(true);
 			tmp.selected_tag.set("");
-			tmp.limit.set(tmp.initial_Limit.get());
+			Session.set("limit", tmp.initial_Limit.get());
 		}
 	},
 	'click #searchBut': function(e,tmp) {
@@ -311,13 +317,13 @@ Template.bulletinBoard.events({
 			tmp.searchQuery.set(searchText);
 	      	tmp.searching.set(true);
 	      	tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
-	   	 	tmp.limit.set(tmp.initial_Limit.get());
+	   	 	Session.set("limit", tmp.initial_Limit.get());
 	    }
 
 	    if(searchText === '') {
 	      	tmp.searchQuery.set(searchText);
 	      	tmp.selected_tag.set("");		//Invalid Tag Search to make way for Filter + Search
-	    	tmp.limit.set(tmp.initial_Limit.get());
+	    	Session.set("limit", tmp.initial_Limit.get());
 	    }
 	}
 });

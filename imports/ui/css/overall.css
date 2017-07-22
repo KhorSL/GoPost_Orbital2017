@@ -5,3 +5,12 @@
 	margin-bottom: 10px;
 	border: 1px solid blue;
 }
+
+.settings_wrapper {
+	padding: 20px;
+}
+
+.settings_bottom {
+	margin: 20px;
+	text-align: right;
+}
