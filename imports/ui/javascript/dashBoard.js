@@ -22,6 +22,11 @@ Template.dashBoard.onCreated(() => {
 
   template.skipCount = new ReactiveVar(0);
   template.max = new ReactiveVar(0);
+  template.max1 = new ReactiveVar(0);
+  template.max2 = new ReactiveVar(0);
+  template.max3 = new ReactiveVar(0);
+  template.max4 = new ReactiveVar(0);
+  template.max5 = new ReactiveVar(0);
   template.currentTab = new ReactiveVar(0);
   template.viewingThisOwner = new ReactiveVar(Router.current().params.owner);
 
@@ -102,7 +107,23 @@ Template.dashBoard.helpers({
   },
 
   max: function() {
-    var max = Template.instance().max.get();
+    var max = 0;
+    var currentTab = Template.instance().currentTab.get();
+    if(currentTab) {
+      if(currentTab === "#menu1") {
+        max = Template.instance().max1.get();
+      } else if(currentTab === "#menu2") {
+        max = Template.instance().max2.get();
+      } else if(currentTab === "#menu3") {
+        max = Template.instance().max3.get();
+      } else if(currentTab === "#menu4") {
+        max = Template.instance().max4.get();
+      } else if(currentTab === "#menu5") {
+        max = Template.instance().max5.get();
+      }
+    }
+    Template.instance().max.set(max);
+
     return Math.ceil(max/3);
   },
   
@@ -115,7 +136,7 @@ Template.dashBoard.helpers({
       limit: 3,
       skip: skipCount
     });
-    Template.instance().max.set(events_List.count());
+    Template.instance().max2.set(Events.find({"owner": owner}).count());
     return events_List;
   },
 
@@ -125,7 +146,7 @@ Template.dashBoard.helpers({
 
     var signedups = Users.find({"User":owner}).fetch().map(function (obj) {return obj.SignUpEventList;});
     signedups = _.pluck(_.flatten(signedups), 'eventID');
-    Template.instance().max.set(signedups.length);
+    Template.instance().max1.set(signedups.length);
 
     return Events.find({ "_id": {"$in" : signedups}}, {
       sort: {createdAt: -1},
@@ -140,7 +161,7 @@ Template.dashBoard.helpers({
 
     var posterIDs = Users.find({"User": owner}).map(function (obj) {return obj.LikedList;});
     posterIDs = _.flatten(posterIDs);
-    Template.instance().max.set(posterIDs.length);
+    Template.instance().max5.set(posterIDs.length);
 
     return Events.find({"_id": {"$in" : posterIDs}}, {
       sort: {createdAt: -1},
@@ -155,7 +176,7 @@ Template.dashBoard.helpers({
 
     var sub_list = Users.find({"User": owner}).fetch().map(function (obj) {return obj.FollowingList;});
     sub_list = _.flatten(sub_list);
-    Template.instance().max.set(sub_list.length);
+    Template.instance().max3.set(sub_list.length);
 
     return Users.find({"User": {"$in" : sub_list}}, {
       limit: 3,
@@ -171,7 +192,7 @@ Template.dashBoard.helpers({
       limit: 3,
       skip: skipCount
     });
-    Template.instance().max.set(subscribers.count());
+    Template.instance().max4.set(Users.find({"FollowingList": owner}).count());
     return subscribers;
   },
 
@@ -185,8 +206,9 @@ Template.dashBoard.helpers({
   }, 
 
   disableNext: function() {
-    var skipCount = Template.instance().skipCount.get();;
-    var max = Template.instance().max.get();;
+    var skipCount = Template.instance().skipCount.get();
+    var max = Template.instance().max.get();
+
     if((skipCount+3) >= max) {
       return 'disabled';
     } else {
