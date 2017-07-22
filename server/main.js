@@ -1372,6 +1372,8 @@ Meteor.methods({
 		for(var i in mailing_list) {
 			var user = mailing_list[i];
 			
+			this.unblock();
+
 			Email.send({
  		 		to: user.Email,
   				from: "GoPost! <gopostnow@gmail.com>",
