@@ -450,6 +450,10 @@ EventsSchema = new SimpleSchema({
 	"locationGeo.$": {
 		type: String
 	},
+	venue: {
+		type: String,
+		label: "Venue"
+	},
 	createdAt: {
 		type: Date,
 		label: "Created At",
@@ -1235,13 +1239,14 @@ Meteor.methods({
 		SignUps.update({_id: submissionId}, {$set: {status: "rejected"}});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, signUpDeadline, cat, type, channel, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, channel, contact, img){
 		return Events.insert({
 			title: title,
 			description: description,
 			location: location,
 			locationAddr: locationAddr,
 			locationGeo: locationGeo,
+			venue: venue,
 			start: start,
 			end: end,
 			category: cat,
@@ -1294,7 +1299,7 @@ Meteor.methods({
     	});
   	},
 
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, start, end, cat, type, contact, img){
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, contact, img){
 		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
@@ -1317,8 +1322,10 @@ Meteor.methods({
 			location: location,
 			locationAddr: locationAddr,
 			locationGeo: locationGeo,
+			venue: venue,
 			start: start,
 			end: end,
+			signUpDeadline: signUpDeadline,
 			category: cat,
 			type: type,
 			contact: contact,

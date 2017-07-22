@@ -89,6 +89,14 @@ Template.event_View.helpers({
     } else {
       return true;
     }
+  },
+  disableSignUpBtn: function() {
+    var curDate = new Date();
+    if(curDate.getTime() - this.signUpDeadline.getTime() >= 0) {
+      return "disabled";
+    } else {
+      return "";
+    }
   }
  });
 

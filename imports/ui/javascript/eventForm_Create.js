@@ -312,6 +312,7 @@ if(Meteor.isClient) {
 			var location = event.target.location.value;
 			var locationAddr = addr;
 			var locationGeo = geo;
+			var venue = event.target.venue.value;
 			var start = event.target.start.value;
 			var end = event.target.end.value;
 			var signUpDeadline = event.target.signUpDeadline.value;
@@ -346,7 +347,7 @@ if(Meteor.isClient) {
 				var rf_matric = event.target.rf_matric.checked;
 				var rf_nric = event.target.rf_nric.checked;
 
-				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
 					if(error) {
 						console.log(error.reason);
 					} else {

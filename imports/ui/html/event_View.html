@@ -25,7 +25,7 @@
 		            	{{#if hasSignUp}}
 		            		<button id="{{this._id}}" class="signUp btn">Check Status</button>
 		            	{{else}}
-		            		<button id="{{this._id}}" class="signUp btn">Sign Up</button>
+		            		<button id="{{this._id}}" class="signUp btn" {{disableSignUpBtn}}>Sign Up</button>
 		            	{{/if}}
 		            {{/if}}
 		            </div>
@@ -44,9 +44,14 @@
 			<div class="col-md-12 col-xs-12">
 				<div>
 					<p>
-						<span class="glyphicon glyphicon-map-marker"> {{location}} <br/> &nbsp;&nbsp;{{locationAddr}}</span><br/>
+						<span class="glyphicon glyphicon-map-marker"> {{venue}} <br/>
+							&nbsp;&nbsp;{{location}} <br/> 
+							&nbsp;&nbsp;{{locationAddr}}</span>
+							<br/>
 						<span class="glyphicon glyphicon-time"> {{formatDate start}}</span><br/>
-						<span class="glyphicon glyphicon-info-sign"> {{type}}</span><br/>
+						<span class="glyphicon glyphicon-bookmark"> {{category}} </span><br/>
+						<span class="glyphicon glyphicon-tags"> {{type}}</span><br/>
+						<span class="glyphicon glyphicon-asterisk"> <strong style="color:red;">Signup Deadline: </strong>{{formatDate  signUpDeadline}}</span><br/>
 					</p>
 				</div>
 
