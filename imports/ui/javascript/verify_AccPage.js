@@ -24,7 +24,7 @@ Template.verify_AccPage.onCreated(function() {
 			//token is created for longer than 10 minutes
 			resend = true;
 		} else {
-			console.log(user[0].Token);
+			//console.log(user[0].Token);
 			template.password_token.set(user[0].Token);
 		}
 		template.email.set(Meteor.user().emails[0].address);
@@ -40,7 +40,7 @@ Template.verify_AccPage.onCreated(function() {
 			if(error) {
 				//console.log(error.reason);
 			} else {
-				console.log(result);
+				//console.log(result);
 				template.password_token.set(result);
 				template.currentDate.set(new Date());
 				resend = false;
@@ -134,7 +134,7 @@ Template.verify_AccPage.events({
 			if(error) {
 				//console.log(error.reason);
 			} else {
-				console.log(result);
+				//console.log(result);
 				tmp.password_token.set(result);
 				tmp.currentDate.set(new Date());
 			}
@@ -146,7 +146,7 @@ Template.verify_AccPage.events({
 		var email = tmp.email.get();
 		Meteor.call("sendResetPasswordEmail", email, function(error, result) {
 			if(error) {
-				console.log(error.reason);
+				//console.log(error.reason);
 			} else {
 				//console.log(result);
 				tmp.password_token.set(result);
