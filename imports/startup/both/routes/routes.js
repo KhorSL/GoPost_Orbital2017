@@ -1,7 +1,11 @@
 Router.route('/', {
 	name: 'landing',
 	template: 'landing',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events_limit", 20);
+  }
 });
 
 Router.route('/aboutUs', {
@@ -15,21 +19,33 @@ Router.route('/bulletinBoard', {
 	name: 'bulletinBoard',
   template: 'bulletinBoard',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events_Filter", "","");
+  }
 });
 
 Router.route('/friendBoard', {
   name: 'friendBoard',
   template: 'friendBoard',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("users_Filter", "");
+  }
 });
 
 Router.route('/myBoard', {
 	name: 'myBoard',
   template: 'myBoard',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events_Subscribers", Meteor.userId(), false);
+  }
 });
 
 Router.route('/messageBoard', {
@@ -43,7 +59,11 @@ Router.route('/chatBoard', {
 	name: 'chatBoard',
   template: 'chatBoard',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events_withChannel");
+  }
 });
 
 Router.route('/dashBoard/:owner', {
@@ -51,6 +71,10 @@ Router.route('/dashBoard/:owner', {
   template: 'dashBoard',
   layoutTemplate: 'layout',
   loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events");
+  },
   data: function() {
     var selection = this.params.owner;
     return Users.findOne({User: selection});
@@ -62,6 +86,10 @@ Router.route('/dashBoard/', { //Normal Dashboard routing
   template: 'dashBoard',
   layoutTemplate: 'layout',
   loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("events");
+  },
   data: function() {
     var selection = Meteor.userId();
     return Users.findOne({User: selection});
@@ -72,7 +100,11 @@ Router.route('/myEvents', {
 	name: 'myEvents',
   template: 'myEvents',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("userEvents");
+  }
 });
 
 Router.route('/regList/:_id', {
@@ -107,6 +139,7 @@ Router.route('/event_View/:_id', {
   template: "event_View",
   layoutTemplate: "layout",
   loadingTemplate: "loader",
+  fastRender: true,
   waitOn: function () {
     var selection = this.params._id;
     return Meteor.subscribe('events_ONE', selection);
@@ -129,6 +162,7 @@ Router.route('/update-event/:_id', {
   template: "eventForm_Update",
   layoutTemplate: "layout",
   loadingTemplate: "loader",
+  fastRender: true,
   waitOn: function () {
     return Meteor.subscribe('events');
   },
@@ -155,6 +189,7 @@ Router.route('/update-regForm/:_id', {
   template: "eventForm_RegistrationForm_Update",
   layoutTemplate: "layout",
   loadingTemplate: "loader",
+  fastRender: true,
   waitOn: function () {
     return Meteor.subscribe('rfTemplates');
   },
@@ -190,20 +225,32 @@ Router.route('/myFriends', {
   name: 'myFriends',
   template: 'myFriends',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("user_subscriptions", Meteor.userId());
+  }
 });
 
 Router.route('/settings', {
 	name: 'settings',
   template: 'settings',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("userDetails_Cur", Meteor.userId());
+  }
 });
 
 Router.route('/verify_AccPage', {
   name: 'verify_AccPage',
   template: 'verify_AccPage',
   loadingTemplate: "loader",
+  fastRender: true,
+  waitOn: function() {
+    return Meteor.subscribe("userDetails_Cur", Meteor.userId());
+  },
   onBeforeAction: function() {
     if(Meteor.user()) {
       if(Meteor.user().emails[0].verified) {

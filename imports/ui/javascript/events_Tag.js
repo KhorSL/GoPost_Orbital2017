@@ -14,7 +14,7 @@ Template.events_Tag.helpers({
 });
 
 Template.events_Tag.events({
-	'click #tag_btn': function(e) {
+	'click #tag_btn': function(e, tmp) {
 		e.preventDefault();
 		var selected_tag = e.target.name;
 		Session.set("selected_tag", selected_tag);
