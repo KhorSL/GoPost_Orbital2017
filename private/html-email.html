@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Events Details</title>
+  <style>
+    .img-responsive {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/EmailMessage">
+  <div style="text-align:center;">
+     <h2>{{title}} </h2>
+     <h4>{{poster}}</h4>
+     
+     <img src={{img}} class="img-responsive">
+     
+     <h5>Hey Everyone!</h5>
+     
+      <p>{{description}}</p>
+      
+      <p>Time: {{formatDate start}}
+         <br/>
+         Venue: {{locationAddr}}
+         <br/>
+         Sign up deadline: 
+       </p>
+      
+      <p>Sign up now at <a href="www.gopostnow.com">www.gopostnow.com</a></p>
+  </div>
+</body>
+</html>

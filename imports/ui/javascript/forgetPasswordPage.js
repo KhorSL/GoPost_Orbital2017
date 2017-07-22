@@ -4,8 +4,14 @@ import { Template } from 'meteor/templating';
 import '../html/components/forgetPasswordPage.html';
 import '../css/loginReg.css';
 
-Template.forgetPasswordPage.onRendered(function() {
+Template.forgetPasswordPage.onCreated(function() {
+  let template = Template.instance();
+  template.disableBtn = new ReactiveVar(false);
+});
 
+Template.forgetPasswordPage.onRendered(function() {
+  var tmp = Template.instance();
+  
   var validator = $('.resetpassword-form').validate({
     submitHandler: function(event) {   //Activates when form is submitted
 
@@ -14,6 +20,7 @@ Template.forgetPasswordPage.onRendered(function() {
       Meteor.call("checkIfUserEmailExists", email, function(error, result) {
         if(result) {
           //email found.
+          tmp.disableBtn.set(true);
           Session.set("sendToken", email);
           $('#forgetPasswordModal').modal('hide'); 
           Router.go('verify_AccPage');
@@ -27,6 +34,16 @@ Template.forgetPasswordPage.onRendered(function() {
     } //end of submitHandler
   }); //end of validate
 }); //end of onRendered
+
+Template.forgetPasswordPage.helpers({
+  disableBtn: function() {
+    if(Template.instance().disableBtn.get()) {
+      return "disabled";
+    } else {
+      return "";
+    }
+  }
+});
 
 Template.forgetPasswordPage.events({
   'submit .resetpassword-form' :function(e) {

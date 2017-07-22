@@ -13,7 +13,7 @@ Template.friendBoard.onCreated(function() {
 	template.searching   = new ReactiveVar( false );
 	template.searchBut	 = new ReactiveVar( false );
 	template.initial_Limit = new ReactiveVar(20);
-	template.limit = new ReactiveVar(20);
+	Session.set("limit", template.initial_Limit.get());
 
   	template.autorun( () => {
   		var search = template.searchQuery.get();
@@ -35,7 +35,7 @@ Template.friendBoard.onRendered(function() {
       		var scrollTop = $(this).scrollTop();
 
       		if(scrollTop > lastScrollTop){ // detect scroll down
-        		Template.instance().limit.set((Template.instance().limit.get()+15)); // when it reaches the end, add another 9 elements
+        		Session.set("limit", (Session.get("limit")+15)); // when it reaches the end, add another 9 elements
       		}
 
       		lastScrollTop = scrollTop;
@@ -44,8 +44,14 @@ Template.friendBoard.onRendered(function() {
  	/*Auto Detect Scrolling Credits:
 	http://www.meteorpedia.com/read/Infinite_Scrolling
 	https://stackoverflow.com/questions/38739335/infinite-scrolling-with-meteor
+	https://stackoverflow.com/questions/4306387/jquery-add-and-remove-window-scrollfunction
  	*/
  });
+
+Template.friendBoard.onDestroyed(function() {
+	$(window).off("scroll");
+	delete Session.keys['limit'];
+});
 
 Template.friendBoard.helpers({
 	searching: function() {
@@ -56,7 +62,7 @@ Template.friendBoard.helpers({
   	},
   	users_filtered: function() {
   		var sq = Template.instance().searchQuery.get();
-  		var limit = Template.instance().limit.get();
+  		var limit = Session.get("limit");
   		var search = {};
   		if(sq) {
     		var regex = new RegExp(sq,'i');
@@ -76,7 +82,7 @@ Template.friendBoard.events({
 			tmp.searchBut.set((!tmp.searchBut.get()));
 			tmp.searching.set(true);
 			tmp.searchQuery.set("");
-			tmp.limit.set(tmp.initial_Limit.get());
+			Session.set("limit", tmp.initial_Limit.get());
 		}
 	},
 	'click #searchBut': function(e,tmp) {
@@ -88,12 +94,12 @@ Template.friendBoard.events({
 		if(searchText !== '') {
 			tmp.searchQuery.set(searchText);
 	      	tmp.searching.set(true);
-	      	tmp.limit.set(tmp.initial_Limit.get());
+	      	Session.set("limit", tmp.initial_Limit.get());
 	    }
 
 	    if(searchText === '') {
 	    	tmp.searchQuery.set(searchText);
-	    	tmp.limit.set(tmp.initial_Limit.get());
+	    	Session.set("limit", tmp.initial_Limit.get());
 	    }
 	}
 });

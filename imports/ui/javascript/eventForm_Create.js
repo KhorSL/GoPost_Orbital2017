@@ -33,18 +33,29 @@ if(Meteor.isClient) {
 		},
 		*/
 		exampleMapOptions: function() {
-	    // Make sure the maps API has loaded
-	    if (GoogleMaps.loaded()) {
-	    	// Map initialization options
-	    	return {
-	    		center: new google.maps.LatLng(1.3521, 103.8198),
-	    		zoom: 10
-	    	};
-	    }
-	  }
+		    // Make sure the maps API has loaded
+		    if (GoogleMaps.loaded()) {
+		    	// Map initialization options
+		    	return {
+		    		center: new google.maps.LatLng(1.3521, 103.8198),
+		    		zoom: 10
+		    	};
+		    }
+	  	},
+	  	disableBtn: function() {
+	    if(Template.instance().disableBtn.get()) {
+		      	return "disabled";
+		    } else {
+		      	return "";
+		    }
+	  	}
 	});
 
 	Template.eventForm_Create.onCreated(function() {
+		let template = Template.instance();
+  		template.disableBtn = new ReactiveVar(false);
+
+
 		var output = ""; // Output for image input
 	  addr = "No address available"; // Global var... for location addr
 	  geo = []; //Global var.. for location geometry
@@ -292,7 +303,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.eventForm_Create.events({
-		'submit .new-event': function(event) {
+		'submit .new-event': function(event, template) {
 			event.preventDefault();
 			var rfChoice = event.target.custom_default.checked; //choice if the user picked custom or default form, true: custom
 
@@ -332,18 +343,16 @@ if(Meteor.isClient) {
 				var rf_additional = event.target.rf_additional.checked;
 				var rf_matric = event.target.rf_matric.checked;
 				var rf_nric = event.target.rf_nric.checked;
-			
+
 				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, contact, img, function(error, result) {
 					if(error) {
 						console.log(error.reason);
 					} else {
+						template.disableBtn.set(true);
 						Meteor.call("addEventTag", type);
 						Meteor.call("addRegistrationForm", result, title, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
-						Meteor.call("addEvent_User", result, title, function(error2, result2) {
-							if(error2) {
-								console.log(error2.reason);
-							}
-						});
+						Meteor.call("addEvent_User", result, title);
+						Meteor.call("sendEventEmail", result);
 						Router.go('event_View', { _id: result});
 					}
 				});

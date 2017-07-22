@@ -10,8 +10,8 @@ Template.verify_AccPage.onCreated(function() {
 	template.email = new ReactiveVar("");
 	template.currentDate = new ReactiveVar(new Date());
 	template.disableBtn = new ReactiveVar(false);
-	Session.set("verifyCode", true); //display verifyCode field
-	Session.set("resetPassword", false); //display resetPassword field.
+	template.resetPassword = new ReactiveVar(false); //display resetPassword field.
+	template.verifyCode = new ReactiveVar(true); //display verifyCode field
 
 	var resend = false;
 
@@ -24,7 +24,7 @@ Template.verify_AccPage.onCreated(function() {
 			//token is created for longer than 10 minutes
 			resend = true;
 		} else {
-			//console.log(user[0].Token);
+			console.log(user[0].Token);
 			template.password_token.set(user[0].Token);
 		}
 		template.email.set(Meteor.user().emails[0].address);
@@ -40,7 +40,7 @@ Template.verify_AccPage.onCreated(function() {
 			if(error) {
 				//console.log(error.reason);
 			} else {
-				//console.log(result);
+				console.log(result);
 				template.password_token.set(result);
 				template.currentDate.set(new Date());
 				resend = false;
@@ -50,15 +50,15 @@ Template.verify_AccPage.onCreated(function() {
 });
 
 Template.verify_AccPage.onDestroyed(function() {
-	delete Session.keys['verifyCode','resetPassword','sendToken'];
+	delete Session.keys['sendToken'];
 });
 
 Template.verify_AccPage.helpers({
 	resetPassword: function() {
-		return Session.get("resetPassword");
+		return Template.instance().resetPassword.get();
 	},
 	verifyCode: function() {
-		return Session.get("verifyCode");
+		return Template.instance().verifyCode.get();
 	},
 	errorMessage: function() {
 		return Template.instance().errorMessage.get();
@@ -107,8 +107,8 @@ Template.verify_AccPage.events({
 					});
 				} else {
 					//forget password
-					Session.set("verifyCode", false);
-					Session.set("resetPassword", true);
+					tmp.verifyCode.set(false);
+					tmp.resetPassword.set(true);
 
 					var email = tmp.email.get();
 					Meteor.call("sendResetPasswordEmail", email, function(error, result) {
@@ -134,7 +134,7 @@ Template.verify_AccPage.events({
 			if(error) {
 				//console.log(error.reason);
 			} else {
-				//console.log(result);
+				console.log(result);
 				tmp.password_token.set(result);
 				tmp.currentDate.set(new Date());
 			}

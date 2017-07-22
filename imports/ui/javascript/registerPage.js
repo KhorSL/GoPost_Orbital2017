@@ -4,7 +4,13 @@ import { Template } from 'meteor/templating';
 import '../html/components/registerPage.html';
 import '../css/loginReg.css';
 
+Template.registerPage.onCreated(function() {
+  let template = Template.instance();
+  template.disableBtn = new ReactiveVar(false);
+});
+
 Template.registerPage.onRendered(function() {
+  var tmp = Template.instance();
 
   var validator = $('.register-form').validate({
     submitHandler: function(event) {   //Activates when form is submitted
@@ -36,7 +42,6 @@ Template.registerPage.onRendered(function() {
       };
 
       var additionalData = {
-        username: $.trim(un),
         gender: $.trim(gender),
         age: $.trim(age)
       };
@@ -56,6 +61,7 @@ Template.registerPage.onRendered(function() {
           }
         } else {
           var token = "";
+          tmp.disableBtn.set(true);
           Meteor.call("sendVerificationToken", newUserData.email, function(error, result) {
               token = result;
           });
@@ -64,7 +70,7 @@ Template.registerPage.onRendered(function() {
               console.log(error.reason);
             } else {
               //Result is the _id of the account
-              Meteor.call('insertUserData',result,additionalData.username,additionalData.gender,additionalData.age, token, function(error) {
+              Meteor.call('insertUserData',result,newUserData.username, newUserData.email, additionalData.gender,additionalData.age, token, function(error) {
                 if(error) {
                   console.log(error.reason);
                 } else {
@@ -79,6 +85,16 @@ Template.registerPage.onRendered(function() {
     } //end of submitHandler
   }); //end of validate
 }); //end of onRendered
+
+Template.registerPage.helpers({
+  disableBtn: function() {
+    if(Template.instance().disableBtn.get()) {
+      return "disabled";
+    } else {
+      return "";
+    }
+  }
+});
 
 Template.registerPage.events({
   'submit .register-form' :function(e) {

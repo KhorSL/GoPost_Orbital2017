@@ -95,6 +95,7 @@ Router.route('/event_View/:_id', {
   name: "event_View",
   template: "event_View",
   layoutTemplate: "layout",
+  loadingTemplate: "loader",
   waitOn: function () {
     var selection = this.params._id;
     return Meteor.subscribe('events_ONE', selection);

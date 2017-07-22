@@ -1,24 +1,29 @@
 <template name='settings'>
 	<div id="content">
-    	<div class="outer">
-      		<div class="inner">
-      			
-      			<div class="row"> <!-- row Buttons and Actions -->
-          			<div class="col-lg-12">
-            			<div class="box">
-              				<header><h5>Notification settings</h5></header>
-                    		<p>
-                    			1. Notifications:
-                    			Subscribe to newsletter 
-                    			A) All Events
-                    			B) Events you subscribed to
-                    			C) None
-                    		</p>
-                    	</div> <!-- end of box -->
-              		</div> <!-- end of col-lg-12 -->
-              	</div> <!-- end of rows -->
+    <div class="outer">
+      <div class="inner">
+      	
+        <div class="row"> <!-- row Buttons and Actions -->
+          <div class="col-lg-12">
+            <div class="box">
+              <header><h5>Notification settings</h5></header>
+              <div class="settings_wrapper">
+                <label>New Events Email Notification:</label>
+                <select class="form-control" id="noti_settings">
+                  <option name="myOption" value="A" selected="{{selected A}}">Disable ALL Notifications Email.</option>
+                  <option name="myOption" value="B" selected="{{selected B}}">Subscribe ONLY to Notifications Email for Events from Users you subscribed to.</option>
+                  <option name="myOption" value="C" selected="{{selected C}}">Subscribe to ALL Notifications Email.</option>
+                </select>
 
-      		</div>	<!-- end of inner -->
-      	</div> <!-- end of outer -->
-    </div> <!-- end of content -->
+                <div class="settings_bottom">
+                  <button type="button" class="btn btn-primary" id="submit" {{disableBtn}}>Save</button>
+                </div>
+              </div>
+            </div> <!-- end of box -->
+          </div> <!-- end of col-lg-12 -->  	
+        </div> <!-- end of rows -->
+      
+      </div>	<!-- end of inner -->
+    </div> <!-- end of outer -->
+  </div> <!-- end of content -->
 </template>

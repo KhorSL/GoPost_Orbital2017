@@ -4,7 +4,13 @@ import { Template } from 'meteor/templating';
 import '../html/components/loginPage.html';
 import '../css/loginReg.css';
 
+Template.loginPage.onCreated(function() {
+  let template = Template.instance();
+  template.disableBtn = new ReactiveVar(false);
+});
+
 Template.loginPage.onRendered(function() {
+  var tmp = Template.instance();
 
   var validator = $('.login-form').validate({
     submitHandler: function(event) {   //Activates when form is submitted
@@ -32,6 +38,7 @@ Template.loginPage.onRendered(function() {
           }
         } else {
           //Log in Successfully
+          tmp.disableBtn.set(true);
           $('#loginModal').modal('hide'); 
           Router.go('verify_AccPage');
         }
@@ -39,6 +46,16 @@ Template.loginPage.onRendered(function() {
     } //end of submitHandler
   }); //end of validate
 }); //end of onRendered
+
+Template.loginPage.helpers({
+  disableBtn: function() {
+    if(Template.instance().disableBtn.get()) {
+      return "disabled";
+    } else {
+      return "";
+    }
+  }
+});
 
 Template.loginPage.events ({
 	'submit .login-form': function(e) {
