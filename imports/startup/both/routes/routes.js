@@ -61,7 +61,7 @@ Router.route('/dashBoard/', { //Normal Dashboard routing
 	name: 'normalDashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout',
-  loadingTemplate: "loader"
+  loadingTemplate: "loader",
   data: function() {
     var selection = Meteor.userId();
     return Users.findOne({User: selection});
