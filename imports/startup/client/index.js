@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 
 //Import default Materials.
 import '/imports/ui/lib/bootstrap.css';
+import '/imports/ui/lib/bootstrap-tour.css';
 import '/imports/ui/lib/bootstrap-tokenfield.css';
 import '/imports/ui/lib/bootstrap-datetimepicker.css';
 

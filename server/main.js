@@ -505,12 +505,15 @@ EventsSchema = new SimpleSchema({
 	},
 	start: {
 		type: Date,
-		label: "Start",
-		optional: true
+		label: "Start"
 	},
 	end: {
 		type: Date,
-		label: "End",
+		label: "End"
+	},
+	signUpDeadline: {
+		type: Date,
+		label: "Sign Up Deadline",
 		optional: true
 	}
 });
@@ -1224,7 +1227,7 @@ Meteor.methods({
 		SignUps.update({_id: submissionId}, {$set: {status: "rejected"}});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, cat, type, channel, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, start, end, signUpDeadline, cat, type, channel, contact, img){
 		return Events.insert({
 			title: title,
 			description: description,
@@ -1240,7 +1243,8 @@ Meteor.methods({
 			img: img,
 			owner: Meteor.userId(),
 			poster: Meteor.user().username,
-			createdAt: new Date()
+			createdAt: new Date(),
+			signUpDeadline: signUpDeadline
 		});
 	},
 

@@ -303,6 +303,7 @@ if(Meteor.isClient) {
 			var locationGeo = geo;
 			var start = event.target.start.value;
 			var end = event.target.end.value;
+			var signUpDeadline = event.target.signUpDeadline.value;
 			var category = $("#event_cat").val();
 			var type = $('#tokenfield').val().split(',');
 			var channel = false;
@@ -311,6 +312,7 @@ if(Meteor.isClient) {
 
 			start = new Date(start);
 			end = new Date(end);
+			signUpDeadline = new Date(signUpDeadline);
 
 			//if rfChoice == false it is default reg form
 			if(!rfChoice) {
@@ -333,7 +335,7 @@ if(Meteor.isClient) {
 				var rf_matric = event.target.rf_matric.checked;
 				var rf_nric = event.target.rf_nric.checked;
 			
-				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, contact, img, function(error, result) {
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
 					if(error) {
 						console.log(error.reason);
 					} else {
@@ -363,7 +365,7 @@ if(Meteor.isClient) {
 					}
 				);
 
-				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, category, type, channel, contact, img, function(error, result) {
+				Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
 					if(error) {
 						console.log(error.reason);
 					} else {

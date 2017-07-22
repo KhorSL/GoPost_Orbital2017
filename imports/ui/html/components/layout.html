@@ -19,25 +19,26 @@
 
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      	{{#if currentUser}}
-				      	<ul class="nav navbar-nav">
+				      	<ul class="nav navbar-nav" id="left-options">
 				        	<li class="dropdown">
-				          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
-				          		<ul class="dropdown-menu">
-					            	<li><a href="{{pathFor route='bulletinBoard'}}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Explore Events</a></li>
-					            	<li><a href="{{pathFor route='friendBoard'}}"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Discover Friends</a></li>
+				          		<a href="#" class="dropdown-toggle left-options-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+				          		<ul class="dropdown-menu" id="left-options-menu">
+					            	<li id="bulletinBoard"><a href="{{pathFor route='bulletinBoard'}}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Explore Events</a></li>
+					            	<li id="discoverFriends"><a href="{{pathFor route='friendBoard'}}"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Discover Friends</a></li>
 					            	<li role="separator" class="divider"></li>
-					            	<li><a href="{{pathFor route='myBoard'}}"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> My Notices</a></li>
-					            	<li><a href="{{pathFor route='myEvents'}}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> My Events</a></li>
-					            	<li><a href="{{pathFor route='create-event'}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create Event</a></li>
-					            	<li><a href="{{pathFor route='myFriends'}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> My Subscriptions</a></li>
+					            	<li id="myNotices"><a href="{{pathFor route='myBoard'}}"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> My Notices</a></li>
+					            	<li id="myEvents"><a href="{{pathFor route='myEvents'}}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> My Events</a></li>
+					            	<li id="createEvents"><a href="{{pathFor route='create-event'}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create Event</a></li>
+					            	<li id="subscriptions"><a href="{{pathFor route='myFriends'}}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> My Subscriptions</a></li>
 					            	<li role="separator" class="divider"></li>
-					            	<li><a href="{{pathFor route='normalDashBoard'}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> DashBoard</a></li>
-					            	<li><a href="{{pathFor route='chatBoard'}}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chat Board</a></li>
+					            	<li id="dash"><a href="{{pathFor route='normalDashBoard'}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> DashBoard</a></li>
+					            	<li id="chat"><a href="{{pathFor route='chatBoard'}}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chat Board</a></li>
 					            	<!--
 					            	<li><a href="{{pathFor route='messageBoard'}}"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> Message Board (Forum)</a></li>-->
 					            	<li role="separator" class="divider"></li>
-					            	<li><a href="{{pathFor route='settings'}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
-					            	<li><a href="{{pathFor route='aboutUs'}}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About Us</a></li>
+					            	<li id="tour"><a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Tour</a></li>
+					            	<li id="settings"><a href="{{pathFor route='settings'}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
+					            	<li id="about"><a href="{{pathFor route='aboutUs'}}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About Us</a></li>
 				          		</ul>
 				        	</li>
 				      	</ul>
@@ -52,9 +53,9 @@
 			      	
 			      	{{#if currentUser}}
 				      	<ul class="nav navbar-nav navbar-right">
-				        	<li><a href="{{pathFor route='chatBoard'}}"><span class="glyphicon glyphicon-comment" aria-hidden="true">{{#if messageCount}}<span class="notification_label">{{messageCount}}</span>{{/if}}</span></a></li>
+				        	<li id="chatBoard"><a href="{{pathFor route='chatBoard'}}"><span class="glyphicon glyphicon-comment" aria-hidden="true">{{#if messageCount}}<span class="notification_label">{{messageCount}}</span>{{/if}}</span></a></li>
 				        	<!--<li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span></a></li>-->
-				        	<li class="dropdown">
+				        	<li class="dropdown" id="user-dropdown">
 				          		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
 				          		<ul class="dropdown-menu">
 				            		<li><a href="{{pathFor route='normalDashBoard'}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> DashBoard</a></li>
@@ -63,7 +64,7 @@
 				            		<li role="separator" class="divider"></li>
 				            		<li><a href="{{pathFor route='settings'}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings</a></li>
 				            		<li role="separator" class="divider"></li>
-				            		<li><a href="#" class="logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Log Out</a></li>
+				            		<li id="logout"><a href="#" class="logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Log Out</a></li>
 				          		</ul>
 				        	</li>
 				      	</ul>
