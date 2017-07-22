@@ -834,7 +834,7 @@ if(Meteor.isServer) {
   		);
 	});
 
-	Meteor.publish("events_Subscribers",function(curUser, sBut, likeSub) {
+	Meteor.publish("events_Subscribers",function(curUser, likeSub) {
 
 		if(likeSub) {
 			var posterIDs = Users.find({"User": curUser}).map(function (obj) {return obj.LikedList;});
@@ -854,6 +854,11 @@ if(Meteor.isServer) {
 		return false;
 	}); 
 
+	//This is for chatboard.js
+	Meteor.publish("events_withChannel", function() {
+		return Events.find({"channel": {$ne: false}});
+	});
+
 	//This is for user created events
 	Meteor.publish("events_Calendar_create", function(curUser) {
 		var event_ids = Users.find({"User": curUser}).map(function (obj) {return obj.CreatedEventList});
@@ -872,13 +877,9 @@ if(Meteor.isServer) {
 		return Users.find({"User": curUser});
 	});
 
-	Meteor.publish("userDetails_All", function(curUser) {
+	Meteor.publish("userDetails", function(curUser) {
 		return Users.find();
 	});
-
-  	Meteor.publish("userDetails", function() {
-  		return Users.find();
-  	});
 
   	Meteor.publish("user_subscriptions", function(curUser) {
   		var sub_list = Users.find({"User": curUser}).fetch().map(function (obj) {return obj.FollowingList;});

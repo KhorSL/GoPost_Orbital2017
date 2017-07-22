@@ -10,10 +10,6 @@ import './forgetPasswordPage.js';
 Template.landing.onCreated(function() {
   var template = Template.instance();
   template.count = new ReactiveVar(0);
-
-  template.autorun(function() {
-    template.subscribe("events_limit", 20);
-  });
 });
 
 Template.landing.events({

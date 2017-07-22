@@ -36,3 +36,4 @@ percolate:momentum
 random
 email
 meteorhacks:ssr
+meteorhacks:fast-render

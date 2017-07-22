@@ -1,6 +1,10 @@
 Router.route('/', {
 	name: 'landing',
-	template: 'landing'
+	template: 'landing',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events_limit", 20);
+  }
 });
 
 Router.route('/aboutUs', {
@@ -12,19 +16,31 @@ Router.route('/aboutUs', {
 Router.route('/bulletinBoard', {
 	name: 'bulletinBoard',
   template: 'bulletinBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events_Filter", "","");
+  }
 });
 
 Router.route('/friendBoard', {
   name: 'friendBoard',
   template: 'friendBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("users_Filter", "");
+  }
 });
 
 Router.route('/myBoard', {
 	name: 'myBoard',
   template: 'myBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events_Subscribers", Meteor.userId(), false);
+  }
 });
 
 Router.route('/messageBoard', {
@@ -36,13 +52,22 @@ Router.route('/messageBoard', {
 Router.route('/chatBoard', {
 	name: 'chatBoard',
   template: 'chatBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events_withChannel");
+  }
 });
 
 Router.route('/dashBoard/:owner', {
 	name: 'dashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events");
+    Meteor.subscribe("userDetails");
+  },
   data: function() {
     var selection = this.params.owner;
     return Users.findOne({User: selection});
@@ -53,6 +78,11 @@ Router.route('/dashBoard/', { //Normal Dashboard routing
 	name: 'normalDashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("events");
+    Meteor.subscribe("userDetails");
+  },
   data: function() {
     var selection = Meteor.userId();
     return Users.findOne({User: selection});
@@ -62,7 +92,11 @@ Router.route('/dashBoard/', { //Normal Dashboard routing
 Router.route('/myEvents', {
 	name: 'myEvents',
   template: 'myEvents',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("userEvents");
+  }
 });
 
 Router.route('/regList/:_id', {
@@ -96,6 +130,7 @@ Router.route('/event_View/:_id', {
   template: "event_View",
   layoutTemplate: "layout",
   loadingTemplate: "loader",
+  fastRender: true,
   waitOn: function () {
     var selection = this.params._id;
     return Meteor.subscribe('events_ONE', selection);
@@ -109,16 +144,17 @@ Router.route('/event_View/:_id', {
 Router.route('/create-event', {
   name: "create-event",
   template: "eventForm_Create",
-  layoutTemplate: "layout"
+  layoutTemplate: "layout",
 });
 
 Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
   layoutTemplate: "layout",
+  fastRender: true,
   waitOn: function () {
-        return Meteor.subscribe('events');
-    },
+    return Meteor.subscribe('events');
+  },
   onBeforeAction: function () {
     var currEvent = Events.findOne({_id: this.params._id});
     if(currEvent.owner != Meteor.userId()) {
@@ -141,9 +177,10 @@ Router.route('/update-regForm/:_id', {
   name: "update-regForm",
   template: "eventForm_RegistrationForm_Update",
   layoutTemplate: "layout",
+  fastRender: true,
   waitOn: function () {
-        return Meteor.subscribe('rfTemplates');
-    },
+    return Meteor.subscribe('rfTemplates');
+  },
   onBeforeAction: function () {
     var currEvent = RegistrationForms.findOne({eventId: this.params._id});
     if(currEvent.owner != Meteor.userId()) {
@@ -174,18 +211,30 @@ Router.route('/signUp/:_id', {
 Router.route('/myFriends', {
   name: 'myFriends',
   template: 'myFriends',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("user_subscriptions", Meteor.userId());
+  }
 });
 
 Router.route('/settings', {
 	name: 'settings',
   template: 'settings',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("userDetails_Cur", Meteor.userId());
+  }
 });
 
 Router.route('/verify_AccPage', {
   name: 'verify_AccPage',
   template: 'verify_AccPage',
+  fastRender: true,
+  waitOn: function() {
+    Meteor.subscribe("userDetails_Cur", Meteor.userId());
+  },
   onBeforeAction: function() {
     if(Meteor.user()) {
       if(Meteor.user().emails[0].verified) {

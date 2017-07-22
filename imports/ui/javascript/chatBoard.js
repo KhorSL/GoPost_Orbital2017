@@ -17,31 +17,30 @@ https://bootsnipp.com/snippets/EkQe7
 Template.chatBoard.onCreated(function() {
 	let template = Template.instance();
 
-	template.subscribe("events");
-
-	Session.set("sender", Meteor.userId());
-	Session.set("recever", "");
-	Session.set("recever_details", null);
-	Session.set("channel", "");
-	Session.set("trigger", true); 			//for search bar
-	Session.set("search_Tag", false);  		//for search bar
-	Session.set("query", ""); 				//for search bar
+	template.sender = new ReactiveVar(Meteor.userId());
+	template.recever = new ReactiveVar("");
+	template.recever_details = new ReactiveVar(null);
+	template.channel = new ReactiveVar("");
+	template.trigger = new ReactiveVar(true); 		//for search bar
+	template.search_Tag = new ReactiveVar(false); 	//for search bar
+	template.query = new ReactiveVar(""); 			//for search bar
+	template.searching = new ReactiveVar(false);
 	Session.set("autoScrollingIsActive", true);
 	Session.set("thereAreUnreadMessages", false);
 
 	template.autorun( () => {
-		var sender = Session.get("sender");
-		var recever = Session.get("recever");
-		var trig = Session.get("trigger");
-		var channel = Session.get("channel");
+		var sender = template.sender.get();
+		var recever = template.recever.get();
+		var trig = template.trigger.get();
+		var channel = template.channel.get();
     	
     	template.subscribe('conversation', sender, recever, channel, () => {
 	      	setTimeout( () => {
-	        	Session.set("searching", false);
+	      		template.searching.set(false);
 	      	}, 300 );
     	});
 
-    	template.subscribe('userDetails_All', trig);
+    	template.subscribe('userDetails', trig);
     	template.subscribe('users_msg_count');
   	});
 });
@@ -60,14 +59,13 @@ Template.chatBoard.onRendered(function() {
 });
 
 Template.chatBoard.onDestroyed(function() {
-	delete Session.keys['channel','sender','recever','recever_details',
-	'trigger','search_Tag','query','chat_Target','chat_Channel',
+	delete Session.keys['chat_Target','chat_Channel',
 	'autoScrollingIsActive','thereAreUnreadMessages'];
 });
 
 Template.chatBoard.helpers({
 	channels: function() {
-		var sender = Session.get("sender");
+		var sender = Template.instance().sender.get();
 
 		//Get all events I signed up for & Created by Me.
 		var signedups = Users.find({"User":sender}).fetch().map(function (obj) {return obj.SignUpEventList;});
@@ -99,7 +97,7 @@ Template.chatBoard.helpers({
 		return event_list;
 	},
 	messages: function() {
-		var sender = Session.get("sender");
+		var sender = Template.instance().sender.get();
 		//Get all messages send by me
 		var convo_list = Messages.find({"owner" : sender}).fetch().map(function (obj) {return obj.to;});
 		//Get all messages others send to me
@@ -114,17 +112,17 @@ Template.chatBoard.helpers({
 		var chatTgt = Session.get("chat_Target"); 
 		if(typeof(chatTgt) !== 'undefined' && chatTgt !== "") {
 			if(convo_with.count() > 0) {
-				Session.set("recever", chatTgt.User);
-				Session.set("recever_details", chatTgt);
+				Template.instance().recever.set(chatTgt.User);
+				Template.instance().recever_details.set(chatTgt);
 			}
 		}
 
 		return convo_with;
 	},
 	msgHistory: function() {
-		var sender = Session.get("sender");
-		var recever = Session.get("recever");
-		var channel = Session.get("channel");
+		var sender = Template.instance().sender.get();
+		var recever = Template.instance().recever.get();
+		var channel = Template.instance().channel.get(); 
 
 		if(channel === "") {
 			//Display Direct Messages
@@ -140,27 +138,27 @@ Template.chatBoard.helpers({
 		}
 	},
 	friend: function() {
-		if(Session.get("search_Tag")) {
-			var sq = Session.get("query");
+		if(Template.instance().search_Tag.get()) {
+			var sq = Template.instance().query.get();
 			var regex = new RegExp(sq,'i');
 			return Users.find({"Username": regex}).fetch();
 		} else {
-			var sender = Session.get("sender");
+			var sender = Template.instance().sender.get();
 			var sub_list = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.FollowingList;});
 			sub_list = _.flatten(sub_list);
 			return Users.find({"User": {"$in" : sub_list}}).fetch();
 		}
 	},
 	msgCount: function() {
-		var sender = Session.get("sender");
-		var recever = Session.get('recever');
+		var sender = Template.instance().sender.get();
+		var recever = Template.instance().recever.get();
 		var chatID = this.User;
 
 		if(recever === chatID) {
 			//setting Message Count to 0 if user reads the message.
 			Meteor.call("emptyMessageCount", sender, chatID, function(error) {
 				if(error) {
-					console.log(error.reason);
+					//console.log(error.reason);
 				}
 			});
 			return false;
@@ -173,8 +171,8 @@ Template.chatBoard.helpers({
 		return false;
 	},
 	msgCount_channel: function() {
-		var sender = Session.get("sender");
-		var channel = Session.get('channel');
+		var sender = Template.instance().sender.get();
+		var channel = Template.instance().channel.get();
 		var chatID = this.valueOf(); //https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor
 		var signOrCreated = true; //true = signup, false = created
 
@@ -192,7 +190,7 @@ Template.chatBoard.helpers({
 			//Update timestamp and count when read.
 			Meteor.call("update_Channel_msg_Count", signOrCreated, sender, chatID, message.timestamp, message.count, function(error) {
 				if(error) {
-					console.log(error.reason);
+					//console.log(error.reason);
 				}
 			});
 			return false;
@@ -208,10 +206,10 @@ Template.chatBoard.helpers({
 		return Session.get("thereAreUnreadMessages");
 	},
 	active: function() {
-		var channel = Session.get("channel");
+		var channel = Template.instance().channel.get(); 
 
 		if(channel === "") {
-			if (Session.get('recever') === this.User) {
+			if (Template.instance().recever.get() === this.User) {
             	return "active";
 	        } else {
 	            return "";
@@ -225,8 +223,8 @@ Template.chatBoard.helpers({
 		}
 	},
 	emptyMsg: function() {
-		var channel = Session.get("channel");
-		var rcv = Session.get('recever');
+		var channel = Template.instance().channel.get(); 
+		var rcv = Template.instance().recever.get();
 		if(channel === "" && rcv ==="") {
 			return true;
 		} else {
@@ -234,11 +232,11 @@ Template.chatBoard.helpers({
 		}
 	},
 	search_Tag: function() {
-		return Session.get("search_Tag");
+		return Template.instance().search_Tag.get();
 	},
 	messaging: function() {
-		var messaging = Session.get("recever_details");
-		var channel = Session.get("channel");
+		var messaging = Template.instance().recever_details.get(); 
+		var channel = Template.instance().channel.get(); 
 
 		if(messaging != null) {
 			return messaging.Username;
@@ -250,10 +248,10 @@ Template.chatBoard.helpers({
 		}
 	},
 	to_target: function() {
-		var channel = Session.get("channel");
+		var channel = Template.instance().channel.get(); 
 
 		if(channel === "") {
-			if(Session.get("recever") === "") {
+			if(Template.instance().recever.get() === "") {
 				return "disabled";
 			} else {
 				return "";
@@ -268,25 +266,25 @@ Template.chatBoard.helpers({
 });
 
 Template.chatBoard.events({
-	'click #startChat': function(e) {
+	'click #startChat': function(e, tmp) {
 		e.preventDefault();
-		Session.set("searching", true);
-		Session.set("recever", this.User);
-		Session.set("recever_details", this);
-		Session.set("channel", "");
+		tmp.searching.set(true);
+		tmp.recever.set(this.User);
+		tmp.recever_details.set(this);
+		tmp.channel.set("");
 		//Bring scrollbar to the bottom.
 		Meteor.setTimeout((function() {
 			updateScroll();
   		}), 500);
 	},
-	'click #searchBut': function(e) {
+	'click #searchBut': function(e, tmp) {
 		e.preventDefault();
 		var searchText = $('[name=search_query]').val().trim();
 
 		if(searchText !== "") {
-			Session.set("trigger", (!Session.get("trigger")));
-			Session.set("search_Tag", true);
-			Session.set("query", searchText);
+			tmp.trigger.set(!tmp.trigger.get());
+			tmp.search_Tag.set(true);
+			tmp.query.set(searchText);
 			$('.nav-pills li:eq(1) a').tab('show');
 		} else {
 			return false;
@@ -297,14 +295,14 @@ Template.chatBoard.events({
 			$("#searchBut").click();
 		}
 	},
-	'click #crossBut': function(e) {
+	'click #crossBut': function(e, tmp) {
 		e.preventDefault();
 		$('[name=search_query]').val("");
-		Session.set("trigger", (!Session.get("trigger")));
-		Session.set("search_Tag", false);
-		Session.set("query", "");
+		tmp.trigger.set(!tmp.trigger.get());
+		tmp.search_Tag.set(false);
+		tmp.query.set("");
 	},
-	'scroll #chatArea': function() {
+	'scroll #chatArea': function(e, tmp) {
 		//https://github.com/meteor/chat-tutorial/blob/master/chat-tutorial-part-4.md#make-a-scrolltobottom-function
 		var howClose = 80;  // # pixels leeway to be considered "at Bottom"
 	    var messageWindow = $("#chatArea");
@@ -314,15 +312,9 @@ Template.chatBoard.events({
 
 	    if(atBottom) {
 	    	Session.set("autoScrollingIsActive", true);
-	    	Session.set("thereAreUnreadMessages", false);
+			Session.set("thereAreUnreadMessages", false);
 	    } else {
 	    	Session.set("autoScrollingIsActive", false);
-	    }
-
-	    var scrollTop = messageWindow.prop("scrollTop");
-	    var atTop = scrollTop < howClose;
-	    if(atTop) {
-	    	Session.set("loadHistoryMsg", true);
 	    }
 	},
 	'click .more-messages': function(e) {
@@ -331,12 +323,12 @@ Template.chatBoard.events({
 		Session.set("thereAreUnreadMessages", false);
 		updateScroll();
 	},
-	'click #sendBtn' : function(e) {
+	'click #sendBtn' : function(e, tmp) {
 		e.preventDefault();
 
-		var channel = Session.get("channel");
-		var to = Session.get("recever");
-		var from = Session.get("sender");
+		var channel = tmp.channel.get();
+		var to = tmp.recever.get(); 
+		var from = tmp.sender.get();
 		var msg = $("#type_msg").val();
 
 		var details = {
@@ -353,7 +345,7 @@ Template.chatBoard.events({
 			if(to === "" || channel === "") {
 				Meteor.call("newMessage", details, function(error, result) {
 					if(error) {
-						console.log(error.reason);
+						//console.log(error.reason);
 					} else {
 						Meteor.call("addMessageCount", details);
 						$("#type_msg").val("");
@@ -370,29 +362,29 @@ Template.chatBoard.events({
 			$("#sendBtn").click();
 		}
 	},
-	'click #createChannel': function(e) {
+	'click #createChannel': function(e, tmp) {
 		e.preventDefault();
-		Session.set("searching", true);
-		Session.set("recever", "");
-		Session.set("recever_details", null);
+		tmp.searching.set(true);
+		tmp.recever.set("");
+		tmp.recever_details.set(null);
 		$('#create-channel-modal').modal('show');
 	},
-	'click #startChannel': function(e) {
+	'click #startChannel': function(e, tmp) {
 		e.preventDefault();
-		Session.set("searching", true);
-		Session.set("recever", "");
-		Session.set("recever_details", null);
-		Session.set("channel", this.valueOf().trim());
+		tmp.searching.set(true);
+		tmp.recever.set("");
+		tmp.recever_details.set(null);
+		tmp.channel.set(this.valueOf().trim());
 		/*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
 		//Bring scrollbar to the bottom.
 		Meteor.setTimeout((function() {
 			updateScroll();
   		}), 500);
 	},
-	'click #myTabs' : function(e) {
+	'click #myTabs' : function(e, tmp) {
 		e.preventDefault();
 		if(e.target.text !== 'Channel') {
-			Session.set("channel", "");
+			tmp.channel.set("");
 			Session.set("chat_Channel", false);
 		}
 		$('#myTabs a[href="' + e.target.hash + '"]').tab('show');

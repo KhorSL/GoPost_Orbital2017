@@ -13,12 +13,13 @@ Template.settings.onCreated(function() {
 
 Template.settings.helpers({
 	selected: function(selected) {
-		var details = Users.find({"User":Meteor.userId()}).fetch();
-		if(selected === details.notificationType) {
-			return true;
-		} else {
-			return false;
+		var details = Users.findOne({"User": Meteor.userId()});
+		if(details) {
+			if(selected === details.NotificationType) {
+				return true;
+			} 
 		}
+		return false;
 	},
 	disableBtn: function() {
 		if(Template.instance().disableBtn.get()) {

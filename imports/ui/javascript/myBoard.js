@@ -11,19 +11,17 @@ Template.myBoard.onCreated( () => {
 	let template = Template.instance();
 	template.subscribe('userDetails_Cur', Meteor.userId());
 
-	Session.set("searching", false);
-	Session.set("switchButton", false);
-	Session.set("likeSub", false); //like = true, sub = false;
-	Session.set("Initial_Limit", 20);
-	Session.set("limit", Session.get("Initial_Limit"));
+	template.searching = new ReactiveVar(false);
+	template.likeSub = new ReactiveVar(false); //like = true, sub = false
+	template.initial_Limit = new ReactiveVar(20);
+	Session.set("limit", template.initial_Limit.get());
 
   	template.autorun( () => {
-  		var sButton = Session.get("switchButton");
-  		var likeSub = Session.get("likeSub");
+  		var likeSub = template.likeSub.get();
 
-    	template.subscribe('events_Subscribers', Meteor.userId(), sButton, likeSub, () => {
+    	template.subscribe('events_Subscribers', Meteor.userId(), likeSub, () => {
 	      	setTimeout( () => {
-	        	Session.set("searching", false);
+	        	template.searching.set(false);
 	      	}, 300 );
     	});
   	});
@@ -49,16 +47,20 @@ Template.myBoard.onRendered(function() {
  	*/
  });
 
+Template.myBoard.onDestroyed(function() {
+	$(window).off("scroll");
+	delete Session.keys['limit'];
+});
 
 Template.myBoard.helpers({
 	viewType: function() {
 		return Session.get("viewToggle");
 	},
 	searching: function() {
-    	return Session.get("searching");
+    	return Template.instance().searching.get();
   	},
   	events_subscribed: function() {
-  		var likeSub = Session.get("likeSub"); 
+  		var likeSub = Template.instance().likeSub.get();
 
   		if(likeSub) {
 			var posterIDs = Users.find({"User": Meteor.userId()}).map(function (obj) {return obj.LikedList;});
@@ -85,24 +87,20 @@ Template.myBoard.events({
 	'click #toggle-list': function(e) {
 		e.preventDefault();
 		Session.set("viewToggle", true);
-		Session.set("searching", true);
-		Session.set("switchButton", (!Session.get("switchButton")));	//Trigger Reactivity
 	},
 	'click #toggle-grid': function(e) {
 		e.preventDefault();
 		Session.set("viewToggle", false);
-		Session.set("searching", true);
-		Session.set("switchButton", (!Session.get("switchButton")));	//Trigger Reactivity
 	},
-	'click #sub_but': function(e) {
+	'click #sub_but': function(e, tmp) {
 		e.preventDefault();
-		Session.set("searching", true);
-		Session.set("likeSub", false);
+		tmp.searching.set(true);
+		tmp.likeSub.set(false);
 	},
-	'click #like_but': function(e) {
+	'click #like_but': function(e, tmp) {
 		e.preventDefault();
-		Session.set("searching", true);
-		Session.set("likeSub", true);
+		tmp.searching.set(true);
+		tmp.likeSub.set(true);
 	},
 	'click .profileClick' :function(e) {
     	e.preventDefault();
