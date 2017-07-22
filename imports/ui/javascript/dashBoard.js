@@ -47,6 +47,9 @@ Template.dashBoard.onCreated(() => {
       template.viewingThisOwner.set(Router.current().params.owner);
       document.location.reload(true);
     }
+
+    template.subscribe("events");
+    template.subscribe("userDetails");
   });
 });
 

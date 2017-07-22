@@ -1,25 +1,28 @@
 Router.route('/', {
 	name: 'landing',
 	template: 'landing',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events_limit", 20);
+    return Meteor.subscribe("events_limit", 20);
   }
 });
 
 Router.route('/aboutUs', {
   name: 'aboutUs',
   template: 'aboutUs',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  loadingTemplate: "loader"
 });
 
 Router.route('/bulletinBoard', {
 	name: 'bulletinBoard',
   template: 'bulletinBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events_Filter", "","");
+    return Meteor.subscribe("events_Filter", "","");
   }
 });
 
@@ -27,9 +30,10 @@ Router.route('/friendBoard', {
   name: 'friendBoard',
   template: 'friendBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("users_Filter", "");
+    return Meteor.subscribe("users_Filter", "");
   }
 });
 
@@ -37,25 +41,28 @@ Router.route('/myBoard', {
 	name: 'myBoard',
   template: 'myBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events_Subscribers", Meteor.userId(), false);
+    return Meteor.subscribe("events_Subscribers", Meteor.userId(), false);
   }
 });
 
 Router.route('/messageBoard', {
 	name: 'messageBoard',
   template: 'messageBoard',
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  loadingTemplate: "loader"
 });
 
 Router.route('/chatBoard', {
 	name: 'chatBoard',
   template: 'chatBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events_withChannel");
+    return Meteor.subscribe("events_withChannel");
   }
 });
 
@@ -63,10 +70,10 @@ Router.route('/dashBoard/:owner', {
 	name: 'dashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events");
-    Meteor.subscribe("userDetails");
+    return Meteor.subscribe("events");
   },
   data: function() {
     var selection = this.params.owner;
@@ -78,10 +85,10 @@ Router.route('/dashBoard/', { //Normal Dashboard routing
 	name: 'normalDashBoard',
   template: 'dashBoard',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("events");
-    Meteor.subscribe("userDetails");
+    return Meteor.subscribe("events");
   },
   data: function() {
     var selection = Meteor.userId();
@@ -93,6 +100,7 @@ Router.route('/myEvents', {
 	name: 'myEvents',
   template: 'myEvents',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
     Meteor.subscribe("userEvents");
@@ -103,6 +111,7 @@ Router.route('/regList/:_id', {
   name: 'registration_List',
   template: 'myEvents_registrationList',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   data: function () {
     // return event id for easy access
     return this.params._id;
@@ -145,12 +154,14 @@ Router.route('/create-event', {
   name: "create-event",
   template: "eventForm_Create",
   layoutTemplate: "layout",
+  loadingTemplate: "loader"
 });
 
 Router.route('/update-event/:_id', {
   name: "update-event",
   template: "eventForm_Update",
   layoutTemplate: "layout",
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function () {
     return Meteor.subscribe('events');
@@ -177,6 +188,7 @@ Router.route('/update-regForm/:_id', {
   name: "update-regForm",
   template: "eventForm_RegistrationForm_Update",
   layoutTemplate: "layout",
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function () {
     return Meteor.subscribe('rfTemplates');
@@ -203,6 +215,7 @@ Router.route('/signUp/:_id', {
   name: 'sign-up',
   template: 'eventForm_signUp',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   data: function () {
     return RegistrationForms.findOne({eventId: this.params._id});
   },
@@ -212,9 +225,10 @@ Router.route('/myFriends', {
   name: 'myFriends',
   template: 'myFriends',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("user_subscriptions", Meteor.userId());
+    return Meteor.subscribe("user_subscriptions", Meteor.userId());
   }
 });
 
@@ -222,18 +236,20 @@ Router.route('/settings', {
 	name: 'settings',
   template: 'settings',
   layoutTemplate: 'layout',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("userDetails_Cur", Meteor.userId());
+    return Meteor.subscribe("userDetails_Cur", Meteor.userId());
   }
 });
 
 Router.route('/verify_AccPage', {
   name: 'verify_AccPage',
   template: 'verify_AccPage',
+  loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    Meteor.subscribe("userDetails_Cur", Meteor.userId());
+    return Meteor.subscribe("userDetails_Cur", Meteor.userId());
   },
   onBeforeAction: function() {
     if(Meteor.user()) {
