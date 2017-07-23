@@ -974,6 +974,8 @@ Meteor.methods({
 	sendVerificationToken: function(email) {
 		var token = Random.hexString(10).toLowerCase();
 
+		Meteor.defer()
+
 		this.unblock();
 
 		if(email) {
@@ -1356,39 +1358,39 @@ Meteor.methods({
 	},
 
 	sendEventEmail: function(eventId) {
-		var event_new = Events.findOne({_id: eventId});
-
-		/*https://themeteorchef.com/tutorials/using-the-email-package*/
-		var mailing_list = Users.find({
-			$or: [
-				{NotificationType: "C", User: {$ne: Meteor.userId()}},
-				{$and: [
-					{NotificationType: "B"},
-					{FollowingList: Meteor.userId()},
-					{User: {$ne: Meteor.userId()}}
-				]}
-			]
-		}).fetch();
-
-		SSR.compileTemplate('eventEmail', Assets.getText('html-email.html'));
-		Template.eventEmail.helpers({
-  			formatDate: function(date) {
-  				return moment(date).format('Do MMM YYYY, h.mm a');
-  			}
-		});
-
-		for(var i in mailing_list) {
-			var user = mailing_list[i];
+		Meteor.defer(function() {
+			var event_new = Events.findOne({_id: eventId});
 			
-			this.unblock();
+			/*https://themeteorchef.com/tutorials/using-the-email-package*/
+			var mailing_list = Users.find({
+				$or: [
+					{NotificationType: "C", User: {$ne: Meteor.userId()}},
+					{$and: [
+						{NotificationType: "B"},
+						{FollowingList: Meteor.userId()},
+						{User: {$ne: Meteor.userId()}}
+					]}
+				]
+			}).fetch();
 
-			Email.send({
- 		 		to: user.Email,
-  				from: "GoPost! <gopostnow@gmail.com>",
-  				subject: "GoPost! New Event Update: " + event_new.title,
-  				html: SSR.render('eventEmail', event_new),
+			SSR.compileTemplate('eventEmail', Assets.getText('html-email.html'));
+			Template.eventEmail.helpers({
+	  			formatDate: function(date) {
+	  				return moment(date).format('Do MMM YYYY, h.mm a');
+	  			}
 			});
-		}
+
+			for(var i in mailing_list) {
+				var user = mailing_list[i];
+
+				Email.send({
+	 		 		to: user.Email,
+	  				from: "GoPost! <gopostnow@gmail.com>",
+	  				subject: "GoPost! New Event Update: " + event_new.title,
+	  				html: SSR.render('eventEmail', event_new),
+				});
+			}
+		});
 	},
 
 	toggleLikes: function(id) {

@@ -80,7 +80,7 @@ Template.events_GridView.helpers({
 Template.events_GridView.events({
 	'click #editEvent': function(e) {
 		var id = this._id;
-		Router.go("update-event", {_id: id});
+		Router.go("event_Update", {_id: id});
 	},
   'click #editRegForm': function(e) {
     var id = this._id;
