@@ -39,9 +39,6 @@ Template.chatBoard.onCreated(function() {
 	      		template.searching.set(false);
 	      	}, 300 );
     	});
-
-    	template.subscribe('userDetails', trig);
-    	template.subscribe('users_msg_count');
   	});
 });
 

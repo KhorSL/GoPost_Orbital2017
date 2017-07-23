@@ -16,7 +16,6 @@ Template.verify_AccPage.onCreated(function() {
 	var resend = false;
 
 	if(Meteor.user()) {
-		template.subscribe("userDetails_Cur", Meteor.userId());
 		var user = Users.find({"User": Meteor.userId()}).fetch();
 		var now = new Date();
 		if (now.getTime() - user[0].TokenExpired.getTime() >= 15*60*1000) {

@@ -7,8 +7,6 @@ import '../css/overall.css';
 Template.settings.onCreated(function() {
 	let template = Template.instance();
 	template.disableBtn = new ReactiveVar(true);
-
-	template.subscribe("userDetails_Cur", Meteor.userId());
 });
 
 Template.settings.helpers({

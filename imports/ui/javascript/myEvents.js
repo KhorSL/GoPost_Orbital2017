@@ -44,12 +44,12 @@ Template.myEvents.events({
 
   'click .update': (e)=> {
     var id = e.target.id;
-    Router.go("update-event", {_id: id});
+    Router.go("event_Update", {_id: id});
   },
 
   'click .new_event' : function(e) {
     e.preventDefault();
-    Router.go('create-event');
+    Router.go('event_Create');
   },
   'click .new_channel' : function(e) {
     e.preventDefault();

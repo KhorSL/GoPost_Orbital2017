@@ -877,7 +877,7 @@ if(Meteor.isServer) {
 		return Users.find({"User": curUser});
 	});
 
-	Meteor.publish("userDetails", function(curUser) {
+	Meteor.publish("userDetails", function() {
 		return Users.find();
 	});
 

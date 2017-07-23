@@ -9,7 +9,6 @@ import './events_ListView.js';
 
 Template.myBoard.onCreated( () => {
 	let template = Template.instance();
-	template.subscribe('userDetails_Cur', Meteor.userId());
 
 	template.searching = new ReactiveVar(false);
 	template.likeSub = new ReactiveVar(false); //like = true, sub = false
