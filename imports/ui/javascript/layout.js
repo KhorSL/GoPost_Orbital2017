@@ -72,6 +72,7 @@ Template.layout.events({
       // Instance the tour
       var tour = new Tour({
         storage: false,
+        keyboard: false,
         onEnd: function(tour) {
           $('.dropdown').on({
               "shown.bs.dropdown": function() { this.closable = true; },

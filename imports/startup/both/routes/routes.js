@@ -266,7 +266,7 @@ Router.route('/verify_AccPage', {
 
 //Prevent unauthorised access
 Router.onBeforeAction(function () {
-  if (!Meteor.userId() && !Meteor.loggingIn()) {
+  if (!Meteor.isServer && !Meteor.userId() && !Meteor.loggingIn()) {
     this.redirect('landing');
     this.stop();
   } else {
