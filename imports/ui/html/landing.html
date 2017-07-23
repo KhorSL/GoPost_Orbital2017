@@ -1,6 +1,6 @@
 <template name="landing">
 	<body id="top" class="indexpage">
-		<div class="wrap">
+		<div class="wrap row">
 			<div class="slider_wrap">
 				<div class="slider">
 				    <nav class='navbar navbar-landing'>
@@ -29,7 +29,7 @@
 				  		</ol>
 
 				  		<!-- Wrapper for slides -->
-				  		<div class="carousel-inner" role="listbox">
+				  		<div class="carousel-inner carousel-inner-landing" role="listbox">
 				    		<div class="item active">
 				      			<img src="/images/BlackBoard.png" alt="surf Girl">
 				      			<div class="carousel-caption">
@@ -91,11 +91,9 @@
 
 				      		{{/each}}
 
-				      		{{#if events_count}}
 				      		<div class="col-sm-12 logMore">
 				      			<a href="#" id="logMoreBut" class="btn btn-xl">Log in For More</a>
 				      		</div>      
-				      		{{/if}}
 
 					</div><!--/row-->
 				</div>

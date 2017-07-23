@@ -7,27 +7,19 @@ import './loginPage.js';
 import './registerPage.js';
 import './forgetPasswordPage.js';
 
-Template.landing.onCreated(function() {
-  var template = Template.instance();
-  template.count = new ReactiveVar(0);
-});
-
 Template.landing.events({
   'click #loginBut': function(e) {
     e.preventDefault();
-    
     $('#loginModal').modal('show');
   },
 
   'click #logMoreBut': function(e) {
     e.preventDefault();
-    
     $('#loginModal').modal('show');
   },
 
   'click #signUpBut': function(e) {
     e.preventDefault();
-    
     $('#registerModal').modal('show');
   },
 
@@ -55,18 +47,10 @@ Template.landing.events({
 
 Template.landing.helpers({
   events: function() {
-    var event_list = Events.find({}, {sort: {createdAt: -1}, limit: 20});
-    Template.instance().count.set(event_list.count());
-    return event_list;
+    return Events.find({}, {sort: {createdAt: -1}, limit: 15});
   },
   events_top3: function() {
     return Events.find({}, {sort: {createdAt: -1}, limit: 3});
-  },
-  events_count: function() {
-    if(Template.instance().count.get() > 15) {
-      return true;
-    }
-    return false;
   },
   formatDate: function(date) {
     return moment(date).format('Do MMM YYYY');

@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 import '../html/components/calendar_full.html';
 import '../css/dashBoard.css';
-import '../lib/fullcalendar.css';
+import '../lib/bootstrap-datetimepicker.min.css';
 import './calendar_modal.js';
 
 Template.calendar_full.onCreated(function() {

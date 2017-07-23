@@ -2,8 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/components/calendar_modal.html';
-import '../css/dashBoard.css';
-import '../lib/fullcalendar.css';
 
 Template.calendar_modal.onCreated(function() {
   Session.set('allDay', false);

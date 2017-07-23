@@ -4,7 +4,7 @@ Router.route('/', {
   loadingTemplate: "loader",
   fastRender: true,
   waitOn: function() {
-    return Meteor.subscribe("events_limit", 20);
+    return Meteor.subscribe("events_limit", 15);
   }
 });
 

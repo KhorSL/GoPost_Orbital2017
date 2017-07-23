@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/components/chat_messageView.html';
-import '../css/chatBoard.css';
 
 Template.chat_messageView.helpers({
 	sending: function() {

@@ -143,11 +143,11 @@ fieldset[disabled] .btn-xl.active {
     height: 100%;
  }
 
- .carousel-inner {
+ .carousel-inner-landing {
     height: 100%;
  }
 
- .carousel-inner > .item > img, carousel-inner > .item > a > img {
+ .carousel-inner-landing > .item > img,  .carousel-inner-landing > .item > a > img {
     display: block;
     height: 100%;
     max-width: 100%;

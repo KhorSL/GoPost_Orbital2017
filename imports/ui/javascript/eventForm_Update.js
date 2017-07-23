@@ -3,6 +3,8 @@ import { Template } from 'meteor/templating';
 
 import '../html/eventForm_Update.html';
 import '../css/eventForm.css';
+import '/imports/ui/lib/bootstrap-tokenfield.min.css';
+import '/imports/ui/lib/bootstrap-datetimepicker.min.css';
 
 if(Meteor.isClient) {
 

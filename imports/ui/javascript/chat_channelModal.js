@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/components/chat_channelModal.html';
-import '../css/chatBoard.css';
 
 Template.chat_channelModal.helpers({
 	usr_events: function() {

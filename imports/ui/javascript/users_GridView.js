@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import '../html/components/users_GridView.html';
-import '../css/myFriends.css';
 
 Template.users_GridView.helpers({
   	isUser: function(){

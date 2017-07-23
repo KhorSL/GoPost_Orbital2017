@@ -3,8 +3,8 @@ import { Template } from 'meteor/templating';
 
 import '../html/dashBoard.html';
 import '../css/dashBoard.css';
-import '/imports/ui/lib/croppie.css';
-import '/imports/ui/lib/fullcalendar.css';
+import '../lib/croppie.min.css';
+import '../lib/fullcalendar.min.css';
 import './calendar_full.js';
 import './dash_profilePic_modal.js';
 import './dash_profileEdit_modal.js';

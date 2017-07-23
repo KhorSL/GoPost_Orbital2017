@@ -3,6 +3,8 @@ import { Template } from 'meteor/templating';
 
 import '../html/eventForm_Create.html';
 import '../css/eventForm.css';
+import '/imports/ui/lib/bootstrap-tokenfield.min.css';
+import '/imports/ui/lib/bootstrap-datetimepicker.min.css';
 
 /*========= FSCollection with cfs:grid ======
 Images = new FS.Collection('Images', {
