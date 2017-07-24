@@ -92,12 +92,69 @@ Template.event_View.helpers({
   },
   disableSignUpBtn: function() {
     var curDate = new Date();
-    if(curDate.getTime() - this.signUpDeadline.getTime() >= 0) {
-      return "disabled";
+    if(this.signUpDeadline) {
+      if(curDate.getTime() - this.signUpDeadline.getTime() >= 0) {
+        return "disabled";
+      }
     } else {
       return "";
     }
-  }
+  },
+  regCount: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({eventId: id});
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  successfulReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "success"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  rejectedReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "rejected"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
+
+  pendingReg: function() {
+    var count = 0;
+    var id = this._id;
+    var currEventSignUps = SignUps.find({$and: [
+        {eventId: id},
+        {status: "pending"}
+      ]
+    });
+    currEventSignUps.forEach(function() {
+      count++;
+    });
+
+    return count;
+  },
  });
 
 Template.event_View.events({
@@ -129,9 +186,14 @@ Template.event_View.events({
     Router.go('chatBoard');
   },
   'click .update' :function(e) {
-    var id = e.target.id;
+    var id = this._id;
     Router.go("event_Update", {_id: id});
   },
+  'click .registeredList': function(e) {
+    var id = this._id;
+    Router.go("registration_List", {_id: id})
+  },
+
 
   'click .signUp' :function(e) {
     var id = e.target.id;

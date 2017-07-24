@@ -4,10 +4,6 @@ import { Template } from 'meteor/templating';
 import '../html/components/events_GridView.html';
 import '../css/myEvents.css';
 
-Template.events_GridView.onRendered(function() {
-  
-});
-
 Template.events_GridView.helpers({
   formatDate: function(date) {
   		return moment(date).format('Do MMM YYYY, h.mm a');

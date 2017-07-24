@@ -16,6 +16,10 @@
 	margin-right:30px;
 }
 
+.view_Left {
+  float:left;
+}
+
 .view_para {
 	word-break: break-all;
 }

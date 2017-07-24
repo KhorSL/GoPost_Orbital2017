@@ -83,7 +83,7 @@ Template.myEvents.helpers({
   },
 
   max: function() {
-    var max = Events.find({"owner" : Meteor.userId()}).count();
+    var max =  Users.find({User: Meteor.userId()}).fetch()[0].NumOfCreatedEvents;
     Session.set("max", max);
     return Math.ceil(max/6);
   },

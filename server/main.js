@@ -375,6 +375,11 @@ UserSchema = new SimpleSchema({
   	"FollowingList.$": {
 		type: String
 	},
+	NumOfSubscribers: {
+		type: Number,
+		label: "Number of subscribers to User",
+		defaultValue: 0
+	},
 	CreatedEventList: {
 		type: [Object],
 		label:"User own created Events",
@@ -396,6 +401,11 @@ UserSchema = new SimpleSchema({
 	"CreatedEventList.$.lastRead_Count": {
 		type: Number,
 		label: "the last count the message in channel was unread (Created).",
+		defaultValue: 0
+	},
+	NumOfCreatedEvents: {
+		type: Number,
+		label: "Number of Events Organized By User",
 		defaultValue: 0
 	},
 	SignUpEventList: {
@@ -854,9 +864,36 @@ if(Meteor.isServer) {
 		return false;
 	}); 
 
+	//This is for DashBoard
+	Meteor.publish("events_LikedCreatedSignUp", function(owner) {
+		var events_id = Users.find({"User": owner}).fetch().map(function (obj) {return obj.LikedList;});
+		events_id = _.flatten(events_id);
+		var events_id2 = Users.find({"User": owner}).fetch().map(function (obj) {return obj.SignUpEventList;});
+		events_id2 = _.pluck(_.flatten(events_id2), 'eventID');
+		events_id = events_id.concat(events_id2);
+
+		return Events.find({
+			$or: [
+			 	{"_id": {"$in" : events_id}},
+				{"owner" : owner}
+			]
+		});
+	});
+
 	//This is for chatboard.js
 	Meteor.publish("events_withChannel", function() {
-		return Events.find({"channel": {$ne: false}});
+		var events_id = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.CreatedEventList;});
+		events_id = _.pluck(_.flatten(events_id), 'eventID');
+		var events_id2 = Users.find({"User": Meteor.userId()}).fetch().map(function (obj) {return obj.SignUpEventList;});
+		events_id2 = _.pluck(_.flatten(events_id2), 'eventID');
+		events_id = events_id.concat(events_id2);
+
+		return Events.find({
+			$and: [
+			 	{"_id": {"$in" : events_id}},
+				{ "channel" : {$ne: true}}
+			]
+		});
 	});
 
 	//This is for user created events
@@ -913,6 +950,10 @@ if(Meteor.isServer) {
 
 	Meteor.publish("signUps", function() {
 		return SignUps.find();
+	});
+
+	Meteor.publish("signUp_forEvent", function(eventID) {
+		return SignUps.find({eventId: eventID});
 	});
 
 	Meteor.publish("conversation", function(sender, recever, channel) {
@@ -1035,6 +1076,11 @@ Meteor.methods({
 		return Accounts.setPassword(user._id, password);
 	},
 
+	changePasswordForUser: function(newPass) {
+		//return Accounts.changePassword(oldPass, newPass);
+		return Accounts.setPassword(Meteor.userId(), newPass);
+	},
+
 	addEventTag: function(tags) {
 		for(var i in tags) {
 			var tag = tags[i].trim();
@@ -1044,14 +1090,15 @@ Meteor.methods({
 
 	addEvent_User: function(event_id, title) {
 		return Users.update({"User" : Meteor.userId()}, {
-			"$addToSet" : {
+			$addToSet : {
 				"CreatedEventList" : {
 					"eventID" : event_id,
 					"eventTitle" : title,
 					"lastRead" : null,
 					"lastRead_Count" : 0
 				}
-			}
+			},
+			$inc: {NumOfCreatedEvents: 1}
 		});
 		/*Credits http://tgrall.github.io/blog/2015/04/21/mongodb-playing-with-arrays/*/
 	},
@@ -1347,7 +1394,8 @@ Meteor.methods({
 				CreatedEventList: {
 					"eventID" :	id
 				}
-			}
+			},
+			$inc: {NumOfCreatedEvents: -1}
 		});
 
 		//Removes the registration forms template
@@ -1425,20 +1473,25 @@ Meteor.methods({
 
 	unsubscribe: function(id) {
 		// Remove the userId from FollowingList
-		Users.update({User: Meteor.userId()}, {$pull: 
-			{
-				FollowingList: id
-			}
+		Users.update({User: Meteor.userId()}, {
+			$pull: {FollowingList: id}
 		});
+		//decrement the number of subscribers to User
+		Users.update({User: id}, {
+			$inc: {NumOfSubscribers: -1}
+		})
 
 	},
 
 	subscribe: function(id) {
 		// Remove the userId from FollowingList
-		Users.update({User: Meteor.userId()}, {"$addToSet" : {
-			"FollowingList" : id
-		}});
-
+		Users.update({User: Meteor.userId()}, {
+			$addToSet : {FollowingList : id}, 
+		});
+		//increment the number of subscribers to User
+		Users.update({User: id}, {
+			$inc: {NumOfSubscribers: 1}
+		})
 	},
 
 	addCalendarEvents: function(event) {

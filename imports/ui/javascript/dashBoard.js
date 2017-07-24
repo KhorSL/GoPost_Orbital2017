@@ -8,6 +8,7 @@ import '../lib/fullcalendar.min.css';
 import './calendar_full.js';
 import './dash_profilePic_modal.js';
 import './dash_profileEdit_modal.js';
+import './dash_passwordEdit_modal.js';
 
 Template.dashBoard.onCreated(() => {
   /*
@@ -133,7 +134,8 @@ Template.dashBoard.helpers({
       limit: 3,
       skip: skipCount
     });
-    Template.instance().max2.set(Events.find({"owner": owner}).count());
+    
+    Template.instance().max2.set(this.NumOfCreatedEvents);
     return events_List;
   },
 
@@ -189,7 +191,7 @@ Template.dashBoard.helpers({
       limit: 3,
       skip: skipCount
     });
-    Template.instance().max4.set(Users.find({"FollowingList": owner}).count());
+    Template.instance().max4.set(this.NumOfSubscribers);
     return subscribers;
   },
 
@@ -251,6 +253,12 @@ Template.dashBoard.events({
   'click #editProfile': function(e) {
     e.preventDefault();
     $('#edit-profile-modal').modal('show');
+    /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
+  },
+
+  'click #changePass': function(e) {
+    e.preventDefault();
+    $('#edit-password-modal').modal('show');
     /*Credits: https://stackoverflow.com/questions/26147697/each-string-in-an-array-with-blaze-in-meteor*/
   },
 

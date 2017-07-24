@@ -48,6 +48,13 @@ Template.users_GridView.events({
       }
     });
   },
+
+  'click #chatbox' : function(e){
+    e.preventDefault();
+    Session.set("chat_Target", this);
+    Router.go('chatBoard');
+  },
+
   'click .profileClick' :function(e) {
     e.preventDefault();
     Router.go("/dashBoard/" + e.currentTarget.id);

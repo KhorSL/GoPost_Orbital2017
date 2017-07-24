@@ -19,7 +19,7 @@ shell-server@0.2.4            # Server-side component of the `meteor shell` comm
 
 iron:router
 session@1.1.7
-accounts-password@1.4.0
+accounts-password
 dynamic-import@0.1.1
 themeteorchef:jquery-validation
 meteortoys:allthings
