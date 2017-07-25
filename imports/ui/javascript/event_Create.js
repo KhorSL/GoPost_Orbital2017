@@ -356,6 +356,9 @@ Template.event_Create.events({
 				if(error) {
 					//console.log(error.reason);
 				} else {
+					template.disableBtn.set(true);
+					Meteor.call("addEventTag", type);
+					Meteor.call("sendEventEmail", result);
 					Meteor.call("addEvent_User", result, title, function(error3, result3) {
 						if(error3) {
 							console.log(error3.reason);

@@ -24,8 +24,6 @@ Template.event_Update.onRendered(function() {
 		$('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
   	});
 
-	var output; // Output for image input
-
 	// We can use the `ready` callback to interact with the map API once the map is ready.
 	GoogleMaps.ready('ufMap', function(map) {
 	  	// Add a marker to the map once it's ready
@@ -148,12 +146,12 @@ Template.event_Update.events({
 		var category = $("#event_cat").val();
 		var type = $('#tokenfield').val().split();
 		var contact = event.target.contact.value;
-		var img = output.src;
+		var img = outputUpdate.src;
 		var eventId = this._id;
 
 		Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, contact, img, function(error, result) {
 			if(error) {
-				//console.log(error.reason);
+				console.log(error.reason);
 			} else {
 				Router.go('event_View', { _id: eventId});
 			}
@@ -166,13 +164,13 @@ Template.event_Update.events({
 		var reader = new FileReader();
 		reader.onload = function() {
 			var dataURL = reader.result;
-			output = document.getElementById('output');
-			output.src = dataURL;
+			outputUpdate = document.getElementById('outputUpdate');
+			outputUpdate.src = dataURL;
 		};
 		if(input.files[0] != null) {
 			reader.readAsDataURL(input.files[0]);
 		} else {
-			output.src = "";
+			outputUpdate.src = "";
 			return false;
 		}
 	}
