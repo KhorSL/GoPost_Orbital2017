@@ -1010,7 +1010,7 @@ if(Meteor.isServer) {
     		
     		//Need to write into folder
     		//Need to know how to delete
-    		var filePath = process.env.PWD + '/.server_Upload/' + req.headers['lneon'];
+    		var filePath = process.env.PWD + '/public/' + req.headers['lneon'];
     		console.log(filePath);
     		var file = fs.createWriteStream(filePath);
 
