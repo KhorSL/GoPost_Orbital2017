@@ -13,16 +13,6 @@ Template.event_Update.onRendered(function() {
 		minDate: dateToday,
 		calendarWeeks: true
   	});
-  	$('#datetimepicker_end').datetimepicker({
-		minDate: dateToday.setHours(dateToday.getHours() + 1),
-		useCurrent: false //Important! See issue #1075
-  	});
-  	$("#datetimepicker_start").on("dp.change", function (e) {
-		$('#datetimepicker_end').data("DateTimePicker").minDate(e.date.add(30,'m'));
-  	});
-  	$("#datetimepicker_end").on("dp.change", function (e) {
-		$('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
-  	});
 
 	// We can use the `ready` callback to interact with the map API once the map is ready.
 	GoogleMaps.ready('ufMap', function(map) {
@@ -148,6 +138,14 @@ Template.event_Update.events({
 		var contact = event.target.contact.value;
 		var img = outputUpdate.src;
 		var eventId = this._id;
+
+		if(start >= end) {
+			Eventvalidator.showErrors({
+		        start: "Invalid Dates",
+		        end: "Invalid Dates"
+		    });
+			return false;
+		}
 
 		Meteor.call("updateEvent", eventId, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, contact, img, function(error, result) {
 			if(error) {

@@ -10,7 +10,6 @@ import '/imports/ui/javascript/myEvents_registrationList.js';
 
 Template.myEvents.onCreated(function() {
   let template = Template.instance();
-
   template.skipCount = new ReactiveVar(0);
 
   template.autorun( () => {

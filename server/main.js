@@ -477,11 +477,6 @@ EventsSchema = new SimpleSchema({
 		label: "Image",
 		optional: true
 	},
-	imgName: {
-		type: String,
-		label: "Image Name",
-		optional: true
-	},
 	owner: {
 		type: String,
 		label: "Owner",
@@ -1003,13 +998,14 @@ if(Meteor.isServer) {
     		accVerficationCode: 1, accVerficationCodeDate: 1
   		}});
 	});*/
-
+	
+	/*
 	var fs = Npm.require('fs');
 	//using interal webapp or iron:router
 	WebApp.connectHandlers.use('/.server_Upload',function(req,res,next){
     	/*https://iamlawrence.me/uploading-files-with-meteor
     	  https://stackoverflow.com/questions/27934141/meteor-uploading-file-from-client-to-mongo-collection-vs-file-system-vs-gridfs/27934142#27934142
-    	  https://stackoverflow.com/questions/17740790/dynamically-insert-files-into-meteor-public-folder-without-hiding-it*/
+    	  https://stackoverflow.com/questions/17740790/dynamically-insert-files-into-meteor-public-folder-without-hiding-it
 
     	if(req.headers['content-type'].startsWith('image')) {
     		
@@ -1026,7 +1022,7 @@ if(Meteor.isServer) {
     		
     		req.pipe(file);
     	}
-	});
+	});*/
 }
 
 Meteor.methods({
@@ -1316,7 +1312,7 @@ Meteor.methods({
 		SignUps.update({_id: submissionId}, {$set: {status: "rejected"}});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, channel, contact, img, imgName){
+	addEvent: function(title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, channel, contact, img){
 		return Events.insert({
 			title: title,
 			description: description,
@@ -1331,7 +1327,6 @@ Meteor.methods({
 			channel : channel,
 			contact: contact,
 			img: img,
-			imgName: imgName,
 			owner: Meteor.userId(),
 			poster: Meteor.user().username,
 			createdAt: new Date(),
@@ -1377,7 +1372,7 @@ Meteor.methods({
     	});
   	},
 
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, contact, img, imgName){
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, contact, img){
 		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
@@ -1407,8 +1402,7 @@ Meteor.methods({
 			category: cat,
 			type: type,
 			contact: contact,
-			img: img,
-			imgName: imgName
+			img: img
 			}
 		});
 	},
@@ -1455,23 +1449,16 @@ Meteor.methods({
 			Template.eventEmail.helpers({
 	  			formatDate: function(date) {
 	  				return moment(date).format('Do MMM YYYY, h.mm a');
-	  			},
+	  			}
+	  			/*
 	  			imageSrc: function(imgName) {
 	  				var filePath = process.env.PWD + '/.server_Upload/' + imgName;
 	  				var url = Meteor.absoluteUrl(filePath.substring(1));
 	  				console.log("Img Src :" + url);
-	  				return url;
-	  			}
+	  				return url;*
+	  			}*/
 			});
 
-			Email.send({
-	 		 	to: "brooklen36@hotmail.com",
-	  			from: "GoPost! <gopostnow@gmail.com>",
-	  			subject: "GoPost! New Event Update: " + event_new.title,
-	  			html: SSR.render('eventEmail', event_new),
-			});
-
-			/*
 			for(var i in mailing_list) {
 				var user = mailing_list[i];
 
@@ -1481,7 +1468,7 @@ Meteor.methods({
 	  				subject: "GoPost! New Event Update: " + event_new.title,
 	  				html: SSR.render('eventEmail', event_new),
 				});
-			}*/
+			}
 		});
 	},
 

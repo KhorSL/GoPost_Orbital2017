@@ -86,16 +86,6 @@ Template.event_Create.onRendered(function() {
 		minDate: dateToday,
 		calendarWeeks: true
   	});
-  	$('#datetimepicker_end').datetimepicker({
-		minDate: dateToday.setHours(dateToday.getHours() + 1),
-		useCurrent: false //Important! See issue #1075
-  	});
-  	$("#datetimepicker_start").on("dp.change", function (e) {
-		$('#datetimepicker_end').data("DateTimePicker").minDate(e.date.add(30,'m'));
-  	});
-  	$("#datetimepicker_end").on("dp.change", function (e) {
-		$('#datetimepicker_start').data("DateTimePicker").maxDate(e.date);
-  	});
 
 	//Limiting the number of question user can add
 	maxFields = 25;
@@ -303,7 +293,6 @@ Template.event_Create.events({
 		var channel = false;
 		var contact = event.target.contact.value;
 		var img = output.src;
-		var imgName = template.uploadedFile.get().name;
 
 		start = new Date(start);
 		end = new Date(end);
@@ -330,15 +319,15 @@ Template.event_Create.events({
 			var rf_matric = event.target.rf_matric.checked;
 			var rf_nric = event.target.rf_nric.checked;
 
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, imgName, function(error, result) {
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
 				if(error) {
 					//console.log(error.reason);
 				} else {
+					/*
 					var xhr = new XMLHttpRequest();
 					xhr.open('POST', '/.server_Upload', true);
 					xhr.setRequestHeader("lneon", imgName);
-					xhr.send(template.uploadedFile.get());
-
+					xhr.send(template.uploadedFile.get());*/
 
 					template.disableBtn.set(true);
 					Meteor.call("addEventTag", type);
@@ -364,7 +353,7 @@ Template.event_Create.events({
 				}
 			);
 
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, imgName, function(error, result) {
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
 				if(error) {
 					//console.log(error.reason);
 				} else {
@@ -469,6 +458,14 @@ Template.event_Create.events({
 			var privacy = $('input[name="privacy"]').is(':checked');
 			var contact = $('input[name="contact"]').val();
 			var img = $('input[name="img"]').val();
+
+			if(start >= end) {
+				Eventvalidator.showErrors({
+		            start: "Invalid Dates",
+		            end: "Invalid Dates"
+		        });
+				return false;
+		    }
 
 			$('input[name="c-title"]').val(title);
 			$('textarea[name="c-description"]').val(description);
