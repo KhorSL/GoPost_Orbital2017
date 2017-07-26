@@ -162,17 +162,21 @@ Template.verify_AccPage.events({
 
 		if(old === tmp.password_token.get()) {
 			//old password matched!
-			if(new1 === new2) {
-				Meteor.call("resetPasswordForUser", email, new1, function(error) {
-					if(error) {
-						//console.log(error.reason);
-					} else {
-						alert("Password Reset successfully. Please log in again.");
-						$("#cancel_btn").click();
-					}
-				});
+			if(new1 === "" || new2 === "") {
+				tmp.errorMessage.set("Please enter your password.");
 			} else {
-				tmp.errorMessage.set("Password do not match!");
+				if(new1 === new2) {
+					Meteor.call("resetPasswordForUser", email, new1, function(error) {
+						if(error) {
+							//console.log(error.reason);
+						} else {
+							alert("Password Reset successfully. Please log in again.");
+							$("#cancel_btn").click();
+						}
+					});
+				} else {
+					tmp.errorMessage.set("Password do not match!");
+				}
 			}
 		} else {
 			tmp.errorMessage.set("Invalid password. Please enter the new password sent to your email.");

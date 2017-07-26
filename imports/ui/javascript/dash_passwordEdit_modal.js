@@ -38,16 +38,20 @@ Template.dash_passwordEdit_modal.events({
 		var new1 = $('[name=new_password]').val();
 		var new2 = $('[name=new_password2]').val();
 
-		if(new1 === new2) { 
-			Meteor.call('changePasswordForUser', new1, function(error) {
-				if(error) {
-					console.log(error.reason);
-				} else {
-					closeModal();
-				}
-			});
+		if(new1 === "" || new2 === "") {
+			tmp.errorMessage.set("Please enter your password.");
 		} else {
-			tmp.errorMessage.set("Password do not match!");
+			if(new1 === new2) { 
+				Meteor.call('changePasswordForUser', new1, function(error) {
+					if(error) {
+						console.log(error.reason);
+					} else {
+						closeModal();
+					}
+				});
+			} else {
+				tmp.errorMessage.set("Password do not match!");
+			}
 		}
 		tmp.disableBtn.set(false);
 	}

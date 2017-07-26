@@ -9,6 +9,7 @@ import '../lib/bootstrap-datetimepicker.min.css';
 Template.event_Create.onCreated(function() {
 	let template = Template.instance();
   	template.disableBtn = new ReactiveVar(false);
+  	template.uploadedFile = new ReactiveVar();
 
   	var output = ""; // Output for image input
 	addr = "No address available"; // Global var... for location addr
@@ -224,7 +225,7 @@ Template.event_Create.onRendered(function() {
 	//Boostrap datetimepicker
 	$('.datetimepicker').datetimepicker();
 	// Validator
-	var validator = $("#new-event").validate({
+	Eventvalidator = $("#new-event").validate({
   		rules: {
 	  		title: "required",
 	  		description: "required",
@@ -232,13 +233,15 @@ Template.event_Create.onRendered(function() {
 	  		start: "required",
 	  		end: "required",
 	  		contact: "required",
-	  		type: "required"
+	  		type: "required",
+	  		signUpDeadline: "required",
+	  		img: "required"
   		},
   		groups: {
 			duration: "start end"
 		},
 		errorPlacement: function(error, element) {
-			if (element.attr("name") == "start" || element.attr("name") == "end" ) {
+			if (element.attr("name") == "start" || element.attr("name") == "end" || element.attr("name") == "signUpDeadline") {
 				error.insertAfter("#end");
 			} else {
 			    error.insertAfter(element);
@@ -251,7 +254,9 @@ Template.event_Create.onRendered(function() {
 			start: "Please specify start date",
 			end: "Please specify end date",
 			contact: "Please enter contact details",
-			type: "Please specify event type"
+			type: "Please specify event type",
+			signUpDeadline: "Please specify Signup Deadline",
+			img: "Please specify Poster image for Event"
   		}
   	});
 });
@@ -328,6 +333,12 @@ Template.event_Create.events({
 				if(error) {
 					//console.log(error.reason);
 				} else {
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', '/.server_Upload', true);
+					xhr.setRequestHeader("lneon", template.uploadedFile.get().name);
+					xhr.send(template.uploadedFile.get());
+
+
 					template.disableBtn.set(true);
 					Meteor.call("addEventTag", type);
 					Meteor.call("addRegistrationForm", result, title, rf_name, rf_contact_mobile, rf_contact_email, rf_address_full, rf_address_region, rf_shirtSize_sml, rf_shirtSize_123, rf_nationality, rf_gender, rf_dietaryPref, rf_allergies, rf_bloodType, rf_faculty, rf_major, rf_nokInfo, rf_additional, rf_matric, rf_nric);
@@ -358,16 +369,12 @@ Template.event_Create.events({
 				} else {
 					template.disableBtn.set(true);
 					Meteor.call("addEventTag", type);
-					Meteor.call("sendEventEmail", result);
-					Meteor.call("addEvent_User", result, title, function(error3, result3) {
-						if(error3) {
-							console.log(error3.reason);
-						}
-					});
+					Meteor.call("addEvent_User", result, title);
 					Meteor.call("addCustomRF", result, title, customQns, function(error2, result2) {
 						if(error2) {
 							alert(error2.reason);
 						} else {
+							Meteor.call("sendEventEmail", result);
 							Router.go('event_View', { _id: result});
 						}
 					});	
@@ -376,16 +383,48 @@ Template.event_Create.events({
 		}
 	},
 
-	'change .img-input': function(event) {
+	'change .img-input': function(event, template) {
 		event.preventDefault();
-		var input = event.target;
-		var reader = new FileReader();
-		reader.onload = function() {
-			var dataURL = reader.result;
-			output = document.getElementById('output');
-			output.src = dataURL;
-		};
-		reader.readAsDataURL(input.files[0]);
+		var uploadedFile = event.target.files[0];
+		output = document.getElementById('output');
+		var error = false;
+
+		if(uploadedFile) {
+			if(uploadedFile.size > 15000000) {
+				Eventvalidator.showErrors({
+	              img: "Please ensure your poster's size is less than 15MB."
+	            });
+	            error = true;
+			} else {
+				var fileName = uploadedFile.name;
+				if(fileName.length > 4) {
+					var mime = fileName.substring(fileName.length-4);
+					if(mime === '.png' || mime === '.jpg' || mime === '.gif') {
+						error = false;
+					} else {
+						Eventvalidator.showErrors({
+			              img: "Please ensure your poster's file type is .png/.jpg/.gif."
+			            });
+						error = true;
+					}
+				}
+			}
+			
+			if(!error) {
+				var reader = new FileReader();
+				reader.onload = function() {
+					var dataURL = reader.result;
+					//output = document.getElementById('output');
+					output.src = dataURL;
+				};
+				reader.readAsDataURL(uploadedFile);
+				template.uploadedFile.set(uploadedFile);
+			} else {
+				output.src = "";
+				$("#img-input").val("");
+				template.uploadedFile.set();
+			}
+		}
 	},
 
 	'click .previous': function(event){

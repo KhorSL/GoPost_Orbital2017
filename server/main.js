@@ -998,6 +998,30 @@ if(Meteor.isServer) {
     		accVerficationCode: 1, accVerficationCodeDate: 1
   		}});
 	});*/
+
+	var fs = Npm.require('fs');
+	//using interal webapp or iron:router
+	WebApp.connectHandlers.use('/.server_Upload',function(req,res,next){
+    	/*https://iamlawrence.me/uploading-files-with-meteor
+    	  https://stackoverflow.com/questions/27934141/meteor-uploading-file-from-client-to-mongo-collection-vs-file-system-vs-gridfs/27934142#27934142
+    	  https://stackoverflow.com/questions/17740790/dynamically-insert-files-into-meteor-public-folder-without-hiding-it*/
+
+    	if(req.headers['content-type'].startsWith('image')) {
+    		
+    		//Need to write into folder
+    		//Need to know how to delete
+    		var filePath = process.env.PWD + '/.server_Upload/' + req.headers['lneon'];
+    		console.log(filePath);
+    		var file = fs.createWriteStream(filePath);
+
+    		file.on('finish', function() {
+    			res.writeHead(200);
+    			res.end();
+    		});
+    		
+    		req.pipe(file);
+    	}
+	});
 }
 
 Meteor.methods({
@@ -1014,8 +1038,6 @@ Meteor.methods({
 
 	sendVerificationToken: function(email) {
 		var token = Random.hexString(10).toLowerCase();
-
-		Meteor.defer()
 
 		this.unblock();
 
@@ -1406,17 +1428,18 @@ Meteor.methods({
 	},
 
 	sendEventEmail: function(eventId) {
+		var userId = Meteor.userId();
 		Meteor.defer(function() {
 			var event_new = Events.findOne({_id: eventId});
 			
 			/*https://themeteorchef.com/tutorials/using-the-email-package*/
 			var mailing_list = Users.find({
 				$or: [
-					{NotificationType: "C", User: {$ne: Meteor.userId()}},
+					{NotificationType: "C", User: {$ne: userId}},
 					{$and: [
 						{NotificationType: "B"},
-						{FollowingList: Meteor.userId()},
-						{User: {$ne: Meteor.userId()}}
+						{FollowingList: userId},
+						{User: {$ne: userId}}
 					]}
 				]
 			}).fetch();
