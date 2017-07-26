@@ -1459,7 +1459,7 @@ Meteor.methods({
 	  			imageSrc: function(imgName) {
 	  				var filePath = process.env.PWD + '/public/' + imgName;
 	  				console.log("Img Src :" + filePath);
-	  				return imageSrc;
+	  				return filePath;
 	  			}
 			});
 
