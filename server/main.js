@@ -477,6 +477,11 @@ EventsSchema = new SimpleSchema({
 		label: "Image",
 		optional: true
 	},
+	imgName: {
+		type: String,
+		label: "Image Name",
+		optional: true
+	},
 	owner: {
 		type: String,
 		label: "Owner",
@@ -1311,7 +1316,7 @@ Meteor.methods({
 		SignUps.update({_id: submissionId}, {$set: {status: "rejected"}});
 	},
 
-	addEvent: function(title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, channel, contact, img){
+	addEvent: function(title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, channel, contact, img, imgName){
 		return Events.insert({
 			title: title,
 			description: description,
@@ -1326,6 +1331,7 @@ Meteor.methods({
 			channel : channel,
 			contact: contact,
 			img: img,
+			imgName: imgName,
 			owner: Meteor.userId(),
 			poster: Meteor.user().username,
 			createdAt: new Date(),
@@ -1371,7 +1377,7 @@ Meteor.methods({
     	});
   	},
 
-	updateEvent: function(id, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, contact, img){
+	updateEvent: function(id, title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, cat, type, contact, img, imgName){
 		var currEvent = Events.findOne(id);
 
 		if(currEvent.owner !== Meteor.userId()) {
@@ -1401,7 +1407,8 @@ Meteor.methods({
 			category: cat,
 			type: type,
 			contact: contact,
-			img: img
+			img: img,
+			imgName: imgName
 			}
 		});
 	},
@@ -1448,9 +1455,22 @@ Meteor.methods({
 			Template.eventEmail.helpers({
 	  			formatDate: function(date) {
 	  				return moment(date).format('Do MMM YYYY, h.mm a');
+	  			},
+	  			imageSrc: function(imgName) {
+	  				var filePath = process.env.PWD + '/public/' + imgName;
+	  				console.log("Img Src :" + filePath);
+	  				return 
 	  			}
 			});
 
+			Email.send({
+	 		 	to: "brooklen36@hotmail.com",
+	  			from: "GoPost! <gopostnow@gmail.com>",
+	  			subject: "GoPost! New Event Update: " + event_new.title,
+	  			html: SSR.render('eventEmail', event_new),
+			});
+
+			/*
 			for(var i in mailing_list) {
 				var user = mailing_list[i];
 
@@ -1460,7 +1480,7 @@ Meteor.methods({
 	  				subject: "GoPost! New Event Update: " + event_new.title,
 	  				html: SSR.render('eventEmail', event_new),
 				});
-			}
+			}*/
 		});
 	},
 

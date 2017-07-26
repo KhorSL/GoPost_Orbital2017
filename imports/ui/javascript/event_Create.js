@@ -303,6 +303,7 @@ Template.event_Create.events({
 		var channel = false;
 		var contact = event.target.contact.value;
 		var img = output.src;
+		var imgName = template.uploadedFile.get().name;
 
 		start = new Date(start);
 		end = new Date(end);
@@ -329,13 +330,13 @@ Template.event_Create.events({
 			var rf_matric = event.target.rf_matric.checked;
 			var rf_nric = event.target.rf_nric.checked;
 
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, imgName, function(error, result) {
 				if(error) {
 					//console.log(error.reason);
 				} else {
 					var xhr = new XMLHttpRequest();
 					xhr.open('POST', '/.server_Upload', true);
-					xhr.setRequestHeader("lneon", template.uploadedFile.get().name);
+					xhr.setRequestHeader("lneon", imgName);
 					xhr.send(template.uploadedFile.get());
 
 
@@ -363,7 +364,7 @@ Template.event_Create.events({
 				}
 			);
 
-			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, function(error, result) {
+			Meteor.call("addEvent", title, description, location, locationAddr, locationGeo, venue, start, end, signUpDeadline, category, type, channel, contact, img, imgName, function(error, result) {
 				if(error) {
 					//console.log(error.reason);
 				} else {
