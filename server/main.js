@@ -1458,8 +1458,9 @@ Meteor.methods({
 	  			},
 	  			imageSrc: function(imgName) {
 	  				var filePath = process.env.PWD + '/public/' + imgName;
-	  				console.log("Img Src :" + filePath);
-	  				return filePath;
+	  				var url = Meteor.absoluteUrl(filePath);
+	  				console.log("Img Src :" + url);
+	  				return url;
 	  			}
 			});
 
