@@ -1457,7 +1457,7 @@ Meteor.methods({
 	  				return moment(date).format('Do MMM YYYY, h.mm a');
 	  			},
 	  			imageSrc: function(imgName) {
-	  				var filePath = process.env.PWD + '/public/' + imgName;
+	  				var filePath = process.env.PWD + '/.server_Upload/' + imgName;
 	  				var url = Meteor.absoluteUrl(filePath.substring(1));
 	  				console.log("Img Src :" + url);
 	  				return url;
