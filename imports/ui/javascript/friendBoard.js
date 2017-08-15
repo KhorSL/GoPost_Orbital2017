@@ -15,15 +15,21 @@ Template.friendBoard.onCreated(function() {
 	template.initial_Limit = new ReactiveVar(20);
 	Session.set("limit", template.initial_Limit.get());
 
+	template.ready = new ReactiveVar();
   	template.autorun( () => {
   		var search = template.searchQuery.get();
   		var sButton = template.searchBut.get();
 
-    	template.subscribe('users_Filter', search, () => {
+  		/*template.subscribe('users_Filter', search, () => {
 	      	setTimeout( () => {
 	        	template.searching.set( false );
 	      	}, 300 );
-    	});
+    	});*/
+  		const handle = Subsman.subscribe('users_Filter', search);
+    	Meteor.setTimeout( () => {
+    		template.searching.set( false );
+    	}, 300);
+    	template.ready.set(handle.ready());
   	});
 });
 
@@ -54,6 +60,9 @@ Template.friendBoard.onDestroyed(function() {
 });
 
 Template.friendBoard.helpers({
+	postReady: function() {
+		return Template.instance().ready.get();
+	},
 	searching: function() {
     	return Template.instance().searching.get();
   	},

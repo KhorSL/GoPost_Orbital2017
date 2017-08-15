@@ -9,6 +9,8 @@ import './events_ListView.js';
 import './events_Tag.js';
 import './advertisement.js';
 
+Subsman = new SubsManager();
+
 Template.bulletinBoard.onCreated( () => {
 	let template = Template.instance();
 
@@ -28,16 +30,24 @@ Template.bulletinBoard.onCreated( () => {
 		}
 	}
 
+	/*https://www.youtube.com/watch?v=VkIaDJwDaHY*/
+	template.ready = new ReactiveVar();
   	template.autorun( () => {
   		var search = Session.get("searchQuery");  
   		var sButton = Session.get("sButton");  
   		var tag = Session.get("selected_tag");
 
+  		/*
     	template.subscribe('events_Filter', search, tag, () => {
 	      	setTimeout( () => {
 	        	Session.set("searching",false); 
 	      	}, 300 );
-    	});
+    	});*/
+  		const handle = Subsman.subscribe('events_Filter', search, tag);
+    	Meteor.setTimeout( () => {
+    		Session.set("searching",false); 
+    	},300);
+    	template.ready.set(handle.ready());
   	});
 });
 
@@ -68,6 +78,9 @@ Template.bulletinBoard.onDestroyed(function() {
 });
 
 Template.bulletinBoard.helpers({
+	postReady: function() {
+		return Template.instance().ready.get();
+	},
 	viewType: function() {
 		//return Template.instance().viewToggle.get();
 		if(Session.get("viewToggle")) {

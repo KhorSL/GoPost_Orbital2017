@@ -12,10 +12,13 @@ Template.myEvents.onCreated(function() {
   let template = Template.instance();
   template.skipCount = new ReactiveVar(0);
 
+  template.ready = new ReactiveVar();
   template.autorun( () => {
     var skipCount = template.skipCount.get();
     //template.subscribe("userEvents_Page", skipCount);
-    template.subscribe("userEvents");
+    //template.subscribe("userEvents");
+    const handle = Subsman.subscribe('userEvents');
+    template.ready.set(handle.ready());
   });
 });
 
@@ -68,7 +71,11 @@ Template.myEvents.events({
 });
 
 Template.myEvents.helpers({
-	delObj: function() {
+	postReady: function() {
+    return Template.instance().ready.get();
+  },
+
+  delObj: function() {
 		return Session.get('delObj');
 	},
 

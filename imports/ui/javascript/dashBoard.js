@@ -36,7 +36,7 @@ Template.dashBoard.onCreated(() => {
     template.ownerID.set(Meteor.userId());
   }
 
-
+  template.ready = new ReactiveVar();
   template.autorun( () => {
     var skipCount = template.skipCount.get();
     var ownerID = template.ownerID.get();
@@ -48,10 +48,17 @@ Template.dashBoard.onCreated(() => {
       template.viewingThisOwner.set(Router.current().params.owner);
       document.location.reload(true);
     }
+
+    const handle = Subsman.subscribe('events');
+    template.ready.set(handle.ready());
   });
 });
 
 Template.dashBoard.helpers({
+  postReady: function() {
+    return Template.instance().ready.get();
+  },
+
   isUser: function(){
     if (Router.current().params.owner === Meteor.userId() || Router.current().params.owner === undefined){ //User visiting his own profile
       return true;
