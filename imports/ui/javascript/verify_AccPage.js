@@ -18,7 +18,7 @@ Template.verify_AccPage.onCreated(function() {
 	if(Meteor.user()) {
 		var user = Users.find({"User": Meteor.userId()}).fetch();
 		var now = new Date();
-		if (now.getTime() - user[0].TokenExpired.getTime() >= 15*60*1000) {
+		if (now.getTime() - user[0].TokenExpired.getTime() >= 20*60*1000) {
 			/*https://stackoverflow.com/questions/7080051/checking-if-difference-between-2-date-is-more-than-20-minutes*/
 			//token is created for longer than 10 minutes
 			resend = true;
@@ -89,7 +89,7 @@ Template.verify_AccPage.events({
 			//Right token was entered.
 			var now = new Date();
 			var timeSent = tmp.currentDate.get();
-			if (now.getTime() - timeSent.getTime() >= 15*60*1000) {
+			if (now.getTime() - timeSent.getTime() >= 20*60*1000) {
 				//Token Expired
 				alert("Token have expired! Please click on the resend button to receive a new Verification Token");
 			} else {

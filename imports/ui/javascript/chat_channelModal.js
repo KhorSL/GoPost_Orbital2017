@@ -18,9 +18,10 @@ Template.chat_channelModal.helpers({
 
 Template.chat_channelModal.events({
 	'click #createChannel' :function(e) {
+		/*https://stackoverflow.com/questions/10659097/jquery-get-selected-option-from-dropdown*/
 		e.preventDefault();
 		var channel_eid = $("#channel_name").val();
-		var channel_title = $("#channel_name").text().trim();
+		var channel_title = $("#channel_name").find(":selected").text().trim();
 
 		if(channel_eid != null) {
 			Meteor.call("startChannel", Meteor.userId(), channel_eid, channel_title, true, function(error) {

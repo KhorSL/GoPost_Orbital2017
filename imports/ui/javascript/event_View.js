@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 
 import '../html/event_View.html';
 import '../css/event_View.css';
+import './event_View_CommentBox.js';
 
 Template.event_View.helpers({
   formatDate: function(date) {
@@ -154,7 +155,7 @@ Template.event_View.helpers({
     });
 
     return count;
-  },
+  }
  });
 
 Template.event_View.events({

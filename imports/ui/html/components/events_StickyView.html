@@ -35,31 +35,31 @@
               </a> <!--end of a href event_view -->
               <div class="noteFoot">
                 <p>
-                  {{#with event_Liked}}
-                    {{#if currentUser}}
-                      {{#if hasLiked}}
-                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
-                      {{else}}
-                        <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
-                      {{/if}}
+                  <!--{{#with event_Liked}}-->
+                  {{#if currentUser}}
+                    {{#if hasLiked}}
+                      <span role="button" class="glyphicon glyphicon-heart">{{likes}}</span>
+                    {{else}}
+                      <span role="button" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
+                    {{/if}}
+                  {{/if}}
+                  &nbsp;
+                  {{#unless isOwner}}
+                    {{#if hasSubscribed}} <!-- Toggle Subscription !-->
+                      <span id="unsubscribe" class="glyphicon glyphicon-thumbs-down" aria-hidden="true">Unsubscribe</span>
+                    {{else}}
+                      <span id="subscribe" class="glyphicon glyphicon-thumbs-up" aria-hidden="true">Subscribe</span>
                     {{/if}}
                     &nbsp;
-                    {{#unless isOwner}}
-                      {{#if hasSubscribed}} <!-- Toggle Subscription !-->
-                        <span role="button" id="unsubscribe" class="glyphicon glyphicon-thumbs-down" aria-hidden="true">Unsubscribe</span>
-                      {{else}}
-                        <span role="button" id="subscribe" class="glyphicon glyphicon-thumbs-up" aria-hidden="true">Subscribe</span>
-                      {{/if}}
-                    &nbsp;
-                      {{#if regStatus "success"}} 
-                        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="Successful Registration">Success</span>
-                      {{else if regStatus "rejected"}}
-                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="Unsuccessful Registration">Unsuccessful</span>
-                      {{else if regStatus "pending"}}
-                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Registration pending confirmation">Pending</span>
-                      {{/if}}
-                    {{/unless}}
-                  {{/with}}
+                    {{#if regStatus "success"}} 
+                      <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="Successful Registration">Success</span>
+                    {{else if regStatus "rejected"}}
+                      <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="Unsuccessful Registration">Unsuccessful</span>
+                    {{else if regStatus "pending"}}
+                      <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Registration pending confirmation">Pending</span>
+                    {{/if}}
+                  {{/unless}}
+                  <!--{{/with}}-->
                 </p>
               </div> <!--end of noteFoot -->
             </div> <!-- end of noteContent -->

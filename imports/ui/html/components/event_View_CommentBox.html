@@ -1,0 +1,93 @@
+<template name="event_View_CommentBox">
+    <div class="row">
+		<div class="col-md-12 col-xs-12">
+			<div class="row">
+    	 		<div class="col-md-11 col-xs-11">
+	    	 		<textarea class="form-control" id="type_msg" placeholder="Start the discussion."></textarea>
+	    	 	</div>
+			 	<div class="col-md-1 col-xs-1">
+			 		<span role="button" id="sendBtn" class="pull-right btn btn-success glyphicon glyphicon-send send_btn_space"></span>
+	 			</div>
+ 			</div> <!-- end of row -->
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<div class="comments-container">
+			 	<ul id="comments-list" class="comments-list">
+			 		{{#each comments}}
+			 			{{> event_View_Comment_Detail}}
+			 		{{/each}}
+			 	</ul>
+			</div>
+		</div>
+	</div>
+
+	{{> event_View_comment_modal}}
+</template>
+
+<template name="event_View_Comment_Detail">
+	<div class="row">
+		<div class="col-md-1 col-xs-1">
+			<div class="comment-avatar">
+				{{#if commentAvatar}}
+                    <img id="commentAvatar" src="{{commentAvatar}}">
+                {{else}}
+                   	<img id="commentAvatar" src="/images/avatar.jpg">
+                {{/if}}
+			</div>
+		</div>
+		<div class="col-md-11 col-xs-11">
+			<div class="comment-box">
+				<div class="comment-head">
+					{{#if isOwner3}}
+						<h6 class="comment-name by-author">{{commentUser}}</h6>
+					{{else}}
+						<h6 class="comment-name">{{commentUser}}</h6>
+					{{/if}}
+					<span class="duration">{{duration timestamp}}</span>
+					<span class="glyphicon glyphicon-share-alt reply_button" aria-hidden="true"></span>
+				</div>
+				<div class="comment-content">
+					{{comment}} 
+				</div>
+			</div>
+		</div>
+	</div>
+	{{#if replies}}
+		<ul class="comments-list reply-list">
+			{{#each replies}}
+				<li>
+				 	<div class="row">
+						<div class="col-md-1 col-xs-1">
+							<div class="comment-avatar">
+								{{#if commentAvatar}}
+				                    <img id="commentAvatar" src="{{commentAvatar}}">
+				                {{else}}
+				                   	<img id="commentAvatar" src="/images/avatar.jpg">
+				                {{/if}}
+							</div>
+						</div>
+						<div class="col-md-11 col-xs-11">
+							<div class="comment-box">
+								<div class="comment-head">
+									{{#if isOwner3}}
+										<h6 class="comment-name by-author">{{commentUser}}</h6>
+									{{else}}
+										<h6 class="comment-name">{{commentUser}}</h6>
+									{{/if}}
+									<span class="duration">{{duration timestamp}}</span>	
+									<span class="glyphicon glyphicon-share-alt reply_button2" aria-hidden="true"></span>	
+								</div>
+								<div class="comment-content">
+									{{comment}} 
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			 {{/each}}
+		</ul>
+	{{/if}}
+</template>

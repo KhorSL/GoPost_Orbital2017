@@ -1,0 +1,22 @@
+<template name="event_View_comment_modal">
+	<div class="modal fade" id="reply-comment-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Reply to </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-11 col-xs-11">
+              <textarea class="form-control" id="reply_msg" placeholder="Start the discussion."></textarea>
+            </div>
+            <div class="col-md-1 col-xs-1">
+              <span role="button" id="replyBtn" class="pull-right btn btn-success glyphicon glyphicon-send send_btn_space"></span>
+            </div>
+          </div> <!-- end of row -->
+        </div> <!-- end of modal body -->
+      </div>
+    </div>
+  </div>
+</template>

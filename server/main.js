@@ -780,12 +780,51 @@ MsgCountSchema = new SimpleSchema({
 	}
 });
 
+CommentsSchema = new SimpleSchema({
+	postID: {
+		type: String,
+		label: "Person who commented on"
+	},
+	eventID: {
+		type: String,
+		label: "Event ID the comment is from"
+	},
+	comment: {
+		type: String,
+		label: "The content of the comment"
+	},
+	likes: {
+		type: Number,
+		label: "Likes",
+		defaultValue: 0
+	},
+	likers: {
+		type: Array,
+		label:"Likers",
+		defaultValue: []
+	},
+	"likers.$": {
+		type: String
+	},
+	timestamp: {
+		type: Date,
+		label: "The date and time the last message was sent"
+	},
+	originalPostID: {
+		type: String,
+		label: "Original Post ID that reply is from, if no reply, null",
+		defaultValue: null,
+		optional: true
+	}
+});
+
 RegistrationForms.attachSchema(RegistrationFormsSchema);
 Users.attachSchema(UserSchema);
 Events.attachSchema(EventsSchema);
 Cal_Events.attachSchema(Cal_EventsSchema);
 Messages.attachSchema(MessagesSchema);
 MessagesCount.attachSchema(MsgCountSchema);
+Comments.attachSchema(CommentsSchema);
 
 if(Meteor.isServer) {
 	Meteor.publish("userEvents", function() {
@@ -888,12 +927,7 @@ if(Meteor.isServer) {
 		events_id2 = _.pluck(_.flatten(events_id2), 'eventID');
 		events_id = events_id.concat(events_id2);
 
-		return Events.find({
-			$and: [
-			 	{"_id": {"$in" : events_id}},
-				{ "channel" : {$ne: true}}
-			]
-		});
+		return Events.find({"_id": {"$in" : events_id}});
 	});
 
 	//This is for user created events
@@ -973,6 +1007,10 @@ if(Meteor.isServer) {
 
 	Meteor.publish("users_msg_count", function() {
 		return MessagesCount.find();
+	});
+
+	Meteor.publish("event_comments", function(eventID) {
+		return Comments.find({"eventID": eventID});
 	});
 
 	/*
@@ -1104,11 +1142,14 @@ Meteor.methods({
 		return Accounts.setPassword(Meteor.userId(), newPass);
 	},
 
-	addEventTag: function(tags) {
-		for(var i in tags) {
-			var tag = tags[i].trim();
-			Tags.update(tag, {tag: tag, createdAt: new Date()}, {upsert: true});
-		}
+	addEventTag: function(newTags) {
+		var tags = newTags;
+		Meteor.defer(function() {
+			for(var i in tags) {
+				var tag = tags[i].trim();
+				Tags.update(tag, {tag: tag, createdAt: new Date()}, {upsert: true});
+			}
+		});
 	},
 
 	addEvent_User: function(event_id, title) {
@@ -1650,5 +1691,25 @@ Meteor.methods({
   			},
 			$inc: { count: +1 }
   		}, {upsert: true});
-  	}
+  	},
+
+  	newComment: function(userID,comment,eventID) {
+  		Comments.insert({
+			postID: userID,
+			comment: comment,
+			eventID: eventID,
+			timestamp: new Date(),
+			originalPostID: null
+		});
+  	},
+
+  	newComment_Reply: function(userID,comment,eventID,originalcommentID) {
+  		Comments.insert({
+			postID: userID,
+			comment: comment,
+			eventID: eventID,
+			timestamp: new Date(),
+			originalPostID: originalcommentID
+		});
+  	},
 });

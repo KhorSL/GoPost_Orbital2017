@@ -1,131 +1,160 @@
 <template name="event_View">
-	<div class="event_Frame corner_event">
-		<div class="row">
-			
-				<div class="col-md-12 col-xs-12">
-					<div class="view_Right">
-					{{#if isOwner}}
-					 	<button type="button" class="btn registeredList">Registration List <span class="glyphicon glyphicon-list-alt"></span></button>
-						<button type="button" class="btn new_channel">Event Channel <span class="glyphicon glyphicon-bullhorn"></span></button>
-		                <button class="update btn">Edit</button>
-		                <button class="delete btn">Delete</button>
-		            {{else}}
-		            	{{#if currentUser}}
-							{{#if hasLiked}}
-								<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart">{{likes}}</span>
-							{{else}}
-								<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart-empty">{{likes}}</span>
-							{{/if}}
-						{{/if}}
-						{{#if hasSubscribed}} <!-- Toggle Subscription !-->
-                          <button class="btn btn-primary" type ="button" id ="unsubscribe"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Unsubscribe</button>
-                        {{else}}
-                          <button class="btn btn-primary" type ="button" id ="subscribe"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Subscribe</button>
-                        {{/if}}
-		            	<button id="{{owner}}" class="poster btn">Organizer Details</button>
-		            	{{#if hasSignUp}}
-		            		<button id="{{this._id}}" class="signUp btn">Check Status</button>
-		            	{{else}}
-		            		<button id="{{this._id}}" class="signUp btn" {{disableSignUpBtn}}>Sign Up</button>
-		            	{{/if}}
-		            {{/if}}
-		            </div>
-				</div>
-			
-		</div>
-		<div class="row">
-			<div class="col-md-12 col-xs-12" id="view_head">
-				<h2 class="view_h2"> {{title}} </h2>
-				<p><small>Created On {{formatDate createdAt}} by <a href="{{pathFor route='dashBoard'}}">{{poster}}</a></small></p>
-				<div class="view_Img"><img src={{img}} class="img-responsive"></div>
-			</div>
-		</div>
+	<div class="row">
+    	<div class="col-md-12 col-xs-12">
+    		<div class="panel with-nav-tabs panel_event_View">
+                <div class="panel-heading panel_heading_event_view">
+                    <ul class="nav nav-tabs nav_event_view">
+                        <li class="active"><a href="#tab1primary" data-toggle="tab">Event</a></li>
+                        <li><a href="#tab2primary" data-toggle="tab">Participants</a></li>
+                        <li><a href="#tab3primary" data-toggle="tab">Comments</a></li>
+                    </ul>
+                </div>
+            	<div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1primary">
+                      			<div class="event_Frame corner_event">
+									<div class="row">
+										
+											<div class="col-md-12 col-xs-12">
+												<div class="view_Right">
+												{{#if isOwner}}
+												 	<button type="button" class="btn registeredList">Registration List <span class="glyphicon glyphicon-list-alt"></span></button>
+													<button type="button" class="btn new_channel">Event Channel <span class="glyphicon glyphicon-bullhorn"></span></button>
+									                <button class="update btn">Edit</button>
+									                <button class="delete btn">Delete</button>
+									            {{else}}
+									            	{{#if currentUser}}
+														{{#if hasLiked}}
+															<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart">{{likes}}</span>
+														{{else}}
+															<span role="button" id="toggle-like" data-id="{{_id}}" class="btn glyphicon glyphicon-heart-empty">{{likes}}</span>
+														{{/if}}
+													{{/if}}
+													{{#if hasSubscribed}} <!-- Toggle Subscription !-->
+							                          <button class="btn btn-primary" type ="button" id ="unsubscribe"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Unsubscribe</button>
+							                        {{else}}
+							                          <button class="btn btn-primary" type ="button" id ="subscribe"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Subscribe</button>
+							                        {{/if}}
+									            	<button id="{{owner}}" class="poster btn">Organizer Details</button>
+									            	{{#if hasSignUp}}
+									            		<button id="{{this._id}}" class="signUp btn">Check Status</button>
+									            	{{else}}
+									            		<button id="{{this._id}}" class="signUp btn" {{disableSignUpBtn}}>Sign Up</button>
+									            	{{/if}}
+									            {{/if}}
+									            </div>
+											</div>
+										
+									</div>
+									<div class="row">
+										<div class="col-md-12 col-xs-12" id="view_head">
+											<h2 class="view_h2"> {{title}} </h2>
+											<p><small>Created On {{formatDate createdAt}} by <a href="{{pathFor route='dashBoard'}}">{{poster}}</a></small></p>
+											<div class="view_Img"><img src={{img}} class="img-responsive"></div>
+										</div>
+									</div>
 
-		<div class="row">
-			<div class="col-md-12 col-xs-12">
-				<div>
-					<p>
-						<span class="glyphicon glyphicon-map-marker"> {{venue}} <br/>
-							&nbsp;&nbsp;{{location}} <br/> 
-							&nbsp;&nbsp;{{locationAddr}}</span>
-							<br/>
-						<span class="glyphicon glyphicon-time"> {{formatDate start}}</span><br/>
-						<span class="glyphicon glyphicon-bookmark"> {{category}} </span><br/>
-						<span class="glyphicon glyphicon-tags"> {{type}}</span><br/>
-						<span class="glyphicon glyphicon-asterisk"> <strong style="color:red;">Signup Deadline: </strong>{{formatDate  signUpDeadline}}</span><br/>
-					</p>
-				</div>
+									<div class="row">
+										<div class="col-md-12 col-xs-12">
+											<div>
+												<p>
+													<span class="glyphicon glyphicon-map-marker"> {{venue}} <br/>
+														&nbsp;&nbsp;{{location}} <br/> 
+														&nbsp;&nbsp;{{locationAddr}}</span>
+														<br/>
+													<span class="glyphicon glyphicon-time"> {{formatDate start}}</span><br/>
+													<span class="glyphicon glyphicon-bookmark"> {{category}} </span><br/>
+													<span class="glyphicon glyphicon-tags"> {{type}}</span><br/>
+													<span class="glyphicon glyphicon-asterisk"> <strong style="color:red;">Signup Deadline: </strong>{{formatDate  signUpDeadline}}</span><br/>
+												</p>
+											</div>
 
-				<hr class="solidBlackLine"/>
-				<p class="view_para">{{description}}</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="participants_Frame corner_event">
-		<div class="row">
-			<div class="col-md-12 col-xs-12">
-				<div class="panel panel-participants">
-					<div class="panel-heading">
-						<div class="view_Right">
-							<span class="glyphicon glyphicon-inbox" aria-hidden="true">{{regCount}}</span> 
-							&nbsp;
-            				<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="cursor:help;" title="Number of pending registrations">{{pendingReg}}</span> 
-            				&nbsp;
-            				<span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="cursor:help;" title="Number of successful registrations">{{successfulReg}}</span> &nbsp;
-            				<span class="glyphicon glyphicon-remove-sign" aria-hidden="true" style="cursor:help;" title="Number of rejected registrations">{{rejectedReg}}
-           	 				</span>
-						</div>
-						<h3 class="panel-title">Participant List</h3>
-					</div>
-					<table class="table table-hover" id="dev-table">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Username</th>
-								<th>Age</th>
-								<th>Status</th>
-								<th>Profile</th>
-								{{#if isOwner}}
-									<th>Actions</th>
-								{{/if}}
-							</tr>
-						</thead>
-						<tbody>
-							{{#each participants}}
-							<tr>
-								<td>{{number}}</td>
-								<td>{{name}}</td>
-								<td>{{age}}</td>
-								{{#with status}}
-									<td>{{this.status}}</td>
-									<td><span class="glyphicon glyphicon-user" role="button" aria-hidden="true" id="profileClick"></span></td>
-									{{#if isOwner2}}
-										<td>
-											{{#if statusTypeS}}
-												<span class="glyphicon glyphicon-ok" role="button" aria-hidden="true" id="acceptUser"></span>
-											{{/if}}
-											{{#if statusTypeR}}
-												<span class="glyphicon glyphicon-remove" role="button" aria-hidden="true" id="rejectUser"></span>
-											{{/if}}
-										</td>
-									{{/if}}
-								{{/with}}
-							</tr>
-							{{else}}
-								<tr>
-									<td class="alert alert-warning"></td>
-									<td class="alert alert-warning">No Participants</td>
-									<td class="alert alert-warning"></td>
-									<td class="alert alert-warning"></td>
-									<td class="alert alert-warning"></td>
-									<td class="alert alert-warning"></td>
-								</tr>
-							{{/each}}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+											<hr class="solidBlackLine"/>
+											<p class="view_para">{{description}}</p>
+										</div>
+									</div>
+								</div>
+                      	</div>  <!-- end of tab 1 -->
+                        <div class="tab-pane fade" id="tab2primary">
+                      			<div id="participants" class="participants_Frame corner_event">
+									<div class="row">
+										<div class="col-md-12 col-xs-12">
+											<div class="panel panel-participants">
+												<div class="panel-heading">
+													<div class="view_Right">
+														<span class="glyphicon glyphicon-inbox" aria-hidden="true">{{regCount}}</span> 
+														&nbsp;
+							            				<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="cursor:help;" title="Number of pending registrations">{{pendingReg}}</span> 
+							            				&nbsp;
+							            				<span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="cursor:help;" title="Number of successful registrations">{{successfulReg}}</span> &nbsp;
+							            				<span class="glyphicon glyphicon-remove-sign" aria-hidden="true" style="cursor:help;" title="Number of rejected registrations">{{rejectedReg}}
+							           	 				</span>
+													</div>
+													<h3 class="panel-title">Participant List</h3>
+												</div>
+												<table class="table table-hover" id="dev-table">
+													<thead>
+														<tr>
+															<th>#</th>
+															<th>Username</th>
+															<th>Age</th>
+															<th>Status</th>
+															<th>Profile</th>
+															{{#if isOwner}}
+																<th>Actions</th>
+															{{/if}}
+														</tr>
+													</thead>
+													<tbody>
+														{{#each participants}}
+														<tr>
+															<td>{{number}}</td>
+															<td>{{name}}</td>
+															<td>{{age}}</td>
+															{{#with status}}
+																<td>{{this.status}}</td>
+																<td><span class="glyphicon glyphicon-user" role="button" aria-hidden="true" id="profileClick"></span></td>
+																{{#if isOwner2}}
+																	<td>
+																		{{#if statusTypeS}}
+																			<span class="glyphicon glyphicon-ok" role="button" aria-hidden="true" id="acceptUser"></span>
+																		{{/if}}
+																		{{#if statusTypeR}}
+																			<span class="glyphicon glyphicon-remove" role="button" aria-hidden="true" id="rejectUser"></span>
+																		{{/if}}
+																	</td>
+																{{/if}}
+															{{/with}}
+														</tr>
+														{{else}}
+															<tr>
+																<td class="alert alert-warning"></td>
+																<td class="alert alert-warning">No Participants</td>
+																<td class="alert alert-warning"></td>
+																<td class="alert alert-warning"></td>
+																<td class="alert alert-warning"></td>
+																<td class="alert alert-warning"></td>
+															</tr>
+														{{/each}}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+                      	</div>  <!-- end of tab 2 -->
+                      	<div class="tab-pane fade" id="tab3primary">
+	                      		<div id="feedback" class="participants_Frame corner_event">
+									<div class="row">
+										<div class="col-md-12 col-xs-12">
+											{{> event_View_CommentBox}}
+										</div>
+									</div>
+								</div>
+                      	</div> <!-- end of tab 3 -->
+                    </div> <!-- end of tab content -->
+                </div> <!-- end of panel body -->
+        	</div> <!-- end of panel -->
+        </div> <!-- end of col -->
+    </div> <!-- end of row -->
 </template>
