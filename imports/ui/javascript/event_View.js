@@ -5,6 +5,28 @@ import '../html/event_View.html';
 import '../css/event_View.css';
 import './event_View_CommentBox.js';
 
+Template.event_View.onCreated(function() {
+  /** Facebook JS SDK ** 
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v2.10'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+   **/
+});
+
 Template.event_View.helpers({
   formatDate: function(date) {
   	return moment(date).format('Do MMM YYYY, h.mm a');
@@ -243,5 +265,31 @@ Template.event_View.events({
         console.log(error.reason);
       }
     });
+  },
+/**Credits on social media share: https://medium.com/just-meteor/implement-your-own-social-share-buttons-71c66504e60a **/  
+  'click #facebook-share': function(e) {
+    e.preventDefault();
+    var link = 'https://www.facebook.com/sharer/sharer.php?&u=' + window.location.href;
+    var fbpopup = window.open(link, "pop", "width=600, height=600, scrollbars=no");
+    return false;
+
+    /**
+    FB.ui({
+      method: 'share',
+      href: window.location.href,
+    }, function(response){});
+    **/
+  },
+  'click #twitter-share': function(e) {
+    e.preventDefault();
+    var link = 'https://twitter.com/intent/tweet?url=' + window.location.href + '&text=' + 'Check out this event at GoPost!';
+    var twitterpopup = window.open(link, "pop", "width=600, height=600, scrollbars=no");
+    return false;
+  },
+  'click #googleplus-share': function(e) {
+    e.preventDefault();
+    var link = 'https://plus.google.com/share?url=' + window.location.href;
+    var googlepopup = window.open(link, "pop", "width=600, height=600, scrollbars=no");
+    return false;
   }
 });
