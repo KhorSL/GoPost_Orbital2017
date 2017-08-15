@@ -18,6 +18,8 @@
 			 	<ul id="comments-list" class="comments-list">
 			 		{{#each comments}}
 			 			{{> event_View_Comment_Detail}}
+			 		{{else}}
+			 			<p style="text-align: center;">Be First to Comment.</p>
 			 		{{/each}}
 			 	</ul>
 			</div>
