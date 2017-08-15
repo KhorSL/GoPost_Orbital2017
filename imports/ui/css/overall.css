@@ -14,3 +14,11 @@
 	margin: 20px;
 	text-align: right;
 }
+
+.aboutUs_wrapper {
+	padding:5px;
+}
+
+.aboutUs_wrapper img {
+	width: 100%;
+}

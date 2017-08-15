@@ -4,9 +4,35 @@ import { Template } from 'meteor/templating';
 import '../html/components/event_View_CommentBox.html';
 import './event_View_comment_modal.js';
 
+Template.event_View_CommentBox.onCreated(function() {
+	Session.set("limit", 20);
+});
+
+Template.event_View_CommentBox.onRendered(function() {
+	var lastScrollTop = 0;
+
+  	$(window).scroll(function(event) {
+    	if($(window).scrollTop() + $(window).height() > $(document).height() - 100) { // to detect scroll event
+      		var scrollTop = $(this).scrollTop();
+
+      		if(scrollTop > lastScrollTop){ // detect scroll down
+      			Session.set("limit", (Session.get("limit")+15)); // when it reaches the end, add another 9 elements
+      		}
+
+      		lastScrollTop = scrollTop;
+   		}
+ 	});
+ 	/*Auto Detect Scrolling Credits:
+	http://www.meteorpedia.com/read/Infinite_Scrolling
+	https://stackoverflow.com/questions/38739335/infinite-scrolling-with-meteor
+	https://stackoverflow.com/questions/4306387/jquery-add-and-remove-window-scrollfunction
+ 	*/
+ });
+
 Template.event_View_CommentBox.helpers({
 	comments: function() {
-		return Comments.find({"eventID": this._id, "originalPostID": null}, {sort: {timestamp: -1}});
+		var limit = Session.get("limit");
+		return Comments.find({"eventID": this._id, "originalPostID": null}, {sort: {timestamp: -1}, limit: limit});
 	}
 });
 
@@ -71,5 +97,6 @@ Template.event_View_Comment_Detail.events({
 });
 
 Template.event_View_Comment_Detail.onDestroyed(function() {
-	delete Session.keys['originalPost'];
+	$(window).off("scroll");
+	delete Session.keys['originalPost', "limit"];
 });
