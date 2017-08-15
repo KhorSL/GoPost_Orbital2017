@@ -21,7 +21,6 @@ iron:router
 session@1.1.7
 accounts-password
 dynamic-import@0.1.1
-themeteorchef:jquery-validation
 meteortoys:allthings
 raix:ui-dropped-event
 dburles:google-maps
@@ -29,7 +28,6 @@ useraccounts:unstyled
 raix:handlebar-helpers
 aldeed:template-extension
 aldeed:collection2
-momentjs:moment
 check@1.2.5
 nicolaslopezj:excel-export
 percolate:momentum
