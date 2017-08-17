@@ -38,9 +38,9 @@
                   <!--{{#with event_Liked}}-->
                   {{#if currentUser}}
                     {{#if hasLiked}}
-                      <span role="button" class="glyphicon glyphicon-heart">{{likes}}</span>
+                      <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart">{{likes}}</span>
                     {{else}}
-                      <span role="button" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
+                      <span role="button" id="toggle-like" data-id="{{_id}}" class="glyphicon glyphicon-heart-empty">{{likes}}</span>
                     {{/if}}
                   {{/if}}
                   &nbsp;
