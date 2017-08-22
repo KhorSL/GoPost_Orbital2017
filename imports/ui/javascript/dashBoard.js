@@ -114,6 +114,7 @@ Template.dashBoard.helpers({
   max: function() {
     var max = 0;
     var currentTab = Template.instance().currentTab.get();
+    
     if(currentTab) {
       if(currentTab === "#menu1") {
         max = Template.instance().max1.get();
@@ -126,8 +127,8 @@ Template.dashBoard.helpers({
       } else if(currentTab === "#menu5") {
         max = Template.instance().max5.get();
       }
+      Template.instance().max.set(max);
     }
-    Template.instance().max.set(max);
 
     return Math.ceil(max/3);
   },
@@ -204,6 +205,7 @@ Template.dashBoard.helpers({
 
   disablePrev: function() {
     var skipCount = Template.instance().skipCount.get();
+
     if(skipCount === 0) {
       return 'disabled';
     } else {
@@ -281,8 +283,11 @@ Template.dashBoard.events({
   },
   'click #myTabs' : function(e) {
     e.preventDefault();
-    Template.instance().currentTab.set(e.target.hash);
-    Template.instance().skipCount.set(0);
+    var tab = e.target.hash;
+    if(tab === "#menu1" || tab == "#menu2" || tab === "#menu3" || tab === "#menu4" || tab === "#menu5") {
+      Template.instance().currentTab.set(e.target.hash);
+      Template.instance().skipCount.set(0);
+    }
     //$('#myTabs a[href="' + e.target.hash + '"]').tab('show');
   }
 });
