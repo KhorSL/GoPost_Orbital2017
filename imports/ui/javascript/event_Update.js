@@ -7,13 +7,6 @@ import '../lib/bootstrap-tokenfield.min.css';
 import '../lib/bootstrap-datetimepicker.min.css';
 
 Template.event_Update.onRendered(function() {
-	//Datetimepicker verification
-	var dateToday = new Date();
-  	$('#datetimepicker_start').datetimepicker({
-		minDate: dateToday,
-		calendarWeeks: true
-  	});
-
 	// We can use the `ready` callback to interact with the map API once the map is ready.
 	GoogleMaps.ready('ufMap', function(map) {
 	  	// Add a marker to the map once it's ready
@@ -82,6 +75,12 @@ Template.event_Update.onRendered(function() {
 	$('#tokenfield').tokenfield();
 	//Boostrap datetimepicker
 	$('.datetimepicker').datetimepicker();
+	//Datetimepicker verification
+	var dateToday = new Date();
+  	$('#datetimepicker_start').datetimepicker({
+		minDate: dateToday,
+		calendarWeeks: true
+  	});
 });
 
 Template.event_Update.helpers({
@@ -110,6 +109,7 @@ Template.event_Update.helpers({
 	},
 
 	formatDate: function(date) {
+		console.log(date);
   		return moment(date).format('MM/DD/YYYY h:mm A');
   	},
 
@@ -124,6 +124,7 @@ Template.event_Update.helpers({
 
 Template.event_Update.events({
 	'submit .update-event': function(event) {
+		event.preventDefault();
 		var title = event.target.title.value;
 		var description = event.target.description.value;
 		var location = event.target.location.value;
@@ -154,6 +155,7 @@ Template.event_Update.events({
 				Router.go('event_View', { _id: eventId});
 			}
 		});
+		return false;
 	},
 
 	'change .img-input': function(event) {

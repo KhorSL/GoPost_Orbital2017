@@ -371,6 +371,7 @@ Template.event_Create.events({
 				}
 			});
 		}
+		return false;
 	},
 
 	'change .img-input': function(event, template) {
