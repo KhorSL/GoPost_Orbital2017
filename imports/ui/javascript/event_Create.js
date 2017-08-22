@@ -231,8 +231,10 @@ Template.event_Create.onRendered(function() {
 			duration: "start end"
 		},
 		errorPlacement: function(error, element) {
-			if (element.attr("name") == "start" || element.attr("name") == "end" || element.attr("name") == "signUpDeadline") {
-				error.insertAfter("#end");
+			if (element.attr("name") == "start" || element.attr("name") == "end") {
+				error.insertAfter("#datetimepicker_start");
+			} else if (element.attr("name") == "signUpDeadline") {
+				error.insertAfter("#datetimepicker_signUpDeadline");
 			} else {
 			    error.insertAfter(element);
 			}
@@ -455,15 +457,27 @@ Template.event_Create.events({
 			var location = $('input[name="location"]').val();
 			var start = $('input[name="start"]').val();
 			var end = $('input[name="end"]').val();
+			var signUpDeadline = $('input[name="signUpDeadline"]').val();
 			var type = $('#tokenfield').val().split(',');
 			var privacy = $('input[name="privacy"]').is(':checked');
 			var contact = $('input[name="contact"]').val();
 			var img = $('input[name="img"]').val();
 
+			start = new Date(start);
+			end = new Date(end);
+			signUpDeadline = new Date(signUpDeadline);
+
 			if(start >= end) {
 				Eventvalidator.showErrors({
-		            start: "Invalid Dates",
-		            end: "Invalid Dates"
+		            start: "Start Date should not be after End Date",
+		            end: "Start Date should not be after End Date"
+		        });
+				return false;
+		    }
+
+		    if(signUpDeadline > start) {
+		    	Eventvalidator.showErrors({
+		            signUpDeadline: "Sign Up Deadline should not be after Start Date"
 		        });
 				return false;
 		    }

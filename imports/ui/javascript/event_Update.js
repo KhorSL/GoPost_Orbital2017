@@ -109,7 +109,6 @@ Template.event_Update.helpers({
 	},
 
 	formatDate: function(date) {
-		console.log(date);
   		return moment(date).format('MM/DD/YYYY h:mm A');
   	},
 
