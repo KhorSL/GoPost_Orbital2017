@@ -34,13 +34,13 @@ Users are able to customize notification options for events. Whenever a new even
 # Future Development Plan
 - [ ] Creating a mobile application version of the project.
 - [ ] Implementation of Calendar Synchronisation of project.
-- [ ] Sharing of Events to  Facebook/Instagram.
+- [x] Sharing of Events to  Social Media.
 - [ ] Better support across different browsers.
 - [ ] Forum for Discussions.
 - [ ] Notification Feed for User’s Activity
 - [ ] Faster loading speed for web application
 - [ ] More intuitive UI for like and subscribe.
-- [ ] Comment Section for Events
+- [x] Comment Section for Events
 - [ ] Secure and Authentic Email Notification (Prevent Junk / Spam Mails)
 - [ ] Secure and Authentic Downloads for Excel File.
 - [ ] Security of Web Application.
