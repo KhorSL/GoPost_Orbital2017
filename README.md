@@ -1,7 +1,7 @@
 [TOC]
 
 # About GoPost!
-GoPost! is an exciting platform that provide users a one-stop portal for all events needs. The web application is coded in meteor.js and offers a spectrum of features and utility. Users will be able to create events, create a registration forms, manage their events schedules, and many more. Visit [gopostnow](gopostnow.herokuapp.com) for more!
+GoPost! is an exciting platform that provide users a one-stop portal for all events needs. The web application is coded in meteor.js and offers a spectrum of features and utility. Users will be able to create events, create a registration forms, manage their events schedules, and many more. Visit [gopostnow](http://gopostnow.herokuapp.com) for more!
 
 ![home-page](documentation/image/home_page.png)
 
