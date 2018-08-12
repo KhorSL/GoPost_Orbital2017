@@ -15,9 +15,9 @@ Below are a list of features that have been developed in GoPost:
 
 In order to gain access to the information in GoPost, users have to register with an email account. The following information will be required to create an account:
 
-	* username
-	* password
-	* email address
+* username
+* password
+* email address
 
 ![register-page](documentation/image/register.png)
 
@@ -41,30 +41,30 @@ A simple reactive search function and filter have been implemented using Meteor.
 
 There are two main view for the users:
 
-	**Grid View**
+**Grid View**
 
-	![gridview](documentation/image/gridview.png)
+![gridview](documentation/image/gridview.png)
 
-	**list View**
+**list View**
 
-	![listview](documentation/image/listview.png)
+![listview](documentation/image/listview.png)
 
 
 ### Search Options
 
 Users are able to search for events using filters or keywords.
 
-	**Search by searchbar**
+**Search by searchbar**
 
-	![searchbar](documentation/image/searchBar.png)
+![searchbar](documentation/image/searchBar.png)
 
-	**Search by filter**
+**Search by filter**
 
-	![searchFilter](documentation/image/searchFilter.png)
+![searchFilter](documentation/image/searchFilter.png)
 
-	**Search by tags**
+**Search by tags**
 
-	![searchTag](documentation/image/searchTag.png)
+![searchTag](documentation/image/searchTag.png)
 
 
 ## 4. Create Events
@@ -88,17 +88,17 @@ Minimal and sleek dashboard that allows the user to manage their personal profil
 
 Users are also able to update their profile 
 
-	**Change Image**
+**Change Image**
 
-	![changeImage](documentation/image/dashboard_image.png)
+![changeImage](documentation/image/dashboard_image.png)
 
-	**Edit Profile Details**
+**Edit Profile Details**
 
-	![changeProfile](documentation/image/dashboard_edit.png)
+![changeProfile](documentation/image/dashboard_edit.png)
 
-	**Change Password**
+**Change Password**
 
-	![changePass](documentation/image/dashboard_reset.png)
+![changePass](documentation/image/dashboard_reset.png)
 
 
 ## 9. Messaging Feature
@@ -111,17 +111,17 @@ With Meteor.js as the base, a simple messaging feature was created to facilitate
 
 Users are able to subscribe to the content of other users to know what events they like, what events they are going. 
 
-	**Discover Friends**
+**Discover Friends**
 	
-	![discover](documentation/image/discoverFriend.png)
+![discover](documentation/image/discoverFriend.png)
 
-	**People subscribing to you**
+**People subscribing to you**
 
-	![subscribers](documentation/image/subscribers.png)
+![subscribers](documentation/image/subscribers.png)
 
-	**People you are subscribing to**
+**People you are subscribing to**
 
-	![subscribe](documentation/image/subscribe.png)
+![subscribe](documentation/image/subscribe.png)
 
 
 ## 11. Event Email Notifications Settings
